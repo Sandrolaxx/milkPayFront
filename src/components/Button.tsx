@@ -8,5 +8,5 @@ export default function Button({ text, handleFunction, stylized }: ButtonProps) 
             focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg` : false}`}>
             {text}
         </button>
-    )
+    );
 }

@@ -13,6 +13,11 @@ export interface FormTypeProps {
     formType: EnumFormType;
 }
 
+export interface FormInputProps {
+    formType: EnumFormType;
+    changeFunction: Function;
+}
+
 export enum EnumFormType {
     LOGIN,
     REGISTER,

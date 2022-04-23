@@ -8,10 +8,10 @@ export default function Authentication() {
             <Header />
             <main className="flex flex-col h-full items-center bg-[url('../assets/images/login.jpg')]" >
                 <div className="h-full flex flex-col justify-center">
-                    <Form formType={EnumFormType.REGISTER} />
+                    <Form formType={EnumFormType.LOGIN} />
                 </div>
                 <footer className="flex justify-center mt-auto m-6" >
-                    <p className="text-base text-white">
+                    <p className="text-base text-white animate-fade-up">
                         Todos os direitos reservados. MilkPay®
                     </p>
                 </footer>
