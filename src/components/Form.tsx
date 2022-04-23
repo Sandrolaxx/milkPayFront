@@ -1,10 +1,7 @@
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { useState } from "react";
-
 import { EnumFormType, FormTypeProps } from "../utils/types";
 import { equalsEnumFormType } from "../utils/utils";
-import Button from "./Button";
 import FormInput from "./FormInput";
 
 export default function Form({ formType }: FormTypeProps) {

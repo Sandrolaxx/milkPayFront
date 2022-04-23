@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import LockIcon from "../assets/icons/lock.svg";
 import MilkPayIcon from "../assets/icons/milkPayIcon.png";
@@ -8,6 +7,7 @@ import EmailIcon from "../assets/icons/mail.svg";
 import { EnumFormType, FormInputProps } from "../utils/types";
 import { equalsEnumFormType } from "../utils/utils";
 import Button from "./Button";
+import { createAccount } from "../utils/restClient";
 
 export default function FormInput({ formType, changeFunction }: FormInputProps) {
     const [document, setDocument] = useState("");
@@ -19,12 +19,23 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
     }
 
     function handleRegister() {
-        console.log("Se registre!" + document + ":" + password);
+        return createAccount(document, password)
+            .then(() => "Deu bom")
+            .catch(() => "Deu ruim!");
+    }
+
+    function handleForgotPassword() {
+        console.log("Esqueci!" + email);
+    }
+
+    function handleLoseEmail() {
+        //TODO abrir modal informações contato suporte
     }
 
     function changeInput(formType: EnumFormType) {
         setDocument("");
         setPassword("");
+        setEmail("");
 
         changeFunction(formType);
     }
@@ -119,7 +130,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                     }
                     {equalsEnumFormType(formType, EnumFormType.FORGOT_PASSWORD) &&
                         <div className="flex w-full mt-16">
-                            <Button text="Enviar" stylized={true} handleFunction={handleLogin} />
+                            <Button text="Enviar" stylized={true} handleFunction={handleForgotPassword} />
                         </div>
                     }
                 </form>
@@ -134,7 +145,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                     <Button text="Não possui uma conta?" handleFunction={() => changeInput(EnumFormType.LOGIN)} />
                 }
                 {equalsEnumFormType(formType, EnumFormType.FORGOT_PASSWORD) &&
-                    <Button text="Não possui mais o e-mail cadastrado?" handleFunction={() => changeInput(EnumFormType.LOGIN)} />
+                    <Button text="Não possui mais o e-mail cadastrado?" handleFunction={handleLoseEmail} />
                 }
             </div>
         </>
