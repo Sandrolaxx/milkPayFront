@@ -8,6 +8,7 @@ import { EnumFormType, FormInputProps } from "../utils/types";
 import { equalsEnumFormType } from "../utils/utils";
 import Button from "./Button";
 import { createAccount } from "../utils/restClient";
+import { toast } from "react-toastify";
 
 export default function FormInput({ formType, changeFunction }: FormInputProps) {
     const [document, setDocument] = useState("");
@@ -19,9 +20,14 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
     }
 
     function handleRegister() {
-        return createAccount(document, password)
-            .then(() => "Deu bom")
-            .catch(() => "Deu ruim!");
+        toast.promise(
+            createAccount(document, password),
+            {
+                pending: 'Promise is pending',
+                success: 'Promise resolved 👌',
+                error: 'Promise rejected 🤯'
+              }
+        );
     }
 
     function handleForgotPassword() {

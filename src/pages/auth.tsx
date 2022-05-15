@@ -1,5 +1,5 @@
-import Header from "../components/Header";
-import Form from "../components/Form";
+import Form from "src/components/Form";
+import Header from "src/components/Header";
 import { EnumFormType } from "../utils/types";
 
 export default function Authentication() {
