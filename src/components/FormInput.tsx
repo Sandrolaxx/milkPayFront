@@ -1,14 +1,14 @@
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import LockIcon from "../assets/icons/lock.svg";
+import EmailIcon from "../assets/icons/mail.svg";
 import MilkPayIcon from "../assets/icons/milkPayIcon.png";
 import UserIcon from "../assets/icons/user.svg";
-import EmailIcon from "../assets/icons/mail.svg";
-import { EnumFormType, FormInputProps } from "../utils/types";
-import { equalsEnumFormType } from "../utils/utils";
-import Button from "./Button";
 import { createAccount } from "../utils/restClient";
-import { toast } from "react-toastify";
+import { EnumError, EnumFormType, FormInputProps } from "../utils/types";
+import { equalsEnumFormType, getToastError, getToastSuccess } from "../utils/utils";
+import Button from "./Button";
 
 export default function FormInput({ formType, changeFunction }: FormInputProps) {
     const [document, setDocument] = useState("");
@@ -19,15 +19,20 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
         console.log("Realizando login!" + document + ":" + password);
     }
 
-    function handleRegister() {
-        toast.promise(
-            createAccount(document, password),
-            {
-                pending: 'Promise is pending',
-                success: 'Promise resolved 👌',
-                error: 'Promise rejected 🤯'
-              }
-        );
+    async function handleRegister() {
+        const toastify = toast.loading("Criando Usuário...");
+
+        await createAccount(document, password).then(res => {
+            if (res.ok) {
+                toast.update(toastify, getToastSuccess("Usuário criado com sucesso!"));
+
+                changeInput(EnumFormType.LOGIN);
+            } else {
+                res.json().then(res => {
+                    toast.update(toastify, getToastError(res.error));
+                });
+            }
+        }).catch(() => toast.update(toastify, getToastError(EnumError.CADASTRO_INDISPONIVEL)));
     }
 
     function handleForgotPassword() {
@@ -48,7 +53,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
 
     return (
         <>
-            <Image src={MilkPayIcon} alt="Logo MilkPay" width={56} height={56} />
+            <Image src={MilkPayIcon} priority alt="Logo MilkPay" width={56} height={56} />
             <p className="text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
                 {equalsEnumFormType(formType, EnumFormType.LOGIN) && 'Autenticação'}
                 {equalsEnumFormType(formType, EnumFormType.REGISTER) && 'Registrar-se'}

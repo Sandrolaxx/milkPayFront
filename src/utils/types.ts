@@ -23,3 +23,7 @@ export enum EnumFormType {
     REGISTER,
     FORGOT_PASSWORD
 }
+
+export enum EnumError {
+    CADASTRO_INDISPONIVEL = "Serviço de cadastro indisponível. Tente novamente em instantes.",
+}
