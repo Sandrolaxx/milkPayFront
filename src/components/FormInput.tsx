@@ -1,13 +1,12 @@
 import Image from "next/image";
 import { useState } from "react";
-import { toast } from "react-toastify";
 import LockIcon from "../assets/icons/lock.svg";
 import EmailIcon from "../assets/icons/mail.svg";
 import MilkPayIcon from "../assets/icons/milkPayIcon.png";
 import UserIcon from "../assets/icons/user.svg";
-import { createAccount } from "../utils/restClient";
-import { EnumError, EnumFormType, FormInputProps } from "../utils/types";
-import { equalsEnumFormType, getToastError, getToastSuccess } from "../utils/utils";
+import { createAccount, getUserToken } from "../utils/restClient";
+import { EnumFormType, FormInputProps } from "../utils/types";
+import { equalsEnumFormType } from "../utils/utils";
 import Button from "./Button";
 
 export default function FormInput({ formType, changeFunction }: FormInputProps) {
@@ -15,24 +14,16 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
 
-    function handleLogin() {
-        console.log("Realizando login!" + document + ":" + password);
+    async function handleLogin() {
+        const token = await getUserToken(document, password);
+
+        console.log(token);
     }
 
     async function handleRegister() {
-        const toastify = toast.loading("Criando Usuário...");
+        await createAccount(document, password);
 
-        await createAccount(document, password).then(res => {
-            if (res.ok) {
-                toast.update(toastify, getToastSuccess("Usuário criado com sucesso!"));
-
-                changeInput(EnumFormType.LOGIN);
-            } else {
-                res.json().then(res => {
-                    toast.update(toastify, getToastError(res.error));
-                });
-            }
-        }).catch(() => toast.update(toastify, getToastError(EnumError.CADASTRO_INDISPONIVEL)));
+        changeInput(EnumFormType.LOGIN);
     }
 
     function handleForgotPassword() {
