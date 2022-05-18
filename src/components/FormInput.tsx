@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import LockIcon from "../assets/icons/lock.svg";
 import EmailIcon from "../assets/icons/mail.svg";
@@ -6,10 +7,11 @@ import MilkPayIcon from "../assets/icons/milkPayIcon.png";
 import UserIcon from "../assets/icons/user.svg";
 import { createAccount, getUserToken } from "../utils/restClient";
 import { EnumFormType, FormInputProps } from "../utils/types";
-import { equalsEnumFormType } from "../utils/utils";
+import { equalsEnumFormType, getTokenExpirationDate } from "../utils/utils";
 import Button from "./Button";
 
 export default function FormInput({ formType, changeFunction }: FormInputProps) {
+    const router = useRouter();
     const [document, setDocument] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -17,7 +19,12 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
     async function handleLogin() {
         const token = await getUserToken(document, password);
 
-        console.log(token);
+        if (token) {
+            localStorage.setItem("token", token);
+            localStorage.setItem("expiration", getTokenExpirationDate());
+
+            router.push("/");
+        }
     }
 
     async function handleRegister() {
@@ -27,7 +34,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
     }
 
     function handleForgotPassword() {
-        console.log("Esqueci!" + email);
+        console.log("Esqueci!" + email);//TODO criar fluxo esqueci minha senha
     }
 
     function handleLoseEmail() {

@@ -1,4 +1,4 @@
-import { Id, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { EnumError } from "./types";
 import { getBasicToken, getBearerToken, getToastError, getToastSuccess } from "./utils";
 
@@ -17,7 +17,7 @@ export async function createAccount(document: string, password: string) {
     const toastify = toast.loading("Criando usuário...");
 
     if (!token) {
-        toast.update(toastify, getToastSuccess("Serviços indisponíveis!"));
+        toast.update(toastify, getToastError("Serviços indisponíveis!"));
         return;
     }
 
@@ -70,7 +70,7 @@ export async function getUserToken(document: string, password: string) {
     const token = await getToken(document, password);
 
     if (!token) {
-        toast.update(toastify, getToastError("Erro ao realizar login!"));//Todo colocar response erro
+        toast.update(toastify, getToastError(EnumError.ERRO_LOGIN));
         return;
     } else {
         toast.update(toastify, getToastSuccess("Login realizado com sucesso!"));

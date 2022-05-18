@@ -26,4 +26,5 @@ export enum EnumFormType {
 
 export enum EnumError {
     CADASTRO_INDISPONIVEL = "Serviço de cadastro indisponível. Tente novamente em instantes.",
+    ERRO_LOGIN = "Erro ao realizar login! Verifique os campos informados.",
 }

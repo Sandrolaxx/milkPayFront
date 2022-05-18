@@ -7,5 +7,6 @@ declare namespace NodeJS {
         NEXT_PUBLIC_TOKEN_PASSWORD: string;
         NEXT_PUBLIC_TOKEN_GRANT_TYPE: string;
         NEXT_PUBLIC_API_USER_ROUTES: string;
+        NEXT_PUBLIC_TOKEN_EXPIRATION_TIME: number;
     }
 }
