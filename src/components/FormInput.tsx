@@ -1,9 +1,8 @@
-import Image from "next/image";
+import MilkPayIcon from "../assets/icons/milkpay.svg";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import LockIcon from "../assets/icons/lock.svg";
 import EmailIcon from "../assets/icons/mail.svg";
-import MilkPayIcon from "../assets/icons/milkPayIcon.png";
 import UserIcon from "../assets/icons/user.svg";
 import { createAccount, getUserToken } from "../utils/restClient";
 import { EnumFormType, FormInputProps } from "../utils/types";
@@ -51,7 +50,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
 
     return (
         <>
-            <Image src={MilkPayIcon} priority alt="Logo MilkPay" width={56} height={56} />
+            <MilkPayIcon color="FFF" width={56} alt="Logo MilkPay" />
             <p className="text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
                 {equalsEnumFormType(formType, EnumFormType.LOGIN) && 'Autenticação'}
                 {equalsEnumFormType(formType, EnumFormType.REGISTER) && 'Registrar-se'}

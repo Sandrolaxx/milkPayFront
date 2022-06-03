@@ -1,5 +1,5 @@
 import { UpdateOptions } from "react-toastify";
-import { EnumFormType } from "./types"
+import { EnumFormType } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 
