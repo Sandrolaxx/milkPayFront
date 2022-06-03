@@ -50,7 +50,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
 
     return (
         <>
-            <MilkPayIcon color="FFF" width={56} alt="Logo MilkPay" />
+            <MilkPayIcon fill="#000" width={56} height={56} name="Logo MilkPay" />
             <p className="text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
                 {equalsEnumFormType(formType, EnumFormType.LOGIN) && 'Autenticação'}
                 {equalsEnumFormType(formType, EnumFormType.REGISTER) && 'Registrar-se'}
