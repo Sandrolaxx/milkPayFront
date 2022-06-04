@@ -13,26 +13,26 @@ export default function Menu() {
             <Header />
             <div className="flex flex-col bg-[url('../assets/images/menu.png')] h-screen w-56 text-light-color">
                 <nav className="w-full h-full">
-                    <div className="flex m-2 mt-6 mb-6">
-                        <MilkPayIcon fill="#FFFFFF" width={42} height={42} name="Logo MilkPay" />
+                    <div className="flex items-center m-2 mt-6 mb-6">
+                        <MilkPayIcon fill="#F1F1F1" width={42} height={42} name="Logo MilkPay" />
                         <h1 className="text-3xl font-medium">MilkPay</h1>
                     </div>
                     <hr className="rounded-sm m-4" />
                     <ul className="w-full">
                         <button className={`flex w-full p-4 rounded-lg ${selected ? 'bg-primary-color' : 'bg-none'}`}
                             onClick={() => setSelected(!selected)}>
-                            <HomeIcon stroke="#FFFFFF" name="Painel Principal" />
-                            <li className="text-xl ml-1">Painel Principal</li>
+                            <HomeIcon stroke="#F1F1F1" name="Painel Principal" />
+                            <li className="ml-1 text-xl">Painel Principal</li>
                         </button>
-                        <button className={`flex w-full p-4 rounded-lg ${!selected ? 'bg-primary-color' : 'bg-none'}`}
+                        <button className={`flex w-full p-4 rounded-xl ${!selected ? 'bg-primary-color' : 'bg-none'}`}
                             onClick={() => setSelected(!selected)}>
-                            <FileTextIcon stroke="#FFFFFF" name="Consultas Títulos" />
-                            <li className="text-xl ml-1">Consultas Títulos</li>
+                            <FileTextIcon stroke="#F1F1F1" name="Consultas Títulos" />
+                            <li className="ml-1 text-xl">Consultas Títulos</li>
                         </button>
                     </ul>
                 </nav>
                 <button className="flex w-full mt-auto p-4 rounded-lg hover:opacity-60">
-                    <LogoutIcon transform="rotate(180)" stroke="#FFFFFF" width={24} height={24} name="Sair" />
+                    <LogoutIcon transform="rotate(180)" stroke="#F1F1F1" width={24} height={24} name="Sair" />
                     <p className="text-xl ml-1">Sair</p>
                 </button>
             </div>

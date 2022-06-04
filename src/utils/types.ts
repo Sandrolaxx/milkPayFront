@@ -18,6 +18,19 @@ export interface FormInputProps {
     changeFunction: Function;
 }
 
+export interface CardTotalProps {
+    element: CartTotal;
+}
+
+export type CartTotal = {
+    title: string;
+    subTitle: string;
+    value: number;
+    bigIcon: SVGElement;
+    smallIcon: SVGElement;
+    iconAreaColor: string;
+}
+
 export enum EnumFormType {
     LOGIN,
     REGISTER,

@@ -7,19 +7,21 @@ module.exports = {
     theme: {
     backgroundColor: theme => ({
         ...theme("colors"),
-        "primary-color": "#56CFE1",
-        "secondary-color": "#4EA8DE",
-        "light-color": "#F7F7F7",
-        "secondary-light-color": "#F0FFFF",
-        "dark-color": "#3F3F3F",
-        "secondary-dark-color": "#737380",
+        "primary-color": "#01ACE2",
+        "secondary-color": "#7001DF",
+        "light-color": "#F1F1F1",
+        "dark-color": "#212121",
+        "secondary-dark-color": "#373737",
+        "gray-color": "#737380",
     }),
     textColor: theme => ({
         ...theme("colors"),
-        "light-color": "#F7F7F7",
-        "primary-color": "#56CFE1",
-        "secondary-color": "#4EA8DE",
-        "dark-color": "#737380",
+        "light-color": "#F1F1F1",
+        "primary-color": "#01ACE2",
+        "secondary-color": "#7001DF",
+        "gray-color": "#929292",
+        "dark-color": "#373737",
+        "secundary-dark-color": "#212121"
     }),
     extend: {
         height: {
