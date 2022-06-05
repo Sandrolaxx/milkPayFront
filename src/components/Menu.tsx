@@ -9,25 +9,25 @@ export default function Menu() {
     const [selected, setSelected] = useState(true);
 
     return (
-        <>
+        <div className="min-w-max">
             <Header />
-            <div className="flex flex-col bg-[url('../assets/images/menu.png')] h-screen w-56 text-light-color">
-                <nav className="w-full h-full">
+            <div className="flex flex-col bg-[url('../assets/images/menu.png')] h-screen text-light-color">
+                <nav>
                     <div className="flex items-center m-2 mt-6 mb-6">
                         <MilkPayIcon fill="#F1F1F1" width={42} height={42} name="Logo MilkPay" />
-                        <h1 className="text-3xl font-medium">MilkPay</h1>
+                        <h1 className="text-3xl font-medium md:text-sm lg:text-3xl">MilkPay</h1>
                     </div>
                     <hr className="rounded-sm m-4" />
                     <ul className="w-full">
                         <button className={`flex w-full p-4 rounded-lg ${selected ? 'bg-primary-color' : 'bg-none'}`}
                             onClick={() => setSelected(!selected)}>
                             <HomeIcon stroke="#F1F1F1" name="Painel Principal" />
-                            <li className="ml-1 text-xl">Painel Principal</li>
+                            <li className="ml-1 md:text-sm lg:text-xl">Painel Principal</li>
                         </button>
                         <button className={`flex w-full p-4 rounded-xl ${!selected ? 'bg-primary-color' : 'bg-none'}`}
                             onClick={() => setSelected(!selected)}>
                             <FileTextIcon stroke="#F1F1F1" name="Consultas Títulos" />
-                            <li className="ml-1 text-xl">Consultas Títulos</li>
+                            <li className="ml-1 md:text-sm lg:text-xl">Consultas Títulos</li>
                         </button>
                     </ul>
                 </nav>
@@ -36,6 +36,6 @@ export default function Menu() {
                     <p className="text-xl ml-1">Sair</p>
                 </button>
             </div>
-        </>
+        </div>
     )
 }

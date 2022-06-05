@@ -9,14 +9,14 @@ export default function CardTotal({element}: CardTotalProps) {
                     <element.bigIcon width={68} height={68} stroke="#F1F1F1"  />
                 </div>
                 <div className="text-right">
-                    <h1 className="text-2xl text-gray-color">{element.title}</h1>
-                    <p className="text-4xl font-semibold text-secundary-dark-color">{element.value}</p>
+                    <h1 className="md:text-sm lg:text-base text-gray-color">{element.title}</h1>
+                    <p className="md:text-xl lg:text-2xl font-semibold text-secundary-dark-color">{element.value}</p>
                 </div>
             </div>
             <hr className="rounded-sm mt-6 mb-4" />
             <div className="flex m-2">
                 <element.smallIcon />
-                <p className="ml-2 text-xl text-gray-color">{element.subTitle}</p>
+                <p className="ml-2 md:text-sm lg:text-base text-gray-color">{element.subTitle}</p>
             </div>
         </div>
     );
