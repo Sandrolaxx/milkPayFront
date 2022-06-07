@@ -2,21 +2,21 @@ import { CardTotalProps } from "src/utils/types";
 
 export default function CardTotal({element}: CardTotalProps) {
     return (
-        <div className="w-96 h-44 m-6 mt-12 p-4 rounded-3xl border-2">
-            <div className="flex justify-between">
-                <div className={`flex items-center justify-center w-28 h-28 ${element.iconAreaColor} 
+        <div className="w-full h-28 m-2 p-4 rounded-3xl border-2 xl:h-36 2xl:m-4">
+            <div className="flex justify-between w-full">
+                <div className={`flex items-center justify-center w-24 h-20 lg:w-20 lg:h-16 xl:w-24 xl:h-20 2xl:w-32 2xl:h-24 ${element.iconAreaColor} 
                 rounded-3xl from-transparent border-2 -mt-10`}>
-                    <element.bigIcon width={68} height={68} stroke="#F1F1F1"  />
+                    <element.bigIcon width={42} height={42} stroke="#F1F1F1"  />
                 </div>
-                <div className="text-right">
-                    <h1 className="md:text-sm lg:text-base text-gray-color">{element.title}</h1>
-                    <p className="md:text-xl lg:text-2xl font-semibold text-secundary-dark-color">{element.value}</p>
+                <div className="text-right w-full">
+                    <h1 className="text-sm lg:text-xs xl:text-lg text-gray-color">{element.title}</h1>
+                    <p className="text-xl xl:text-2xl 2xl:text-3xl font-semibold text-secundary-dark-color">{element.value}</p>
                 </div>
             </div>
-            <hr className="rounded-sm mt-6 mb-4" />
-            <div className="flex m-2">
-                <element.smallIcon />
-                <p className="ml-2 md:text-sm lg:text-base text-gray-color">{element.subTitle}</p>
+            <hr className="rounded-sm mt-2 mb-1 lg:mb-2 xl:mt-4" />
+            <div className="flex items-center">
+                <element.smallIcon/>
+                <p className="ml-2 text-sm lg:xs xl:text-lg text-gray-color">{element.subTitle}</p>
             </div>
         </div>
     );
