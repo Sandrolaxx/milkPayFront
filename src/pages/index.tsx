@@ -63,9 +63,10 @@ export default function Home() {
 
     return (
         isAuth &&
-        <div className="flex bg-cyan-300 sm:bg-red-300 md:bg-red-300 lg:bg-purple-300 xl:bg-orange-300 2xl:bg-slate-300">
+        <div className="block md:flex bg-cyan-300 sm:bg-red-300 md:bg-yellow-300 lg:bg-purple-300 xl:bg-orange-300 2xl:bg-slate-300">
             <Menu />
-            <div className="w-full h-full mt-8 m-1 grid grid-flow-row grid-cols-2 gap-6 lg:gap-0 lg:flex">
+            <div className={`w-full h-full mt-4 p-4 grid grid-flow-row grid-cols-1 
+                gap-y-8 gap-x-4 sm:grid-cols-2 md:pt-8 lg:flex lg:gap-0 lg:p-1`}>
                 <CardTotal element={teste} />
                 <CardTotal element={teste2} />
                 <CardTotal element={teste3} />
