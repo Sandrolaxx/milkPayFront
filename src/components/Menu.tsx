@@ -19,12 +19,12 @@ export default function Menu() {
                     </div>
                     <hr className="rounded-sm m-4" />
                     <ul className="w-full">
-                        <button className={`flex w-full p-4 rounded-lg ${selected ? 'bg-primary-color' : 'bg-none'}`}
+                        <button className={`flex w-full p-4 rounded-lg ${selected ? 'bg-primary-color' : 'bg-none hover:opacity-60'}`}
                             onClick={() => setSelected(!selected)}>
                             <HomeIcon stroke="#F1F1F1" name="Painel Principal" />
                             <li className="ml-1 text-sm xl:text-xl">Painel Principal</li>
                         </button>
-                        <button className={`flex w-full p-4 rounded-xl ${!selected ? 'bg-color' : 'bg-none'}`}
+                        <button className={`flex w-full p-4 rounded-xl ${!selected ? 'bg-primary-color' : 'bg-none hover:opacity-60'}`}
                             onClick={() => setSelected(!selected)}>
                             <FileTextIcon stroke="#F1F1F1" name="Consultas Títulos" />
                             <li className="ml-1 text-sm xl:text-xl">Consultas Títulos</li>
