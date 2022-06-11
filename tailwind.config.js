@@ -24,6 +24,9 @@ module.exports = {
         "secundary-dark-color": "#212121"
     }),
     extend: {
+        width: {
+            "54": "218px"
+        },
         height: {
             "98": "470px",
             "100": "480px",
@@ -37,7 +40,8 @@ module.exports = {
             "fade-right": 'fadeRight 1s',
             "fade-in": 'fadeIn 3s',
             "fade-out": 'fadeOut 3s',
-            "fade-in-fast": 'fadeIn 1s'
+            "fade-in-fast": 'fadeIn 1s',
+            "fade-in-slow": 'fadeIn 5s'
         },
         keyframes: theme => ({
             fadeDown: {
@@ -73,7 +77,7 @@ module.exports = {
             fadeRight: {
                 "0%": {
                     "opacity": "0",
-                    "transform": "translateX(-25%)"
+                    "transform": "translateX(25%)"
                     },
                     "100%": {
                     "opacity": "1",

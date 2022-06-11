@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import CardTotal from "src/components/CardTotal";
 import Menu from "src/components/Menu";
 import CardTotalSkeleton from "src/components/skeleton/CardTotalSkeleton";
+import Table from "src/components/Table";
 import { CartTotal } from "src/utils/types";
 import CalendarIcon from "../assets/icons/calendar.svg";
 import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
@@ -59,30 +60,38 @@ export default function Home() {
         //     router.push("/auth");
         // }
 
+        setTimeout(() => setLoading(false), 2000);
+
         setAuth(true);
     }
 
     return (
         isAuth && //bg-cyan-300 sm:bg-red-300 md:bg-yellow-300 lg:bg-purple-300 xl:bg-orange-300 2xl:bg-slate-300
-        <div className="block md:flex ">
-            <Menu />
-            <div className={`w-full h-full mt-4 p-4 grid grid-flow-row grid-cols-1 
-                gap-y-8 gap-x-4 sm:grid-cols-2 md:pt-8 lg:flex lg:gap-0 lg:p-1`}>
-                {isLoading ?
-                    <>
-                        <CardTotalSkeleton />
-                        <CardTotalSkeleton />
-                        <CardTotalSkeleton />
-                        <CardTotalSkeleton />
-                    </>
-                    :
-                    <>
-                        <CardTotal element={teste} />
-                        <CardTotal element={teste2} />
-                        <CardTotal element={teste3} />
-                        <CardTotal element={teste4} />
-                    </>
-                }
+        <div className="block md:flex">
+            <div className="w-full md:w-54 lg:w-52 xl:w-64">
+                <Menu />
+            </div>
+            <div className="w-full flex flex-col">
+                <div className={`w-full h-full mt-4 p-4 grid grid-flow-row grid-cols-1 
+                    gap-y-8 gap-x-4 sm:grid-cols-2 md:pt-6 lg:flex lg:gap-0 lg:p-1`}>
+                    {isLoading ?
+                        <>
+                            <CardTotalSkeleton />
+                            <CardTotalSkeleton />
+                            <CardTotalSkeleton />
+                            <CardTotalSkeleton />
+                        </>
+                        :
+                        <>
+                            <CardTotal element={teste} />
+                            <CardTotal element={teste2} />
+                            <CardTotal element={teste3} />
+                            <CardTotal element={teste4} />
+                        </>
+                    }
+                </div>
+                <Table />
+                <Table />
             </div>
         </div>
     );

@@ -9,29 +9,29 @@ export default function Menu() {
     const [selected, setSelected] = useState(true);
 
     return (
-        <div className="min-w-max">
+        <div className="animate-fade-down md:animate-fade-left">
             <Header />
-            <div className="hidden md:flex flex-col bg-[url('../assets/images/menu.png')] h-screen text-light-color">
+            <div className="hidden flex-col md:fixed md:flex bg-[url('../assets/images/menu.png')] h-screen text-light-color">
                 <nav>
-                    <div className="flex items-center m-2 mt-6 mb-6">
+                    <div className="flex items-center m-2 mt-6 mb-6 animate-fade-in-slow">
                         <MilkPayIcon fill="#F1F1F1" width={42} height={42} name="Logo MilkPay" />
                         <h1 className="text-2xl font-medium xl:text-3xl">MilkPay</h1>
                     </div>
-                    <hr className="rounded-sm m-4" />
-                    <ul className="w-full">
-                        <button className={`flex w-full p-4 rounded-lg ${selected ? 'bg-primary-color' : 'bg-none hover:opacity-60'}`}
+                    <hr className="rounded-sm m-4 animate-fade-in-slow" />
+                    <ul className="w-full animate-fade-in-fast">
+                        <button className={`flex w-full items-center p-4 rounded-lg ${selected ? 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => setSelected(!selected)}>
                             <HomeIcon stroke="#F1F1F1" name="Painel Principal" />
                             <li className="ml-1 text-sm xl:text-xl">Painel Principal</li>
                         </button>
-                        <button className={`flex w-full p-4 rounded-xl ${!selected ? 'bg-primary-color' : 'bg-none hover:opacity-60'}`}
+                        <button className={`flex w-full p-4 items-center rounded-xl ${!selected ? 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => setSelected(!selected)}>
                             <FileTextIcon stroke="#F1F1F1" name="Consultas Títulos" />
                             <li className="ml-1 text-sm xl:text-xl">Consultas Títulos</li>
                         </button>
                     </ul>
                 </nav>
-                <button className="flex w-full mt-auto p-4 rounded-lg hover:opacity-60">
+                <button className="flex w-full mt-auto p-4 rounded-lg animate-fade-in-slow hover:opacity-60">
                     <LogoutIcon transform="rotate(180)" stroke="#F1F1F1" width={24} height={24} name="Sair" />
                     <p className="text-xl ml-1">Sair</p>
                 </button>
