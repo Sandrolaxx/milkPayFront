@@ -71,8 +71,8 @@ export default function Home() {
             <div className="w-full md:w-54 lg:w-52 xl:w-64">
                 <Menu />
             </div>
-            <div className="w-full flex flex-col">
-                <div className={`w-full h-full mt-4 p-4 grid grid-flow-row grid-cols-1 
+            <div className="w-full flex flex-col overflow-hidden md:pr-2">
+                <div className={`w-full h-full mt-4 p-2 grid grid-flow-row grid-cols-1 
                     gap-y-8 gap-x-4 sm:grid-cols-2 md:pt-6 lg:flex lg:gap-0 lg:p-1`}>
                     {isLoading ?
                         <>
