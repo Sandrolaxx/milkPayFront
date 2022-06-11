@@ -51,7 +51,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
     return (
         <>
             <MilkPayIcon fill="#000" width={56} height={56} name="Logo MilkPay" />
-            <p className="text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
+            <p className="text-xl font-light text-gray-color sm:text-2xl dark:text-white">
                 {equalsEnumFormType(formType, EnumFormType.LOGIN) && 'Autenticação'}
                 {equalsEnumFormType(formType, EnumFormType.REGISTER) && 'Registrar-se'}
                 {equalsEnumFormType(formType, EnumFormType.FORGOT_PASSWORD) && 'Redefinir Senha'}
@@ -64,13 +64,13 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                             <div className="flex flex-col mb-2">
                                 <div className="flex">
                                     <span className={`rounded-l-md inline-flex  items-center px-3 border-t 
-                                            bg-white border-l border-b  border-gray-300 text-gray-500`}>
-                                        <UserIcon className="text-gray-700" width={24} />
+                                            bg-white border-l border-b  border-gray-300 text-gray-color`}>
+                                        <UserIcon className="text-dark-color" width={24} />
                                     </span>
                                     <input type="text" id="sign-in-document" placeholder="CPF/CNPJ"
                                         value={document} onChange={e => setDocument(e.target.value)}
                                         className={`flex-1 rounded-r-lg appearance-none border 
-                                        border-gray-300 w-full py-2 px-3 bg-white text-gray-700 
+                                        border-gray-300 w-full py-2 px-3 bg-white text-gray-color 
                                         placeholder-gray-400 shadow-sm text-base focus:outline-none 
                                         focus:ring-2 focus:ring-purple-600 focus:border-transparent`}
                                     />
@@ -79,13 +79,13 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                             <div className="flex flex-col mb-6">
                                 <div className="flex">
                                     <span className={`rounded-l-md inline-flex  items-center px-3 border-t 
-                                            bg-white border-l border-b  border-gray-300 text-gray-500`}>
-                                        <LockIcon className="text-gray-700" width={24} />
+                                            bg-white border-l border-b  border-gray-300 text-gray-color`}>
+                                        <LockIcon className="text-dark-color" width={24} />
                                     </span>
                                     <input type="password" id="sign-in-password" placeholder="Senha"
                                         value={password} onChange={e => setPassword(e.target.value)}
                                         className={`flex-1 rounded-r-lg appearance-none border 
-                                        border-gray-300 w-full py-2 px-3 bg-white text-gray-700 
+                                        border-gray-300 w-full py-2 px-3 bg-white text-gray-color 
                                         placeholder-gray-400 shadow-sm text-base focus:outline-none 
                                         focus:ring-2 focus:ring-purple-600 focus:border-transparent`}
                                     />
@@ -98,13 +98,13 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                             <div className="flex flex-col mb-2">
                                 <div className="flex">
                                     <span className={`rounded-l-md inline-flex  items-center px-3 border-t 
-                                    bg-white border-l border-b  border-gray-300 text-gray-500`}>
-                                        <EmailIcon className="text-gray-700" width={24} />
+                                    bg-white border-l border-b  border-gray-300 text-gray-color `}>
+                                        <EmailIcon className="text-dark-color" width={24} />
                                     </span>
                                     <input type="email" id="forgot-email" placeholder="E-mail"
                                         value={email} onChange={e => setEmail(e.target.value)}
                                         className={`flex-1 rounded-r-lg appearance-none border 
-                                border-gray-300 w-full py-2 px-3 bg-white text-gray-700 
+                                border-gray-300 w-full py-2 px-3 bg-white text-gray-color
                                 placeholder-gray-400 shadow-sm text-base focus:outline-none 
                                 focus:ring-2 focus:ring-purple-600 focus:border-transparent`}
                                     />
