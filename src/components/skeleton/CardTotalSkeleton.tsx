@@ -1,6 +1,6 @@
 export default function CardTotalSkeleton() {
     return (
-        <div className="w-full h-16 p-2 shadow-md border-2 rounded-3xl sm:h-24 lg:mt-4 lg:m-2 xl:mt-6 xl:h-32 animate-fade-left md:animate-fade-down">
+        <div className="w-full h-16 p-2 shadow-md border-2 rounded-3xl sm:h-24 xl:mt-4 lg:m-2 xl:h-32 animate-fade-left md:animate-fade-down">
             <div className="flex justify-between w-full">
                 <div className={`flex items-center justify-center w-16 h-12 animate-pulse bg-gray-300 
                     rounded-3xl shadow-md border-2 sm:h-16 lg:w-14 lg:h-16 xl:w-16 xl:h-20 2xl:w-24 2xl:h-24 -mt-8 xl:-mt-10`}>

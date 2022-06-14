@@ -22,6 +22,12 @@ export interface CardTotalProps {
     element: CartTotal;
 }
 
+export interface TableProps {
+    title: string;
+    subTitle: string;
+    data?: titleData[];
+}
+
 export type CartTotal = {
     title: string;
     subTitle: string;
@@ -29,6 +35,17 @@ export type CartTotal = {
     bigIcon: SVGElement;
     smallIcon: SVGElement;
     iconAreaColor: string;
+}
+
+export type titleData = {
+    id: number;
+    nfNumber: string;
+    paymentType: string;
+    paymentId: string;
+    inclusionDate: Date;
+    dueDate: Date;
+    amount: number;
+    dailyInterest: number;
 }
 
 export enum EnumFormType {

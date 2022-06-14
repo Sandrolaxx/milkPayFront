@@ -3,50 +3,14 @@ import { useEffect, useState } from "react";
 import CardTotal from "src/components/CardTotal";
 import Menu from "src/components/Menu";
 import CardTotalSkeleton from "src/components/skeleton/CardTotalSkeleton";
+import TableSkeleton from "src/components/skeleton/TableSkeleton";
 import Table from "src/components/Table";
-import { CartTotal } from "src/utils/types";
-import CalendarIcon from "../assets/icons/calendar.svg";
-import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
-import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
-import AmountReceiveToIcon from "../assets/icons/dollar-sign.svg";
-import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
+import { listTotalCard, titleListData } from "src/utils/testFront";
 
 export default function Home() {
     const router = useRouter();
     let [isAuth, setAuth] = useState(false);
     let [isLoading, setLoading] = useState(true);
-    const teste: CartTotal = {
-        title: "Títulos Recebidos",
-        subTitle: "Últimos 12 meses",
-        value: 27,
-        bigIcon: RecivedTitlesIcon,
-        smallIcon: CalendarIcon,
-        iconAreaColor: "bg-dark-color"
-    }
-    const teste2: CartTotal = {
-        title: "Valor Recebido",
-        subTitle: "Últimos 12 meses",
-        value: 330759.90,
-        bigIcon: AmountRecivedIcon,
-        smallIcon: CalendarIcon,
-        iconAreaColor: "bg-primary-color"
-    }
-    const teste3: CartTotal = {
-        title: "Títulos a Receber",
-        subTitle: "Próximos 30 dias",
-        value: 14,
-        bigIcon: TitlesToReceiveIcon,
-        smallIcon: CalendarIcon,
-        iconAreaColor: "bg-dark-color"
-    }
-    const teste4: CartTotal = {
-        title: "Valor  a Receber",
-        subTitle: "Próximos 30 dias",
-        value: 22319.82,
-        bigIcon: AmountReceiveToIcon,
-        smallIcon: CalendarIcon,
-        iconAreaColor: "bg-primary-color"
-    }
 
     useEffect(() => isAuthenticated());
 
@@ -72,8 +36,8 @@ export default function Home() {
                 <Menu />
             </div>
             <div className="w-full flex flex-col overflow-hidden md:pr-2">
-                <div className={`w-full h-full mt-4 p-2 grid grid-flow-row grid-cols-1 
-                    gap-y-8 gap-x-4 sm:grid-cols-2 md:pt-6 lg:flex lg:gap-0 lg:p-1`}>
+                <div className={`w-full h-full mt-6 p-2 grid grid-flow-row grid-cols-1 
+                    gap-y-8 gap-x-4 sm:grid-cols-2 lg:flex lg:gap-0 lg:p-1`}>
                     {isLoading ?
                         <>
                             <CardTotalSkeleton />
@@ -82,16 +46,24 @@ export default function Home() {
                             <CardTotalSkeleton />
                         </>
                         :
-                        <>
-                            <CardTotal element={teste} />
-                            <CardTotal element={teste2} />
-                            <CardTotal element={teste3} />
-                            <CardTotal element={teste4} />
-                        </>
+                        listTotalCard.map(data => (
+                            <CardTotal element={data} key={data.title} />
+                        ))
                     }
                 </div>
-                <Table />
-                <Table />
+                {isLoading ?
+                    <>
+                        <TableSkeleton title="Títulos a Receber" subTitle="Dados dos Recebimentos dos próximos 30 dias." />
+                        <TableSkeleton title="Títulos Recebidos" subTitle="Recebimentos dos últimos 30 dias." />
+                    </>
+                    :
+                    <>
+                        <Table title="Títulos a Receber" data={titleListData}
+                            subTitle="Dados dos Recebimentos dos próximos 30 dias." />
+                        <Table title="Títulos Recebidos" data={titleListData}
+                            subTitle="Recebimentos dos últimos 30 dias." />
+                    </>
+                }
             </div>
         </div>
     );
