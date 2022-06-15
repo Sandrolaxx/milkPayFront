@@ -4,9 +4,15 @@ import FileTextIcon from "../assets/icons/file-text.svg";
 import LogoutIcon from "../assets/icons/log-out.svg";
 import Header from "./Header";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Menu() {
+    const route = useRouter();
     const [selected, setSelected] = useState(true);
+
+    function handleExit() {
+        route.push("/auth");
+    }
 
     return (
         <div className="animate-fade-down md:animate-fade-left">
@@ -31,7 +37,7 @@ export default function Menu() {
                         </button>
                     </ul>
                 </nav>
-                <button className="flex w-full mt-auto p-4 rounded-lg animate-fade-in-slow hover:opacity-60">
+                <button onClick={handleExit} className="flex w-full mt-auto p-4 rounded-lg animate-fade-in-slow hover:opacity-60">
                     <LogoutIcon transform="rotate(180)" stroke="#F1F1F1" width={24} height={24} name="Sair" />
                     <p className="text-xl ml-1">Sair</p>
                 </button>

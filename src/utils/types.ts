@@ -19,16 +19,16 @@ export interface FormInputProps {
 }
 
 export interface CardTotalProps {
-    element: CartTotal;
+    element: CardTotal;
 }
 
 export interface TableProps {
     title: string;
     subTitle: string;
-    data?: titleData[];
+    data?: TitleData[];
 }
 
-export type CartTotal = {
+export type CardTotal = {
     title: string;
     subTitle: string;
     value: number;
@@ -37,7 +37,14 @@ export type CartTotal = {
     iconAreaColor: string;
 }
 
-export type titleData = {
+export type Totalizers = {
+    amountReceived: number;
+    amountToReceive: number;
+    titlesReceived: number;
+    titlesToReceive: number;
+}
+
+export type TitleData = {
     id: number;
     nfNumber: string;
     paymentType: string;

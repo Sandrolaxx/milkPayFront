@@ -1,18 +1,21 @@
 import { toast } from "react-toastify";
-import { EnumError } from "./types";
+import { EnumError, Totalizers } from "./types";
 import { getBasicToken, getBearerToken, getToastError, getToastSuccess } from "./utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-const userRoutes = process.env.NEXT_PUBLIC_API_USER_ROUTES;
 const tokenBaseUrl = process.env.NEXT_PUBLIC_TOKENBASE_URL;
 const tokenAuth = process.env.NEXT_PUBLIC_TOKEN_BASIC;
 const tokenUser = process.env.NEXT_PUBLIC_TOKEN_USER;
 const tokenPassword = process.env.NEXT_PUBLIC_TOKEN_PASSWORD;
 const tokenGrantType = process.env.NEXT_PUBLIC_TOKEN_GRANT_TYPE;
 
+const userPath = process.env.NEXT_PUBLIC_USER_PATH;
+const titlePath = process.env.NEXT_PUBLIC_TITLE_PATH;
+const totalizersPath = process.env.NEXT_PUBLIC_TOTALIZERS_PATH;
+
 export async function createAccount(document: string, password: string) {
     const userDto = { document, password };
-    const url = baseUrl.concat(userRoutes);
+    const url = baseUrl.concat(userPath);
     const token = await getToken(tokenUser, tokenPassword);
     const toastify = toast.loading("Criando usuário...");
 
@@ -77,4 +80,19 @@ export async function getUserToken(document: string, password: string) {
 
         return token;
     }
+}
+
+export function fetchTotalizers(): Promise<Totalizers> {
+    const urlTotalizers = baseUrl.concat(titlePath).concat(totalizersPath);
+    const token = localStorage.getItem("token");
+
+    const request: RequestInit = {
+        headers: {
+            "Authorization": getBearerToken(token!),
+            "Content-Type": "application/json"
+        }
+    }
+
+    return fetch(urlTotalizers, request)
+        .then(res => res.json().then(response => response));
 }

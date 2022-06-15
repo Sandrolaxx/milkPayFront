@@ -5,14 +5,18 @@ import Menu from "src/components/Menu";
 import CardTotalSkeleton from "src/components/skeleton/CardTotalSkeleton";
 import TableSkeleton from "src/components/skeleton/TableSkeleton";
 import Table from "src/components/Table";
+import { fetchTotalizers } from "src/utils/restClient";
 import { listTotalCard, titleListData } from "src/utils/testFront";
+import { Totalizers } from "src/utils/types";
 
 export default function Home() {
     const router = useRouter();
-    let [isAuth, setAuth] = useState(false);
-    let [isLoading, setLoading] = useState(true);
+    const [cardsData, setCardsData] = useState<Totalizers>();
+    const [isAuth, setAuth] = useState(false);
+    const [isLoading, setLoading] = useState(false);
 
-    useEffect(() => isAuthenticated());
+
+    useEffect(() => isAuthenticated(), []);
 
     function isAuthenticated() {
         const expiration = localStorage.getItem("expiration");
@@ -24,9 +28,11 @@ export default function Home() {
         //     router.push("/auth");
         // }
 
-        setTimeout(() => setLoading(false), 2000);
-
-        setAuth(true);
+        fetchTotalizers().then(res => {
+            setCardsData(res);
+            setAuth(true);
+            console.log(res);
+        })
     }
 
     return (

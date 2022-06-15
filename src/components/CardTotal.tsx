@@ -1,4 +1,5 @@
 import { CardTotalProps } from "src/utils/types";
+import { formatMoney } from "src/utils/utils";
 
 export default function CardTotal({ element }: CardTotalProps) {
     return (
@@ -13,7 +14,7 @@ export default function CardTotal({ element }: CardTotalProps) {
                         {element.title}
                     </h1>
                     <p className="text-xl font-semibold text-secundary-dark-color xl:text-2xl 2xl:text-3xl">
-                        {element.value}
+                        {formatMoney(element.value)}
                     </p>
                 </div>
             </div>

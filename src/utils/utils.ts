@@ -46,3 +46,36 @@ export function getTokenExpirationDate() {
 export function isValidToken(expiration: string) {
     return Number.parseInt(expiration) > new Date().getTime();
 }
+
+export function formatDateToDDMMYYYHHMMSS(date: Date):string {
+    const day = date.getUTCDate().toString();
+    const month = (date.getMonth() + 1);
+    const monthFormated = month < 10 ? ("0").concat(month.toString()) : month.toString(); 
+    const year = date.getFullYear().toString();
+
+    const hour = date.getHours().toString();
+    const minutes = date.getMinutes().toString();
+    const seconds = date.getSeconds().toString();
+
+    const formatedDate = day.concat("/").concat(monthFormated).concat("/").concat(year);
+    const formatedTime = hour.concat(":").concat(minutes).concat(":").concat(seconds);
+
+    return formatedDate.concat(" ").concat(formatedTime);
+}
+
+export function formatMoney(amount: number) {
+    return amount.toFixed(2)
+        .replace("", "R$ ")
+        .replace(".", ",")
+        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+}
+
+export function formatDocument(document: string) {
+    const regex = new RegExp(/[^\d]/g);
+
+    if (document.length > 14) {
+        return document.substring(0,14);
+    }
+
+    return document.replace(regex, "");
+}

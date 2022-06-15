@@ -6,7 +6,7 @@ import EmailIcon from "../assets/icons/mail.svg";
 import UserIcon from "../assets/icons/user.svg";
 import { createAccount, getUserToken } from "../utils/restClient";
 import { EnumFormType, FormInputProps } from "../utils/types";
-import { equalsEnumFormType, getTokenExpirationDate } from "../utils/utils";
+import { equalsEnumFormType, formatDocument, getTokenExpirationDate } from "../utils/utils";
 import Button from "./Button";
 
 export default function FormInput({ formType, changeFunction }: FormInputProps) {
@@ -68,7 +68,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                                         <UserIcon className="text-dark-color" width={24} />
                                     </span>
                                     <input type="text" id="sign-in-document" placeholder="CPF/CNPJ"
-                                        value={document} onChange={e => setDocument(e.target.value)}
+                                        value={document} onChange={e => setDocument(formatDocument(e.target.value))}
                                         className={`flex-1 rounded-r-lg appearance-none border 
                                         border-gray-300 w-full py-2 px-3 bg-white text-gray-color 
                                         placeholder-gray-400 shadow-sm text-base focus:outline-none 
