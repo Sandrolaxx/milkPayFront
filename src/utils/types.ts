@@ -19,7 +19,7 @@ export interface FormInputProps {
 }
 
 export interface CardTotalProps {
-    element: CardTotal;
+    element: CardTotalizers;
 }
 
 export interface TableProps {
@@ -28,10 +28,10 @@ export interface TableProps {
     data?: TitleData[];
 }
 
-export type CardTotal = {
+export type CardTotalizers = {
     title: string;
     subTitle: string;
-    value: number;
+    value: string;
     bigIcon: SVGElement;
     smallIcon: SVGElement;
     iconAreaColor: string;

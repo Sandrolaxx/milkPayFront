@@ -82,7 +82,7 @@ export async function getUserToken(document: string, password: string) {
     }
 }
 
-export function fetchTotalizers(): Promise<Totalizers> {
+export async function fetchTotalizers(): Promise<Totalizers> {
     const urlTotalizers = baseUrl.concat(titlePath).concat(totalizersPath);
     const token = localStorage.getItem("token");
 
@@ -93,6 +93,11 @@ export function fetchTotalizers(): Promise<Totalizers> {
         }
     }
 
-    return fetch(urlTotalizers, request)
-        .then(res => res.json().then(response => response));
+    return await fetch(urlTotalizers, request)
+        .then(res => res.json().then(response => response))
+        .catch(() => {
+            toast.error("Sessão expirada! Realize o login novamente.");
+
+            throw Error("Erro ao buscar totalizadores.");
+        });
 }

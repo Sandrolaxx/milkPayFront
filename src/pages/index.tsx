@@ -6,33 +6,35 @@ import CardTotalSkeleton from "src/components/skeleton/CardTotalSkeleton";
 import TableSkeleton from "src/components/skeleton/TableSkeleton";
 import Table from "src/components/Table";
 import { fetchTotalizers } from "src/utils/restClient";
-import { listTotalCard, titleListData } from "src/utils/testFront";
-import { Totalizers } from "src/utils/types";
+import { titleListData } from "src/utils/testFront";
+import { CardTotalizers, Totalizers } from "src/utils/types";
+import { getTotalCardComponentData, isNullOrEmpty, isValidToken } from "src/utils/utils";
 
 export default function Home() {
     const router = useRouter();
-    const [cardsData, setCardsData] = useState<Totalizers>();
+    const [cardsData, setCardsData] = useState<CardTotalizers[]>();
     const [isAuth, setAuth] = useState(false);
     const [isLoading, setLoading] = useState(false);
-
 
     useEffect(() => isAuthenticated(), []);
 
     function isAuthenticated() {
         const expiration = localStorage.getItem("expiration");
         const token = localStorage.getItem("token");
-        // const hasAuth = !isNullOrEmpty(expiration) && !isNullOrEmpty(token);
+        const hasAuth = !isNullOrEmpty(expiration) && !isNullOrEmpty(token);
 
-        // if (!hasAuth 
-        //     || (hasAuth && !isValidToken(expiration!))) {
-        //     router.push("/auth");
-        // }
+        if (!hasAuth
+            || (hasAuth && !isValidToken(expiration!))) {
+            router.push("/auth");
+            return;
+        }
 
+        
         fetchTotalizers().then(res => {
-            setCardsData(res);
+            setCardsData(getTotalCardComponentData(res));
             setAuth(true);
-            console.log(res);
-        })
+        }).catch(err => router.push("/auth"));
+
     }
 
     return (
@@ -52,7 +54,7 @@ export default function Home() {
                             <CardTotalSkeleton />
                         </>
                         :
-                        listTotalCard.map(data => (
+                        cardsData!.map(data => (
                             <CardTotal element={data} key={data.title} />
                         ))
                     }
