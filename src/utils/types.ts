@@ -18,6 +18,15 @@ export interface FormInputProps {
     changeFunction: Function;
 }
 
+export interface MenuProps {
+    changeFunction: Function;
+}
+
+export interface DashboardProps {
+    isLoading: boolean;
+    cardsData: CardTotalizers[];
+}
+
 export interface CardTotalProps {
     element: CardTotalizers;
 }
@@ -59,6 +68,11 @@ export enum EnumFormType {
     LOGIN,
     REGISTER,
     FORGOT_PASSWORD
+}
+
+export enum EnumScreens {
+    DASHBOARD,
+    SEARCH_TITLE
 }
 
 export enum EnumError {

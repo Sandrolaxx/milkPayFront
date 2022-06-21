@@ -1,5 +1,5 @@
 import { UpdateOptions } from "react-toastify";
-import { CardTotalizers, EnumFormType, Totalizers } from "./types";
+import { CardTotalizers, EnumFormType, EnumScreens, Totalizers } from "./types";
 import CalendarIcon from "../assets/icons/calendar.svg";
 import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
@@ -12,7 +12,7 @@ export function isNullOrEmpty(str: any): boolean {
     return str == null || str == undefined || str.trim() == "";
 }
 
-export function equalsEnumFormType(firstEnum: EnumFormType, secondEnum: EnumFormType) {
+export function equalsEnum(firstEnum: any, secondEnum: any) {
     return firstEnum == secondEnum;
 }
 

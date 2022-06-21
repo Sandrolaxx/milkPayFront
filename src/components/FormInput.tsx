@@ -6,7 +6,7 @@ import EmailIcon from "../assets/icons/mail.svg";
 import UserIcon from "../assets/icons/user.svg";
 import { createAccount, getUserToken } from "../utils/restClient";
 import { EnumFormType, FormInputProps } from "../utils/types";
-import { equalsEnumFormType, formatDocument, getTokenExpirationDate } from "../utils/utils";
+import { equalsEnum, formatDocument, getTokenExpirationDate } from "../utils/utils";
 import Button from "./Button";
 
 export default function FormInput({ formType, changeFunction }: FormInputProps) {
@@ -52,14 +52,14 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
         <>
             <MilkPayIcon fill="#000" width={56} height={56} name="Logo MilkPay" />
             <p className="text-xl font-light text-gray-color sm:text-2xl dark:text-white">
-                {equalsEnumFormType(formType, EnumFormType.LOGIN) && 'Autenticação'}
-                {equalsEnumFormType(formType, EnumFormType.REGISTER) && 'Registrar-se'}
-                {equalsEnumFormType(formType, EnumFormType.FORGOT_PASSWORD) && 'Redefinir Senha'}
+                {equalsEnum(formType, EnumFormType.LOGIN) && 'Autenticação'}
+                {equalsEnum(formType, EnumFormType.REGISTER) && 'Registrar-se'}
+                {equalsEnum(formType, EnumFormType.FORGOT_PASSWORD) && 'Redefinir Senha'}
             </p>
             <div className="mt-6">
                 <form autoComplete="off" onSubmit={e => e.preventDefault()}>
-                    {(equalsEnumFormType(formType, EnumFormType.LOGIN)
-                        || equalsEnumFormType(formType, EnumFormType.REGISTER))
+                    {(equalsEnum(formType, EnumFormType.LOGIN)
+                        || equalsEnum(formType, EnumFormType.REGISTER))
                         && <>
                             <div className="flex flex-col mb-2">
                                 <div className="flex">
@@ -93,7 +93,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                             </div>
                         </>
                     }
-                    {equalsEnumFormType(formType, EnumFormType.FORGOT_PASSWORD) &&
+                    {equalsEnum(formType, EnumFormType.FORGOT_PASSWORD) &&
                         <>
                             <div className="flex flex-col mb-2">
                                 <div className="flex">
@@ -118,7 +118,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                             </div>
                         </>
                     }
-                    {equalsEnumFormType(formType, EnumFormType.LOGIN) &&
+                    {equalsEnum(formType, EnumFormType.LOGIN) &&
                         <div className={`flex items-center mb-6 -mt-4 text-xs font-normal sm:text-sm 
                                             text-gray-600 hover:text-gray-500 dark:text-gray-100 dark:hover:text-white`}>
                             <div className="flex ml-auto">
@@ -126,17 +126,17 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                             </div>
                         </div>
                     }
-                    {equalsEnumFormType(formType, EnumFormType.LOGIN) &&
+                    {equalsEnum(formType, EnumFormType.LOGIN) &&
                         <div className="flex w-full">
                             <Button text="Login" stylized={true} handleFunction={handleLogin} />
                         </div>
                     }
-                    {equalsEnumFormType(formType, EnumFormType.REGISTER) &&
+                    {equalsEnum(formType, EnumFormType.REGISTER) &&
                         <div className="flex w-full mt-12">
                             <Button text="Registrar" stylized={true} handleFunction={handleRegister} />
                         </div>
                     }
-                    {equalsEnumFormType(formType, EnumFormType.FORGOT_PASSWORD) &&
+                    {equalsEnum(formType, EnumFormType.FORGOT_PASSWORD) &&
                         <div className="flex w-full mt-16">
                             <Button text="Enviar" stylized={true} handleFunction={handleForgotPassword} />
                         </div>
@@ -145,14 +145,14 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
             </div>
             <div className={`items-center text-sm font-normal mt-6 text-center text-gray-600
                                 hover:text-gray-500 dark:text-gray-100 dark:hover:text-white`}>
-                {equalsEnumFormType(formType, EnumFormType.LOGIN) &&
+                {equalsEnum(formType, EnumFormType.LOGIN) &&
                     <Button text="Não possui uma conta?" handleFunction={() => changeInput(EnumFormType.REGISTER)} />
                 }
-                {equalsEnumFormType(formType, EnumFormType.REGISTER) &&
+                {equalsEnum(formType, EnumFormType.REGISTER) &&
 
                     <Button text="Não possui uma conta?" handleFunction={() => changeInput(EnumFormType.LOGIN)} />
                 }
-                {equalsEnumFormType(formType, EnumFormType.FORGOT_PASSWORD) &&
+                {equalsEnum(formType, EnumFormType.FORGOT_PASSWORD) &&
                     <Button text="Não possui mais o e-mail cadastrado?" handleFunction={handleLoseEmail} />
                 }
             </div>
