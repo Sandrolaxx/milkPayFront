@@ -13,6 +13,8 @@ export default function Menu({ changeFunction }: MenuProps) {
     const route = useRouter();
 
     function handleExit() {
+        localStorage.removeItem("token");
+
         route.push("/auth");
     }
 

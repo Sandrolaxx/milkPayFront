@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { EnumError, Totalizers } from "./types";
+import { EnumError, TitleData, Totalizers } from "./types";
 import { getBasicToken, getBearerToken, getToastError, getToastSuccess } from "./utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -82,7 +82,7 @@ export async function getUserToken(document: string, password: string) {
     }
 }
 
-export async function fetchTotalizers(): Promise<Totalizers> {
+export function fetchTotalizers(): Promise<Totalizers> {
     const urlTotalizers = baseUrl.concat(titlePath).concat(totalizersPath);
     const token = localStorage.getItem("token");
 
@@ -93,11 +93,31 @@ export async function fetchTotalizers(): Promise<Totalizers> {
         }
     }
 
-    return await fetch(urlTotalizers, request)
+    return fetch(urlTotalizers, request)
         .then(res => res.json().then(response => response))
         .catch(() => {
             toast.error("Sessão expirada! Realize o login novamente.");
 
             throw Error("Erro ao buscar totalizadores.");
+        });
+}
+
+export function fetchAllTitles(): Promise<TitleData[]> {
+    const urlTitles = baseUrl.concat(titlePath);
+    const token = localStorage.getItem("token");
+
+    const request: RequestInit = {
+        headers: {
+            "Authorization": getBearerToken(token!),
+            "Content-Type": "application/json"
+        }
+    }
+
+    return fetch(urlTitles, request)
+        .then(res => res.json().then(response => response))
+        .catch(() => {
+            toast.error("Sessão expirada! Realize o login novamente.");
+
+            throw Error("Erro ao buscar títulos.");
         });
 }

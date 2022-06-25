@@ -1,10 +1,10 @@
 import { UpdateOptions } from "react-toastify";
-import { CardTotalizers, EnumFormType, EnumScreens, Totalizers } from "./types";
 import CalendarIcon from "../assets/icons/calendar.svg";
 import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
 import AmountReceiveToIcon from "../assets/icons/dollar-sign.svg";
 import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
+import { CardTotalizers, Totalizers } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 
@@ -52,20 +52,19 @@ export function isValidToken(expiration: string) {
     return Number.parseInt(expiration) > new Date().getTime();
 }
 
-export function formatDateToDDMMYYYHHMMSS(date: Date): string {
-    const day = date.getUTCDate().toString();
-    const month = (date.getMonth() + 1);
-    const monthFormated = month < 10 ? ("0").concat(month.toString()) : month.toString();
-    const year = date.getFullYear().toString();
+export function formatDateStrToDDMMYYYY(date: string): string {
+    const DD = date.slice(8, 10);
+    const MM = date.slice(5, 7);
+    const YYYY = date.slice(0, 4);
 
-    const hour = date.getHours().toString();
-    const minutes = date.getMinutes().toString();
-    const seconds = date.getSeconds().toString();
+    return DD.concat("/").concat(MM).concat("/").concat(YYYY);
+}
 
-    const formatedDate = day.concat("/").concat(monthFormated).concat("/").concat(year);
-    const formatedTime = hour.concat(":").concat(minutes).concat(":").concat(seconds);
+export function formatDateStrToDDMMYYYYHHMMSS(date: string): string {
+    const DDMMYYYY = formatDateStrToDDMMYYYY(date.slice(0, 10));
+    const HHMMSS = date.slice(11, 19);
 
-    return formatedDate.concat(" ").concat(formatedTime);
+    return DDMMYYYY.concat(" ").concat(HHMMSS);
 }
 
 export function formatMoney(amount: number) {
@@ -83,6 +82,19 @@ export function formatDocument(document: string) {
     }
 
     return document.replace(regex, "");
+}
+
+export function isUserAuth(): boolean {
+    const expiration = localStorage.getItem("expiration");
+    const token = localStorage.getItem("token");
+    const hasAuth = !isNullOrEmpty(expiration) && !isNullOrEmpty(token);
+
+    if (!hasAuth
+        || (hasAuth && !isValidToken(expiration!))) {
+        return false;
+    }
+
+    return true;
 }
 
 export function getTotalCardComponentData(totalizers: Totalizers): CardTotalizers[] {

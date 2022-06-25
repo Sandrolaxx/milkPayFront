@@ -1,5 +1,5 @@
 import { TableProps } from "src/utils/types";
-import { formatDateToDDMMYYYHHMMSS, formatMoney } from "src/utils/utils";
+import { formatDateStrToDDMMYYYY, formatDateStrToDDMMYYYYHHMMSS, formatMoney } from "src/utils/utils";
 import ArrowRightIcon from "../assets/icons/arrow-left.svg";
 import ArrowLeftIcon from "../assets/icons/arrow-right.svg";
 import BoletoIcon from "../assets/icons/barcode.svg";
@@ -69,7 +69,8 @@ export default function Table({ title, subTitle, data }: TableProps) {
                                             {result.paymentType}
                                         </p>
                                     </td>
-                                    <td className="p-5 border-b border-gray-200 text-sm" title={result.paymentId}>
+                                    <td className="p-5 border-b border-gray-200 text-sm"
+                                        title={result.pixKey ?? result.digitable ?? result.barcode}>
                                         {result.paymentType == "BOLETO" ?
                                             <BoletoIcon width={32} height={32} stroke="#212121" />
                                             :
@@ -78,12 +79,12 @@ export default function Table({ title, subTitle, data }: TableProps) {
                                     </td>
                                     <td className="p-5 border-b border-gray-200 text-sm">
                                         <p className="text-dark-color whitespace-no-wrap">
-                                            {formatDateToDDMMYYYHHMMSS(result.inclusionDate)}
+                                            {formatDateStrToDDMMYYYYHHMMSS(result.inclusionDate)}
                                         </p>
                                     </td>
                                     <td className="p-5 border-b border-gray-200 text-sm">
                                         <p className="text-dark-color whitespace-no-wrap">
-                                            {formatDateToDDMMYYYHHMMSS(result.dueDate)}
+                                            {formatDateStrToDDMMYYYY(result.dueDate)}
                                         </p>
                                     </td>
                                     <td className="p-5 border-b border-gray-200 text-sm">

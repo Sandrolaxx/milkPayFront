@@ -1,6 +1,6 @@
 export interface LayoutProps {
     children: any;
-    animateFooter?: boolean; 
+    animateFooter?: boolean;
 }
 
 export interface ButtonProps {
@@ -23,8 +23,8 @@ export interface MenuProps {
 }
 
 export interface DashboardProps {
-    isLoading: boolean;
     cardsData: CardTotalizers[];
+    titleListData: TitleData[];
 }
 
 export interface CardTotalProps {
@@ -57,9 +57,11 @@ export type TitleData = {
     id: number;
     nfNumber: string;
     paymentType: string;
-    paymentId: string;
-    inclusionDate: Date;
-    dueDate: Date;
+    digitable: string;
+    barcode: string;
+    pixKey: string;
+    inclusionDate: string;
+    dueDate: string;
     amount: number;
     dailyInterest: number;
 }
