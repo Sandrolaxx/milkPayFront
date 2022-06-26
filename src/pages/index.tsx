@@ -2,30 +2,25 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Dashboard from "src/components/Dashboard";
 import Menu from "src/components/Menu";
-import { fetchAllTitles, fetchTotalizers } from "src/utils/restClient";
-import { CardTotalizers, EnumScreens, TitleData } from "src/utils/types";
-import { equalsEnum, getTotalCardComponentData, isUserAuth } from "src/utils/utils";
+import { useCardsData } from "src/hooks/useCardsData";
+import { useTitleData } from "src/hooks/useTitleData";
+import { EnumScreens } from "src/utils/types";
+import { equalsEnum, isUserAuth } from "src/utils/utils";
 
 export default function Home() {
-    const [selectedScreen, setSelectedScreen] = useState(EnumScreens.DASHBOARD);
-    const [cardsData, setCardsData] = useState<CardTotalizers[]>();
-    const [titleList, setTitleList] = useState<TitleData[]>();
     const router = useRouter();
+    const [selectedScreen, setSelectedScreen] = useState(EnumScreens.DASHBOARD);
+    const { cardsData, fetchCardsData } = useCardsData(router);
+    const { titleList, fetchTitlesData } = useTitleData(router);
 
     useEffect(() => {
         isUserAuth() ? fetchData() : router.push("/auth");
     }, []);
 
     function fetchData() {
-        fetchTotalizers().then(res => {
-            setCardsData(getTotalCardComponentData(res));
-        }).catch(err => router.push("/auth"));
-
-        fetchAllTitles().then(res => {
-            setTitleList(res);
-        }).catch(err => router.push("/auth"));
+        fetchCardsData();
+        fetchTitlesData();
     }
-
 
     function changeView(selectedScreen: EnumScreens) {
         setSelectedScreen(selectedScreen);
