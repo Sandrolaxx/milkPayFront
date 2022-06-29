@@ -52,7 +52,7 @@ export default function Table({ title, subTitle, data }: TableProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {data?.map(result => (
+                            {data!.results.map(result => (
                                 <tr key={result.id} >
                                     <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm">
                                         <p className="text-dark-color whitespace-no-wrap">

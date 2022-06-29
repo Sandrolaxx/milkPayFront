@@ -23,8 +23,11 @@ export interface MenuProps {
 }
 
 export interface DashboardProps {
-    cardsData: CardTotalizers[];
-    titleListData: TitleData[];
+    dashboardData: {
+        cardsData: CardTotalizers[];
+        titlesToReceive: FecthTitleResponse;
+        receivedTitles: FecthTitleResponse;
+    };
 }
 
 export interface CardTotalProps {
@@ -34,7 +37,20 @@ export interface CardTotalProps {
 export interface TableProps {
     title: string;
     subTitle: string;
-    data?: TitleData[];
+    data?: FecthTitleResponse;
+}
+
+export type DataContext = {
+    cardsData: {
+        cardsData: CardTotalizers[] | undefined;
+        fetchCardsData: () => void
+    },
+    titlesData: {
+        titlesToReceive: FecthTitleResponse | undefined;
+        receivedTitles: FecthTitleResponse | undefined;
+        fetchTitlesToReciveData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
+        fetchRecivedTitlesData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
+    }
 }
 
 export type CardTotalizers = {
@@ -64,6 +80,20 @@ export type TitleData = {
     dueDate: string;
     amount: number;
     dailyInterest: number;
+}
+
+export type FecthTitleResponse = {
+    allResultsSize: number;
+    page: number;
+    results: TitleData[];
+}
+
+export type FecthTitleParams = {
+    offset: string,
+    limit: string,
+    pageIndex: number,
+    pageSize: number,
+    liquidated: boolean
 }
 
 export enum EnumFormType {

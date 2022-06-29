@@ -1,18 +1,47 @@
-import { NextRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useState } from "react";
-import { fetchAllTitles } from "src/utils/restClient";
-import { TitleData } from "src/utils/types";
+import { fetchTitles } from "src/utils/restClient";
+import { FecthTitleParams, FecthTitleResponse } from "src/utils/types";
 
-export function useTitleData(router: NextRouter) {
-    const [titleList, setTitleList] = useState<TitleData[]>();
+export function useTitleData() {
+    const [titlesToReceive, setTitlesRecive] = useState<FecthTitleResponse>();
+    const [receivedTitles, setReceivedTitles] = useState<FecthTitleResponse>();
+    const router = useRouter();
 
-    function fetchTitlesData() {
-        fetchAllTitles()
+    function fetchTitlesToReciveData(pageIndex?: number, pageSize?: number) {
+        const titlesToReceiveParams: FecthTitleParams = {
+            offset: "24/06/2022",
+            limit: "26/07/2022",
+            pageIndex: pageIndex ?? 0,
+            pageSize: pageSize ?? 5,
+            liquidated: false
+        };
+
+        fetchTitles(titlesToReceiveParams)
             .then(res => {
-                setTitleList(res);
+                setTitlesRecive(res);
             })
             .catch(err => router.push("/auth"));
     }
 
-    return { titleList, fetchTitlesData }
+    function fetchRecivedTitlesData(pageIndex?: number, pageSize?: number) {
+        const receivedTitlesParams: FecthTitleParams = {
+            offset: "24/06/2022",
+            limit: "26/07/2022",
+            pageIndex: pageIndex ? pageIndex : 0,
+            pageSize: pageSize ? pageSize : 5,
+            liquidated: true
+        };
+
+        fetchTitles(receivedTitlesParams)
+            .then(res => {
+                setReceivedTitles(res);
+            })
+            .catch(err => router.push("/auth"));
+    }
+
+    return {
+        titlesToReceive, receivedTitles,
+        fetchTitlesToReciveData, fetchRecivedTitlesData
+    }
 } 

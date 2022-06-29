@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { EnumError, TitleData, Totalizers } from "./types";
+import { EnumError, FecthTitleParams, FecthTitleResponse, Totalizers } from "./types";
 import { getBasicToken, getBearerToken, getToastError, getToastSuccess } from "./utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -47,9 +47,7 @@ export async function createAccount(document: string, password: string) {
 }
 
 async function getToken(tokenUser: string, tokenPassword: string) {
-    const qs = require("querystring");
-
-    const form = qs.stringify({
+    const form = new URLSearchParams({
         username: tokenUser,
         password: tokenPassword,
         grant_type: tokenGrantType,
@@ -94,7 +92,8 @@ export function fetchTotalizers(): Promise<Totalizers> {
     }
 
     return fetch(urlTotalizers, request)
-        .then(res => res.json().then(response => response))
+        .then(res => res.json())
+        .then(response => response)
         .catch(() => {
             toast.error("Sessão expirada! Realize o login novamente.");
 
@@ -102,19 +101,27 @@ export function fetchTotalizers(): Promise<Totalizers> {
         });
 }
 
-export function fetchAllTitles(): Promise<TitleData[]> {
-    const urlTitles = baseUrl.concat(titlePath);
+export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleResponse> {
+
+    const urlTitles = new URL(baseUrl.concat(titlePath));
     const token = localStorage.getItem("token");
+    
+    urlTitles.searchParams.append("offset", params.offset);
+    urlTitles.searchParams.append("limit", params.limit);
+    urlTitles.searchParams.append("pageIndex", params.pageIndex.toString());
+    urlTitles.searchParams.append("pageSize", params.pageSize.toString());
 
     const request: RequestInit = {
         headers: {
             "Authorization": getBearerToken(token!),
-            "Content-Type": "application/json"
-        }
+            "Content-Type": "application/json",
+            "liquidated": JSON.stringify(params.liquidated)
+        },
     }
 
     return fetch(urlTitles, request)
-        .then(res => res.json().then(response => response))
+        .then(res => res.json())
+        .then(response => response)
         .catch(() => {
             toast.error("Sessão expirada! Realize o login novamente.");
 

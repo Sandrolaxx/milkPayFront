@@ -24,7 +24,7 @@
         "next-env.d.ts",
         "**/*.ts",
         "**/*.tsx",
-        "src/utils/restClient.ts"
+        "src/hooks/restClient.ts"
     ],
     "exclude": [
         "node_modules"
