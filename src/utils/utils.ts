@@ -1,10 +1,11 @@
-import { toast, UpdateOptions } from "react-toastify";
+import { UpdateOptions } from "react-toastify";
+import { URL } from "url";
 import CalendarIcon from "../assets/icons/calendar.svg";
 import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
 import AmountReceiveToIcon from "../assets/icons/dollar-sign.svg";
 import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
-import { CardTotalizers, Totalizers } from "./types";
+import { CardTotalizers, FecthTitleParams, Totalizers } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 
@@ -133,3 +134,40 @@ export function getTotalCardComponentData(totalizers: Totalizers): CardTotalizer
         }
     ];
 };
+
+export function addQueryParams(params: URLSearchParams, url: URL): URL {
+    params.forEach((k, v) => {
+        url.searchParams.append(v, k);
+    })
+
+    return url;
+}
+
+export function getFetchTitlesParams(liquidated: boolean, pageIndex?: number,
+    pageSize?: number): FecthTitleParams {
+        const today = new Date();
+        const nextMonth = new Date();
+        nextMonth.setMonth(today.getMonth() + 1);
+
+    return {
+        offset: formatDDMMYYYY(today),
+        limit: formatDDMMYYYY(nextMonth),
+        pageIndex: pageIndex ?? 0,
+        pageSize: pageSize ?? 5,
+        liquidated
+    }
+}
+
+export function formatDDMMYYYY(date: Date): string {
+    const month = date.getUTCMonth() + 1;
+    
+    const DD = date.getDate().toString();
+    const MM = month < 10 ? ("0").concat(month.toString()) : month.toString();
+    const YYYY = date.getUTCFullYear().toString();
+
+    return DD.concat("/").concat(MM).concat("/").concat(YYYY);
+}
+
+export function firstElement<T>(array: T[]): T | undefined {
+        return array.at(0);
+}

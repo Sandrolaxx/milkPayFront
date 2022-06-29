@@ -1,11 +1,40 @@
+import { useEffect, useState } from "react";
+import { useDataContext } from "src/context/data";
 import { TableProps } from "src/utils/types";
-import { formatDateStrToDDMMYYYY, formatDateStrToDDMMYYYYHHMMSS, formatMoney } from "src/utils/utils";
+import { firstElement, formatDateStrToDDMMYYYY, formatDateStrToDDMMYYYYHHMMSS, formatMoney } from "src/utils/utils";
 import ArrowRightIcon from "../assets/icons/arrow-left.svg";
 import ArrowLeftIcon from "../assets/icons/arrow-right.svg";
 import BoletoIcon from "../assets/icons/barcode.svg";
 import PixIcon from "../assets/icons/pix.svg";
 
 export default function Table({ title, subTitle, data }: TableProps) {
+    const [listPageSize, setListPageSize] = useState<number[]>();
+    const { titlesData } = useDataContext();
+
+    useEffect(getPageNavSize, []);
+
+    function changePage(pageIndex: number) {
+        const isLiquidatedTitles = firstElement(data?.results!)?.liquidated;
+
+        if (isLiquidatedTitles) {
+            titlesData.fetchRecivedTitlesData(pageIndex);
+        } else {
+            titlesData.fetchTitlesToReciveData(pageIndex);
+        }
+    }
+
+    function getPageNavSize() {
+        const defaultPageSize = 5;
+        const size = Math.ceil(data?.allResultsSize! / defaultPageSize);
+        const pagesSize = [];
+
+        for (let index = 0; index < size; index++) {
+            pagesSize.push(index);
+        }
+
+        setListPageSize(pagesSize);
+    }
+
     return (
         <div className="container min-w-full py-4 pr-4 xl:pr-0">
             <div className="px-4 overflow-x-auto">
@@ -18,35 +47,35 @@ export default function Table({ title, subTitle, data }: TableProps) {
                         <thead>
                             <tr>
                                 <th title="Identificador" scope="col" className={`pt-6 px-6 border-b border-gray-200 
-                                    text-purple-700  text-left text-sm uppercase font-normal cursor-help`}>
+                                        text-purple-700  text-left text-sm uppercase font-normal cursor-help`}>
                                     Id.
                                 </th>
                                 <th title="Número Nota Fiscal" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                    border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                                        border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                                     Número NF
                                 </th>
                                 <th title="Tipo Recebimento(PIX/Boleto)" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                    border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                                        border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                                     Tipo Recebimento
                                 </th>
                                 <th title="Identificador do Tipo Recebimento" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                    border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                                        border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                                     Id. Recebimento
                                 </th>
                                 <th title="Data de Realização do Serviço/Venda" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                    border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                                      first-letter:border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                                     Data Serviço/Venda
                                 </th>
                                 <th title="Data Prevista do Recebimento" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                    border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                                            border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                                     Data Recebimento
                                 </th>
                                 <th title="Valor Total Título a ser Recebido" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                    border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                                            border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                                     Valor Total Título
                                 </th>
                                 <th title="Solicitar Antecipação" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                    border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                                            border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                                     Antecipar
                                 </th>
                             </tr>
@@ -101,28 +130,32 @@ export default function Table({ title, subTitle, data }: TableProps) {
                             ))}
                         </tbody>
                     </table>
-                    <div className="px-4 bg-white py-4 flex flex-col xs:flex-row items-center xs:justify-between">
-                        <div className="flex items-center">
-                            <button type="button" className="p-2 border rounded-l-xl text-gray-600 bg-white hover:bg-gray-100">
-                                <ArrowRightIcon width={16} stroke="#7E22CE" />
-                            </button>
-                            <button type="button" className="w-full px-4 py-2 border-t border-b text-base text-purple-600 hover:bg-gray-100 ">
-                                1
-                            </button>
-                            <button type="button" className="w-full px-4 py-2 border text-base text-gray-color hover:bg-gray-100">
-                                2
-                            </button>
-                            <button type="button" className="w-full px-4 py-2 border-t border-b text-base text-gray-color hover:bg-gray-100">
-                                3
-                            </button>
-                            <button type="button" className="w-full px-4 py-2 border text-base text-gray-color hover:bg-gray-100">
-                                4
-                            </button>
-                            <button type="button" className="p-2 border-t border-b border-r rounded-r-xl text-gray-color hover:bg-gray-100">
-                                <ArrowLeftIcon width={16} stroke="#7E22CE" />
-                            </button>
+
+                    {listPageSize && listPageSize.length ?
+                        <div className="px-4 bg-white py-4 flex flex-col xs:flex-row items-center xs:justify-between">
+                            <div className="flex items-center">
+                                <button type="button" onClick={data?.page! > 0 ? () => changePage(data?.page! - 1) : () => false}
+                                    className="p-2 border rounded-l-xl text-gray-600 bg-white hover:bg-gray-100">
+                                    <ArrowRightIcon width={16} stroke="#7E22CE" />
+                                </button>
+                                {listPageSize!.map(pageIndex => (
+                                    <button key={pageIndex} type="button" onClick={pageIndex != data?.page! ? () => changePage(pageIndex) : () => false}
+                                        className={`px-4 py-2 border-t border-b text-base  
+                                            hover:bg-gray-100 ${pageIndex == data?.page! ? 'text-purple-600' : 'text-gray-500' } `}>
+                                        {pageIndex + 1}
+                                    </button>
+                                ))}
+                                <button type="button" onClick={(data?.page! + 1) < listPageSize.length ? () => changePage(data?.page! + 1) : () => false}
+                                    className="p-2 border-t border-b border-r rounded-r-xl hover:bg-gray-100">
+                                    <ArrowLeftIcon width={16} stroke="#7E22CE" />
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                        :
+                        <div className="flex justify-center items-center h-16">
+                            Nenhum registro encontrado
+                        </div>
+                    }
                 </div>
             </div>
         </div>

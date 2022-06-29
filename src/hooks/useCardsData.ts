@@ -13,7 +13,7 @@ export function useCardsData() {
             .then(res => {
                 setCardsData(getTotalCardComponentData(res));
             })
-            .catch(err => router.push("/auth"));
+            .catch(() => router.push("/auth"));
     }
 
     return { cardsData, fetchCardsData }

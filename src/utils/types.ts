@@ -81,6 +81,7 @@ export type TitleData = {
     dueDate: string;
     amount: number;
     dailyInterest: number;
+    liquidated: boolean;
 }
 
 export type FecthTitleResponse = {

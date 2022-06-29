@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import { EnumError, FecthTitleParams, FecthTitleResponse, Totalizers } from "./types";
-import { getBasicToken, getBearerToken, getToastError, getToastSuccess } from "./utils";
+import { addQueryParams, getBasicToken, getBearerToken, getToastError, getToastSuccess } from "./utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 const tokenBaseUrl = process.env.NEXT_PUBLIC_TOKENBASE_URL;
@@ -47,7 +47,7 @@ export async function createAccount(document: string, password: string) {
         .catch(() => toast.update(toastify, getToastError(EnumError.CADASTRO_INDISPONIVEL)));
 }
 
-async function getToken(tokenUser: string, tokenPassword: string) {
+function getToken(tokenUser: string, tokenPassword: string) {
     const form = new URLSearchParams({
         username: tokenUser,
         password: tokenPassword,
@@ -63,7 +63,7 @@ async function getToken(tokenUser: string, tokenPassword: string) {
         method: "POST"
     }
 
-    return await fetch(tokenBaseUrl, request)
+    return fetch(tokenBaseUrl, request)
         .then(res => res.json())
         .then(json => json.access_token);
 }
@@ -95,7 +95,14 @@ export function fetchTotalizers(): Promise<Totalizers> {
 
     return fetch(urlTotalizers, request)
         .then(res => res.json())
-        .then(response => response)
+        .then(response => {
+            if (response.error) {
+                toast.error("Ocorreu um erro ao buscar os totalizadores, realize o login novamente!");
+                throw new Error("Erro ao consultar registros.");
+            }
+
+            return response;
+        })
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
@@ -103,17 +110,21 @@ export function fetchTotalizers(): Promise<Totalizers> {
             } else {
                 toast.error("Sessão expirada! Realize o login novamente.");
             }
+
+            throw new Error("Erro ao consultar registros.");
         });
 }
 
 export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleResponse> {
-    const urlTitles = new URL(baseUrl.concat(titlePath));
+    const searchParams = new URLSearchParams({
+        offset: params.offset,
+        limit: params.limit,
+        pageIndex: params.pageIndex.toString(),
+        pageSize: params.pageSize.toString()
+    });
+    const urlTitles = addQueryParams(searchParams, new URL(baseUrl.concat(titlePath)));
     const token = localStorage.getItem("token");
-
-    urlTitles.searchParams.append("offset", params.offset);
-    urlTitles.searchParams.append("limit", params.limit);
-    urlTitles.searchParams.append("pageIndex", params.pageIndex.toString());
-    urlTitles.searchParams.append("pageSize", params.pageSize.toString());
+    const errorMsgType = params.liquidated ? "títulos recebidos" : "títulos a receber";
 
     const request: RequestInit = {
         headers: {
@@ -125,14 +136,24 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
 
     return fetch(urlTitles, request)
         .then(res => res.json())
-        .then(response => response)
+        .then(response => {
+            if (response.error) {
+                toast.error("Ocorreu um erro ao buscar os ".concat(errorMsgType)
+                    .concat(". Realize o login novamente!"));
+                return;
+            }
+
+            return response;
+        })
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
-                toast.error("Serviços da MilkPay indisponíveis! Não foi possível realizar a consulta "
-                    .concat(params.liquidated ? "dos títulos recebidos." : "dos títulos a receber."));
+                toast.error("Serviços da MilkPay indisponíveis! Não foi possível realizar a consulta dos "
+                    .concat(errorMsgType));
             } else {
                 toast.error("Sessão expirada! Realize o login novamente.");
             }
+
+            throw new Error("Erro ao consultar registros.");
         });
 }
