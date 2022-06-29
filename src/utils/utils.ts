@@ -1,4 +1,4 @@
-import { UpdateOptions } from "react-toastify";
+import { toast, UpdateOptions } from "react-toastify";
 import CalendarIcon from "../assets/icons/calendar.svg";
 import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";

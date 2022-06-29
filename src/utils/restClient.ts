@@ -43,7 +43,8 @@ export async function createAccount(document: string, password: string) {
                         toast.update(toastify, getToastError(res.error));
                     });
             }
-        }).catch(() => toast.update(toastify, getToastError(EnumError.CADASTRO_INDISPONIVEL)));
+        })
+        .catch(() => toast.update(toastify, getToastError(EnumError.CADASTRO_INDISPONIVEL)));
 }
 
 async function getToken(tokenUser: string, tokenPassword: string) {
@@ -63,7 +64,8 @@ async function getToken(tokenUser: string, tokenPassword: string) {
     }
 
     return await fetch(tokenBaseUrl, request)
-        .then(res => res.json().then(res => res.access_token));
+        .then(res => res.json())
+        .then(json => json.access_token);
 }
 
 export async function getUserToken(document: string, password: string) {
@@ -94,18 +96,20 @@ export function fetchTotalizers(): Promise<Totalizers> {
     return fetch(urlTotalizers, request)
         .then(res => res.json())
         .then(response => response)
-        .catch(() => {
-            toast.error("Sessão expirada! Realize o login novamente.");
-
-            throw Error("Erro ao buscar totalizadores.");
+        .catch(err => {
+            if (err instanceof TypeError
+                && err.message == "Failed to fetch") {
+                toast.error("Serviços da MilkPay indisponíveis! Não foi possível realizar a consulta dos totalizadores!");
+            } else {
+                toast.error("Sessão expirada! Realize o login novamente.");
+            }
         });
 }
 
 export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleResponse> {
-
     const urlTitles = new URL(baseUrl.concat(titlePath));
     const token = localStorage.getItem("token");
-    
+
     urlTitles.searchParams.append("offset", params.offset);
     urlTitles.searchParams.append("limit", params.limit);
     urlTitles.searchParams.append("pageIndex", params.pageIndex.toString());
@@ -122,9 +126,13 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
     return fetch(urlTitles, request)
         .then(res => res.json())
         .then(response => response)
-        .catch(() => {
-            toast.error("Sessão expirada! Realize o login novamente.");
-
-            throw Error("Erro ao buscar títulos.");
+        .catch(err => {
+            if (err instanceof TypeError
+                && err.message == "Failed to fetch") {
+                toast.error("Serviços da MilkPay indisponíveis! Não foi possível realizar a consulta "
+                    .concat(params.liquidated ? "dos títulos recebidos." : "dos títulos a receber."));
+            } else {
+                toast.error("Sessão expirada! Realize o login novamente.");
+            }
         });
 }

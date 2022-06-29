@@ -50,7 +50,8 @@ export type DataContext = {
         receivedTitles: FecthTitleResponse | undefined;
         fetchTitlesToReciveData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
         fetchRecivedTitlesData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
-    }
+    },
+    isAuth: boolean
 }
 
 export type CardTotalizers = {
