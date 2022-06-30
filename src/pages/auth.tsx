@@ -6,7 +6,7 @@ export default function Authentication() {
     return (
         <div className="h-screen flex flex-col">
             <Header />
-            <main className="flex flex-col h-full items-center bg-[url('../assets/images/login.jpg')]" >
+            <main className="flex flex-col h-full bg-cover items-center bg-[url('../assets/images/login.jpg')]" >
                 <div className="h-full flex flex-col justify-center">
                     <Form formType={EnumFormType.LOGIN} />
                 </div>

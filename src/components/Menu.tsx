@@ -26,7 +26,7 @@ export default function Menu({ changeFunction }: MenuProps) {
     return (
         <div className="animate-fade-down md:animate-fade-left">
             <Header />
-            <div className="hidden flex-col md:fixed md:flex bg-[url('../assets/images/menu.png')] h-screen text-light-color">
+            <div className="hidden flex-col md:fixed md:flex bg-cover bg-[url('../assets/images/menu.png')] h-screen text-light-color">
                 <nav>
                     <div className="flex items-center m-2 mt-6 mb-6 animate-fade-in-slow">
                         <MilkPayIcon fill="#F1F1F1" width={42} height={42} name="Logo MilkPay" />
