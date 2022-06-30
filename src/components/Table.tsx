@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { useDataContext } from "src/context/data";
-import { TableProps } from "src/utils/types";
+import { TableProps, TitleData } from "src/utils/types";
 import { firstElement, formatDateStrToDDMMYYYY, formatDateStrToDDMMYYYYHHMMSS, formatMoney } from "src/utils/utils";
 import ArrowRightIcon from "../assets/icons/arrow-left.svg";
 import ArrowLeftIcon from "../assets/icons/arrow-right.svg";
 import BoletoIcon from "../assets/icons/barcode.svg";
 import PixIcon from "../assets/icons/pix.svg";
+import ModalCard from "./ModalCard";
 
 export default function Table({ title, subTitle, data }: TableProps) {
     const [listPageSize, setListPageSize] = useState<number[]>();
+    const [selectedTitle, setSelectedTitle] = useState<TitleData>();
     const { titlesData } = useDataContext();
     const [showModal, setShowModal] = useState(false);
 
@@ -36,16 +38,18 @@ export default function Table({ title, subTitle, data }: TableProps) {
         setListPageSize(pagesSize);
     }
 
+    function handleShowModal(title: TitleData) {
+        setSelectedTitle(title);
+        setShowModal(true);
+    }
+
     return (
         <>
             {showModal &&
                 <div className="fixed z-10 inset-0 backdrop-blur-[2px] overflow-auto flex justify-center items-center">
-                    <div className="flex justify-center items-center w-54 h-36 bg-slate-100 border-2 rounded-md">
-                        teste
-                    </div>
+                    <ModalCard title={selectedTitle!} handleClose={() => setShowModal(false)} />
                 </div>
             }
-
             <div className="container min-w-full py-4 pr-4 xl:pr-0">
                 <div className="px-4 overflow-x-auto">
                     <div className="relative h-16 p-3 -mb-6 mx-4 rounded-2xl bg-purple-600 xl:py-2">
@@ -61,15 +65,15 @@ export default function Table({ title, subTitle, data }: TableProps) {
                                         Id.
                                     </th>
                                     <th title="Número Nota Fiscal" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                        border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                                    border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                                         Número NF
                                     </th>
-                                    <th title="Tipo Recebimento(PIX/Boleto)" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                        border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                                    <th title="Tipo Recebimento(PIX/Boleto)" scope="col" className={`pt-8 px-5 py-3 
+                                    border-b cursor-help border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                                         Tipo Recebimento
                                     </th>
-                                    <th title="Identificador do Tipo Recebimento" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                        border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                                    <th title="Identificador do Tipo Recebimento" scope="col" className={`pt-8 px-5 py-3 border-b 
+                                    cursor-help border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                                         Id. Recebimento
                                     </th>
                                     <th title="Data de Realização do Serviço/Venda" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
@@ -131,11 +135,15 @@ export default function Table({ title, subTitle, data }: TableProps) {
                                                 {formatMoney(result.amount)}
                                             </p>
                                         </td>
-                                        <td className="p-5 border-b border-gray-200 text-sm">
-                                            <button onClick={() => setShowModal(true)} className="px-3 py-1 font-semibold bg-dark-color rounded-full text-light-color leading-tight">
-                                                ANTECIPAR
-                                            </button>
-                                        </td>
+                                        {
+                                            !result.liquidated &&
+                                            <td className="p-5 border-b border-gray-200 text-sm">
+                                                <button onClick={() => handleShowModal(result)} className={`px-3 py-1 
+                                                font-semibold bg-dark-color rounded-full text-light-color leading-tight`}>
+                                                    ANTECIPAR
+                                                </button>
+                                            </td>
+                                        }
                                     </tr>
                                 ))}
                             </tbody>

@@ -5,7 +5,7 @@ import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
 import AmountReceiveToIcon from "../assets/icons/dollar-sign.svg";
 import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
-import { CardTotalizers, FecthTitleParams, Totalizers } from "./types";
+import { CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 
@@ -170,4 +170,18 @@ export function formatDDMMYYYY(date: Date): string {
 
 export function firstElement<T>(array: T[]): T | undefined {
         return array.at(0);
+}
+
+export function getPixDto(pixKeyData: ConsultPixKey, titleId: number): PixPayment {
+    return {
+        titleId,
+        endToEndId: pixKeyData.endtoendid,
+        receiverAccount: pixKeyData.account.accountNumber,
+        receiverAccountType: pixKeyData.account.accountType,
+        receiverBank: pixKeyData.account.participant,
+        receiverKey: pixKeyData.key,
+        receiverBranch: pixKeyData.account.branch,
+        receiverDocument: pixKeyData.owner.taxIdNumber,
+        receiverName: pixKeyData.owner.name
+    }
 }

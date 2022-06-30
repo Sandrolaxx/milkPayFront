@@ -10,5 +10,8 @@ declare namespace NodeJS {
         NEXT_PUBLIC_USER_PATH: string;
         NEXT_PUBLIC_TITLE_PATH: string;
         NEXT_PUBLIC_TOTALIZERS_PATH: string;
+        NEXT_PUBLIC_PIX_PATH: string;
+        NEXT_PUBLIC_CONSULT_PIX_KEY_PATH: string;
+        NEXT_PUBLIC_PAYMENT_PIX_PATH: string;
     }
 }

@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { EnumError, FecthTitleParams, FecthTitleResponse, Totalizers } from "./types";
+import { ConsultPixKey, EnumError, FecthTitleParams, FecthTitleResponse, PixPayment, Totalizers } from "./types";
 import { addQueryParams, getBasicToken, getBearerToken, getToastError, getToastSuccess } from "./utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -11,7 +11,10 @@ const tokenGrantType = process.env.NEXT_PUBLIC_TOKEN_GRANT_TYPE;
 
 const userPath = process.env.NEXT_PUBLIC_USER_PATH;
 const titlePath = process.env.NEXT_PUBLIC_TITLE_PATH;
+const pixPath = process.env.NEXT_PUBLIC_PIX_PATH;
 const totalizersPath = process.env.NEXT_PUBLIC_TOTALIZERS_PATH;
+const consultPixKeyPath = process.env.NEXT_PUBLIC_CONSULT_PIX_KEY_PATH;
+const paymentPixKeyPath = process.env.NEXT_PUBLIC_PAYMENT_PIX_PATH;
 
 export async function createAccount(document: string, password: string) {
     const userDto = { document, password };
@@ -75,11 +78,11 @@ export async function getUserToken(document: string, password: string) {
     if (!token) {
         toast.update(toastify, getToastError(EnumError.ERRO_LOGIN));
         return;
-    } else {
-        toast.update(toastify, getToastSuccess("Login realizado com sucesso!"));
-
-        return token;
     }
+
+    toast.update(toastify, getToastSuccess("Login realizado com sucesso!"));
+
+    return token;
 }
 
 export function fetchTotalizers(): Promise<Totalizers> {
@@ -97,7 +100,8 @@ export function fetchTotalizers(): Promise<Totalizers> {
         .then(res => res.json())
         .then(response => {
             if (response.error) {
-                toast.error("Ocorreu um erro ao buscar os totalizadores, realize o login novamente!");
+                toast.error(EnumError.ERRO_CONSULTAR_TOTALIZADORES.concat(response.error)
+                    .concat(". Realize o login novamente!"));
                 throw new Error("Erro ao consultar registros.");
             }
 
@@ -106,12 +110,12 @@ export function fetchTotalizers(): Promise<Totalizers> {
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
-                toast.error("Serviços da MilkPay indisponíveis! Não foi possível realizar a consulta dos totalizadores!");
+                toast.error(EnumError.SERVICOS_INDISPONIVEIS.concat("consulta dos totalizadores!"));
             } else {
-                toast.error("Sessão expirada! Realize o login novamente.");
+                toast.error(EnumError.SESSAO_EXPIRADA);
             }
 
-            throw new Error("Erro ao consultar registros.");
+            throw new Error(EnumError.SESSAO_EXPIRADA);
         });
 }
 
@@ -124,7 +128,7 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
     });
     const urlTitles = addQueryParams(searchParams, new URL(baseUrl.concat(titlePath)));
     const token = localStorage.getItem("token");
-    const errorMsgType = params.liquidated ? "títulos recebidos" : "títulos a receber";
+    const errorMsgType = params.liquidated ? "recebidos" : "a receber";
 
     const request: RequestInit = {
         headers: {
@@ -138,9 +142,9 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
         .then(res => res.json())
         .then(response => {
             if (response.error) {
-                toast.error("Ocorreu um erro ao buscar os ".concat(errorMsgType)
-                    .concat(". Realize o login novamente!"));
-                return;
+                toast.error(EnumError.ERRO_CONSULTAR_TITULOS.concat(errorMsgType)
+                    .concat(".Erro: ").concat(response.error).concat(". Realize o login novamente!"));
+                throw new Error(EnumError.ERRO_CONSULTAR_TITULOS);
             }
 
             return response;
@@ -148,12 +152,89 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
-                toast.error("Serviços da MilkPay indisponíveis! Não foi possível realizar a consulta dos "
-                    .concat(errorMsgType));
+                toast.error(EnumError.SERVICOS_INDISPONIVEIS.concat("consulta dos títulos ").concat(errorMsgType));
             } else {
-                toast.error("Sessão expirada! Realize o login novamente.");
+                toast.error(EnumError.SESSAO_EXPIRADA);
             }
 
-            throw new Error("Erro ao consultar registros.");
+            throw new Error(EnumError.SESSAO_EXPIRADA);
+        });
+}
+
+export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
+    const toastify = toast.loading("Consultando Chave🗝");
+    const urlConsultPix = new URL(baseUrl.concat(pixPath.concat(consultPixKeyPath)));
+    const token = localStorage.getItem("token");
+
+    const request: RequestInit = {
+        headers: {
+            "Authorization": getBearerToken(token!),
+            "Content-Type": "application/json",
+            "key": pixKey
+        },
+    }
+
+    return fetch(urlConsultPix, request)
+        .then(res => res.json())
+        .then(response => {
+            if (response.error) {
+                const err = EnumError.ERRO_CONSULTAR_CHAVE.concat(response.error).concat(".Tente novamente.");
+                toast.update(toastify, getToastError(err));
+
+                throw new Error(EnumError.ERRO_CONSULTAR_CHAVE);
+            }
+
+            toast.update(toastify, getToastSuccess("Chave consultada com sucesso!"));
+
+            return response;
+        })
+        .catch(err => {
+            if (err instanceof TypeError
+                && err.message == "Failed to fetch") {
+                toast.update(toastify, getToastError(EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta da chave pix")));
+            } else {
+                toast.update(toastify, getToastError(EnumError.SESSAO_EXPIRADA));
+            }
+
+            throw new Error(EnumError.SESSAO_EXPIRADA);
+        });
+}
+
+export function pixPayment(pixPayment: PixPayment) {
+    const toastify = toast.loading("Realizando Pagamento");
+    const urlPaymentPix = new URL(baseUrl.concat(pixPath.concat(paymentPixKeyPath)));
+    const token = localStorage.getItem("token");
+
+    const request: RequestInit = {
+        headers: {
+            "Authorization": getBearerToken(token!),
+            "Content-Type": "application/json"
+        },
+        method: "POST",
+        body: JSON.stringify(pixPayment)
+    }
+
+    return fetch(urlPaymentPix, request)
+        .then(res => res.json())
+        .then(response => {
+            if (response.error) {
+                toast.update(toastify, getToastError(EnumError.ERRO_AO_REALIZAR_PAGAMENTO));
+
+                throw new Error(EnumError.ERRO_AO_REALIZAR_PAGAMENTO);
+            }
+
+            toast.update(toastify, getToastSuccess("Pagamento realizado com sucesso!"));
+
+            return response;
+        })
+        .catch(err => {
+            if (err instanceof TypeError
+                && err.message == "Failed to fetch") {
+                toast.update(toastify, getToastError(EnumError.ERRO_AO_REALIZAR_PAGAMENTO));
+            } else {
+                toast.update(toastify, getToastError(EnumError.SESSAO_EXPIRADA));
+            }
+
+            throw new Error(EnumError.SESSAO_EXPIRADA);
         });
 }

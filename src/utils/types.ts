@@ -1,3 +1,4 @@
+//==========Interfaces==========//
 export interface LayoutProps {
     children: any;
     animateFooter?: boolean;
@@ -40,6 +41,18 @@ export interface TableProps {
     data?: FecthTitleResponse;
 }
 
+export interface ModalCardProps {
+    title: TitleData;
+    handleClose: Function;
+}
+
+export interface ModalCardButtonProps {
+    handleClose: Function;
+    handleContinue: Function;
+    isEnabled: boolean
+}
+
+//==========Types==========//
 export type DataContext = {
     cardsData: {
         cardsData: CardTotalizers[] | undefined;
@@ -98,6 +111,39 @@ export type FecthTitleParams = {
     liquidated: boolean
 }
 
+export type ConsultPixKey = {
+    account: ConsultPixKeyAccount,
+    endtoendid: string,
+    key: string,
+    keyType: string,
+    owner: ConsultPixKeyOwner
+}
+
+export type ConsultPixKeyAccount = {
+    accountNumber: string,
+    accountType: string,
+    branch: number,
+    participant: string
+}
+
+export type ConsultPixKeyOwner = {
+    name: string,
+    taxIdNumber: string,
+}
+
+export type PixPayment = {
+    titleId: number,
+	endToEndId: string,
+	receiverKey: string,
+	receiverBank: string,
+	receiverAccount: string,
+	receiverBranch: number,
+	receiverDocument: string,
+	receiverAccountType: string,
+	receiverName: string
+}
+
+//==========Enum's==========//
 export enum EnumFormType {
     LOGIN,
     REGISTER,
@@ -112,4 +158,16 @@ export enum EnumScreens {
 export enum EnumError {
     CADASTRO_INDISPONIVEL = "Serviço de cadastro indisponível. Tente novamente em instantes.",
     ERRO_LOGIN = "Erro ao realizar login! Verifique os campos informados.",
+    ERRO_CONSULTAR_CHAVE = "Ocorreu um erro ao consultar chave! Erro: ",
+    ERRO_CONSULTAR_TOTALIZADORES = "Ocorreu um erro ao buscar os totalizadores! Erro: ",
+    ERRO_CONSULTAR_TITULOS = "Ocorreu um erro ao buscar os títulos ",
+    SERVICOS_INDISPONIVEIS = "Serviços da MilkPay indisponíveis! Não foi possível realizar a",
+    SESSAO_EXPIRADA = "Sessão expirada! Realize o login novamente.",
+    ERRO_AO_REALIZAR_PAGAMENTO = "Erro ao realizar o pagamento do título. Verifique se os serviços estão disponíveis."
+}
+
+export enum EnumModalSteps {
+    STEP_ONE,
+    STEP_TWO,
+    STEP_THREE
 }
