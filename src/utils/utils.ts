@@ -160,8 +160,9 @@ export function getFetchTitlesParams(liquidated: boolean, pageIndex?: number,
 
 export function formatDDMMYYYY(date: Date): string {
     const month = date.getUTCMonth() + 1;
+    const day = date.getDate();
     
-    const DD = date.getDate().toString();
+    const DD = day < 10 ? ("0").concat(day.toString()) : day.toString();
     const MM = month < 10 ? ("0").concat(month.toString()) : month.toString();
     const YYYY = date.getUTCFullYear().toString();
 
