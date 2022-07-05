@@ -8,6 +8,7 @@ import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
 import { CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
+const defaultPageSize = process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE;
 
 export function isNullOrEmpty(str: any): boolean {
     return str == null || str == undefined || str.trim() == "";
@@ -145,9 +146,9 @@ export function addQueryParams(params: URLSearchParams, url: URL): URL {
 
 export function getFetchTitlesParams(liquidated: boolean, pageIndex?: number,
     pageSize?: number): FecthTitleParams {
-        const today = new Date();
-        const nextMonth = new Date();
-        nextMonth.setMonth(today.getMonth() + 1);
+    const today = new Date();
+    const nextMonth = new Date();
+    nextMonth.setMonth(today.getMonth() + 1);
 
     return {
         offset: formatDDMMYYYY(today),
@@ -161,7 +162,7 @@ export function getFetchTitlesParams(liquidated: boolean, pageIndex?: number,
 export function formatDDMMYYYY(date: Date): string {
     const month = date.getUTCMonth() + 1;
     const day = date.getDate();
-    
+
     const DD = day < 10 ? ("0").concat(day.toString()) : day.toString();
     const MM = month < 10 ? ("0").concat(month.toString()) : month.toString();
     const YYYY = date.getUTCFullYear().toString();
@@ -170,7 +171,7 @@ export function formatDDMMYYYY(date: Date): string {
 }
 
 export function firstElement<T>(array: T[]): T | undefined {
-        return array.at(0);
+    return array.at(0);
 }
 
 export function getPixDto(pixKeyData: ConsultPixKey, titleId: number): PixPayment {
@@ -185,4 +186,12 @@ export function getPixDto(pixKeyData: ConsultPixKey, titleId: number): PixPaymen
         receiverDocument: pixKeyData.owner.taxIdNumber,
         receiverName: pixKeyData.owner.name
     }
+}
+
+export function getArrayOfElements(lineSize?: number): number[] {
+    return Array.from({ length: lineSize ?? getDefaultPageSize() }, (x, i) => i + 1);
+}
+
+export function getDefaultPageSize() {
+    return defaultPageSize;
 }

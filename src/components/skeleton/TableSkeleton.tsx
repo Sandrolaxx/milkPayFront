@@ -1,8 +1,9 @@
 import { TableProps } from "src/utils/types";
 import ArrowRightIcon from "../../assets/icons/arrow-left.svg";
 import ArrowLeftIcon from "../../assets/icons/arrow-right.svg";
+import TableLineSkeleton from "./TableLineSkeleton";
 
-export default function TableSkeleton({title, subTitle}: TableProps) {
+export default function TableSkeleton({ title, subTitle }: TableProps) {
     return (
         <div className="container min-w-full py-4 pr-4 xl:pr-0 animate-fade-right">
             <div className="px-4 overflow-x-auto">
@@ -49,142 +50,7 @@ export default function TableSkeleton({title, subTitle}: TableProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm">
-                                    <div className="w-14 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-12 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-14 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-10 h-8 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-24 h-6 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm">
-                                    <div className="w-14 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-12 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-14 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-10 h-8 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-24 h-6 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm">
-                                    <div className="w-14 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-12 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-14 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-10 h-8 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-24 h-6 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm">
-                                    <div className="w-14 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-12 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-14 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-10 h-8 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-20 h-4 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                                <td className="p-5 border-b border-gray-200 text-sm">
-                                    <div className="w-24 h-6 animate-pulse bg-gray-300 rounded-sm" >
-                                    </div>
-                                </td>
-                            </tr>
+                            <TableLineSkeleton />
                         </tbody>
                     </table>
                     <div className="px-4 bg-white py-4 flex flex-col xs:flex-row items-center xs:justify-between">

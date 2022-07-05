@@ -1,41 +1,37 @@
 import { useEffect, useState } from "react";
 import { useDataContext } from "src/context/data";
-import { TableProps, TitleData } from "src/utils/types";
-import { firstElement, formatDateStrToDDMMYYYY, formatDateStrToDDMMYYYYHHMMSS, formatMoney } from "src/utils/utils";
+import { EnumTitleTypes, TableProps, TitleData } from "src/utils/types";
+import * as util from "src/utils/utils";
 import ArrowRightIcon from "../assets/icons/arrow-left.svg";
 import ArrowLeftIcon from "../assets/icons/arrow-right.svg";
 import BoletoIcon from "../assets/icons/barcode.svg";
 import PixIcon from "../assets/icons/pix.svg";
 import ModalCard from "./ModalCard";
+import TableLineSkeleton from "./skeleton/TableLineSkeleton";
+import TableHead from "./TableHead";
 
 export default function Table({ title, subTitle, data }: TableProps) {
+    const { titlesData } = useDataContext();
     const [listPageSize, setListPageSize] = useState<number[]>();
     const [selectedTitle, setSelectedTitle] = useState<TitleData>();
-    const { titlesData } = useDataContext();
     const [showModal, setShowModal] = useState(false);
+    const [isFetchingData, setFetchingData] = useState(false);
+    const [titleType, setTitleType] = useState<EnumTitleTypes>();
 
-    useEffect(getPageNavSize, []);
+    useEffect(() => {
+        setFetchingData(false);
+        setListPageSize(util.getArrayOfElements(Math.ceil(data?.allResultsSize! / util.getDefaultPageSize())));
+        setTitleType(util.firstElement(data?.results!)?.liquidated ? EnumTitleTypes.RECEIVED : EnumTitleTypes.TO_RECEIVE);
+    }, [data]);
 
     function changePage(pageIndex: number) {
-        const isLiquidatedTitles = firstElement(data?.results!)?.liquidated;
+        setFetchingData(true);
 
-        if (isLiquidatedTitles) {
-            titlesData.fetchRecivedTitlesData(pageIndex);
+        if (util.equalsEnum(titleType, EnumTitleTypes.RECEIVED)) {
+            titlesData.fetchRecivedTitlesData(pageIndex)
         } else {
             titlesData.fetchTitlesToReciveData(pageIndex);
         }
-    }
-
-    function getPageNavSize() {
-        const defaultPageSize = 5;
-        const size = Math.ceil(data?.allResultsSize! / defaultPageSize);
-        const pagesSize = [];
-
-        for (let index = 0; index < size; index++) {
-            pagesSize.push(index);
-        }
-
-        setListPageSize(pagesSize);
     }
 
     function handleShowModal(title: TitleData) {
@@ -58,94 +54,62 @@ export default function Table({ title, subTitle, data }: TableProps) {
                     </div>
                     <div className="inline-block min-w-full shadow-md border-2 rounded-3xl overflow-hidden">
                         <table className="min-w-full leading-normal">
-                            <thead>
-                                <tr>
-                                    <th title="Identificador" scope="col" className={`pt-6 px-6 border-b border-gray-200 
-                                        text-purple-700  text-left text-sm uppercase font-normal cursor-help`}>
-                                        Id.
-                                    </th>
-                                    <th title="Número Nota Fiscal" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                    border-gray-200 text-purple-700 text-left text-sm font-normal`}>
-                                        Número NF
-                                    </th>
-                                    <th title="Tipo Recebimento(PIX/Boleto)" scope="col" className={`pt-8 px-5 py-3 
-                                    border-b cursor-help border-gray-200 text-purple-700 text-left text-sm font-normal`}>
-                                        Tipo Recebimento
-                                    </th>
-                                    <th title="Identificador do Tipo Recebimento" scope="col" className={`pt-8 px-5 py-3 border-b 
-                                    cursor-help border-gray-200 text-purple-700 text-left text-sm font-normal`}>
-                                        Id. Recebimento
-                                    </th>
-                                    <th title="Data de Realização do Serviço/Venda" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                      first-letter:border-gray-200 text-purple-700 text-left text-sm font-normal`}>
-                                        Data Serviço/Venda
-                                    </th>
-                                    <th title="Data Prevista do Recebimento" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                            border-gray-200 text-purple-700 text-left text-sm font-normal`}>
-                                        Data Recebimento
-                                    </th>
-                                    <th title="Valor Total Título a ser Recebido" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                            border-gray-200 text-purple-700 text-left text-sm font-normal`}>
-                                        Valor Total Título
-                                    </th>
-                                    <th title="Solicitar Antecipação" scope="col" className={`pt-8 px-5 py-3 border-b cursor-help 
-                                            border-gray-200 text-purple-700 text-left text-sm font-normal`}>
-                                        Antecipar
-                                    </th>
-                                </tr>
-                            </thead>
+                            <TableHead titleType={titleType!} />
                             <tbody>
-                                {data!.results.map(result => (
-                                    <tr key={result.id} >
-                                        <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm">
-                                            <p className="text-dark-color whitespace-no-wrap">
-                                                {result.id}
-                                            </p>
-                                        </td>
-                                        <td className="p-5 border-b border-gray-200 text-sm">
-                                            <p className="text-dark-colorwhitespace-no-wrap">
-                                                {result.nfNumber}
-                                            </p>
-                                        </td>
-                                        <td className="p-5 border-b border-gray-200 text-sm">
-                                            <p className="text-dark-color whitespace-no-wrap">
-                                                {result.paymentType}
-                                            </p>
-                                        </td>
-                                        <td className="p-5 border-b border-gray-200 text-sm"
-                                            title={result.pixKey ?? result.digitable ?? result.barcode}>
-                                            {result.paymentType == "BOLETO" ?
-                                                <BoletoIcon width={32} height={32} stroke="#212121" />
-                                                :
-                                                <PixIcon width={32} height={32} stroke="#212121" />
-                                            }
-                                        </td>
-                                        <td className="p-5 border-b border-gray-200 text-sm">
-                                            <p className="text-dark-color whitespace-no-wrap">
-                                                {formatDateStrToDDMMYYYYHHMMSS(result.inclusionDate)}
-                                            </p>
-                                        </td>
-                                        <td className="p-5 border-b border-gray-200 text-sm">
-                                            <p className="text-dark-color whitespace-no-wrap">
-                                                {formatDateStrToDDMMYYYY(result.dueDate)}
-                                            </p>
-                                        </td>
-                                        <td className="p-5 border-b border-gray-200 text-sm">
-                                            <p className="text-dark-color whitespace-no-wrap">
-                                                {formatMoney(result.amount)}
-                                            </p>
-                                        </td>
-                                        {
-                                            !result.liquidated &&
-                                            <td className="p-5 border-b border-gray-200 text-sm">
-                                                <button onClick={() => handleShowModal(result)} className={`px-3 py-1 
-                                                font-semibold bg-dark-color rounded-full text-light-color leading-tight`}>
-                                                    ANTECIPAR
-                                                </button>
+                                {isFetchingData ?
+                                    <TableLineSkeleton />
+                                    :
+                                    data!.results.map(result => (
+                                        <tr key={result.id} >
+                                            <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <p className="text-dark-color whitespace-no-wrap">
+                                                    {result.id}
+                                                </p>
                                             </td>
-                                        }
-                                    </tr>
-                                ))}
+                                            <td className="p-5 border-b border-gray-200 text-sm">
+                                                <p className="text-dark-colorwhitespace-no-wrap">
+                                                    {result.nfNumber}
+                                                </p>
+                                            </td>
+                                            <td className="p-5 border-b border-gray-200 text-sm">
+                                                <p className="text-dark-color whitespace-no-wrap">
+                                                    {result.paymentType}
+                                                </p>
+                                            </td>
+                                            <td className="p-5 border-b border-gray-200 text-sm"
+                                                title={result.pixKey ?? result.digitable ?? result.barcode}>
+                                                {result.paymentType == "BOLETO" ?
+                                                    <BoletoIcon width={32} height={32} stroke="#212121" />
+                                                    :
+                                                    <PixIcon width={32} height={32} stroke="#212121" />
+                                                }
+                                            </td>
+                                            <td className="p-5 border-b border-gray-200 text-sm">
+                                                <p className="text-dark-color whitespace-no-wrap">
+                                                    {util.formatDateStrToDDMMYYYYHHMMSS(result.inclusionDate)}
+                                                </p>
+                                            </td>
+                                            <td className="p-5 border-b border-gray-200 text-sm">
+                                                <p className="text-dark-color whitespace-no-wrap">
+                                                    {util.formatDateStrToDDMMYYYY(result.dueDate)}
+                                                </p>
+                                            </td>
+                                            <td className="p-5 border-b border-gray-200 text-sm">
+                                                <p className="text-dark-color whitespace-no-wrap">
+                                                    {util.formatMoney(result.amount)}
+                                                </p>
+                                            </td>
+                                            {
+                                                !result.liquidated &&
+                                                <td className="p-5 border-b border-gray-200 text-sm">
+                                                    <button onClick={() => handleShowModal(result)} className={`px-3 py-1 
+                                                font-semibold bg-dark-color rounded-full text-light-color leading-tight`}>
+                                                        ANTECIPAR
+                                                    </button>
+                                                </td>
+                                            }
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
 
@@ -157,13 +121,13 @@ export default function Table({ title, subTitle, data }: TableProps) {
                                         <ArrowRightIcon width={16} stroke="#7E22CE" />
                                     </button>
                                     {listPageSize!.map(pageIndex => (
-                                        <button key={pageIndex} type="button" onClick={pageIndex != data?.page! ? () => changePage(pageIndex) : () => false}
-                                            className={`px-4 py-2 border-t border-b text-base  
-                                            hover:bg-gray-100 ${pageIndex == data?.page! ? 'text-purple-600' : 'text-gray-500'} `}>
-                                            {pageIndex + 1}
+                                        <button key={pageIndex} type="button" onClick={pageIndex != data?.page! + 1 ? () => changePage(pageIndex - 1) : () => false}
+                                            className={`px-4 py-2 border-t border-b text-base hover:bg-gray-100
+                                            ${pageIndex == data?.page! + 1 ? 'text-purple-600' : 'text-gray-500'} `}>
+                                            {pageIndex}
                                         </button>
                                     ))}
-                                    <button type="button" onClick={(data?.page! + 1) < listPageSize.length ? () => changePage(data?.page! + 1) : () => false}
+                                    <button type="button" onClick={data?.page! + 1 < listPageSize.length ? () => changePage(data?.page! + 1) : () => false}
                                         className="p-2 border-t border-b border-r rounded-r-xl hover:bg-gray-100">
                                         <ArrowLeftIcon width={16} stroke="#7E22CE" />
                                     </button>

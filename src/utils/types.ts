@@ -52,6 +52,10 @@ export interface ModalCardButtonProps {
     isEnabled: boolean
 }
 
+export interface TableHeadProps {
+    titleType: EnumTitleTypes;
+}
+
 //==========Types==========//
 export type DataContext = {
     cardsData: {
@@ -170,4 +174,10 @@ export enum EnumModalSteps {
     STEP_ONE,
     STEP_TWO,
     STEP_THREE
+}
+
+export enum EnumTitleTypes {
+    ALL,
+    RECEIVED,
+    TO_RECEIVE
 }
