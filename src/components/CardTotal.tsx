@@ -1,11 +1,10 @@
 import { CardTotalProps } from "src/utils/types";
-import { formatMoney } from "src/utils/utils";
 
 export default function CardTotal({ element }: CardTotalProps) {
     return (
         <div className="w-full h-16 p-2 shadow-md border-2 rounded-3xl sm:h-24 xl:mt-4 lg:m-2 xl:h-32">
             <div className="flex justify-between w-full">
-                <div className={`flex items-center justify-center w-16 h-12 -mt-8 rounded-3xl shadow-md  border-2
+                <div className={`flex items-center justify-center w-16 h-12 -mt-8 rounded-3xl shadow-md border-2
                     sm:w-20 sm:h-16 xl:w-24 xl:h-20 2xl:w-32 2xl:h-24 ${element.iconAreaColor} xl:-mt-10`}>
                     <element.bigIcon width={42} height={42} stroke="#F1F1F1" />
                 </div>

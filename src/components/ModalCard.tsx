@@ -121,16 +121,14 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
             {equalsEnum(step, EnumModalSteps.STEP_THREE) &&
                 <div className="w-full h-full flex flex-col justify-start items-center">
                     <h1 className="font-medium text-lg my-6">Confirmação de Antecipação</h1>
-                    <p className="mx-6 mb-4 text-lg text-center">Deseja mesmo realizar a antecipação no valor de {formatMoney(title.amount)}?</p>
+                    <p className="mx-6 mb-4 text-lg text-center">
+                        Deseja mesmo realizar a antecipação no valor de {formatMoney(title.amount)}?
+                    </p>
                     <span className="w-full flex justify-center items-center py-1">
                         <input className="mx-2" type="checkbox" name="confirmPaymentData" id="checkbox"
                             onChange={e => setPaymentConfirmed(e.target.checked)} />
-                        <p className="mr-1">
-                            Concordo com os
-                        </p>
-                        <p className="underline">
-                            termos de uso.
-                        </p>
+                        <p className="mr-1">Concordo com os</p>
+                        <p className="underline">termos de uso.</p>
                     </span>
                     <ModalCardButtons isEnabled={isPaymentConfirmed} handleClose={handleClose}
                         handleContinue={handlePayment} />

@@ -38,7 +38,7 @@ export interface CardTotalProps {
 export interface TableProps {
     title: string;
     subTitle: string;
-    data?: FecthTitleResponse;
+    data: FecthTitleResponse;
 }
 
 export interface ModalCardProps {
@@ -54,6 +54,13 @@ export interface ModalCardButtonProps {
 
 export interface TableHeadProps {
     titleType: EnumTitleTypes;
+}
+
+export interface TableBodyProps {
+    titles: TitleData[];
+    titleType: EnumTitleTypes;
+    handleShowModal: Function;
+    handleShowReceipt: Function;
 }
 
 //==========Types==========//
@@ -75,8 +82,8 @@ export type CardTotalizers = {
     title: string;
     subTitle: string;
     value: string;
-    bigIcon: SVGElement;
-    smallIcon: SVGElement;
+    bigIcon: any;
+    smallIcon: any;
     iconAreaColor: string;
 }
 

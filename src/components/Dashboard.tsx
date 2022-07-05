@@ -1,7 +1,6 @@
 import { DashboardProps } from "src/utils/types";
 import CardTotal from "./CardTotal";
 import CardTotalSkeleton from "./skeleton/CardTotalSkeleton";
-import TableSkeleton from "./skeleton/TableSkeleton";
 import Table from "./Table";
 
 export default function Dashboard({ dashboardData }: DashboardProps) {
@@ -22,18 +21,10 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
                     </>
                 }
             </div>
-            {dashboardData.titlesToReceive ?
-                <Table title="Títulos a Receber" data={dashboardData.titlesToReceive}
-                    subTitle="Dados dos Recebimentos dos próximos 30 dias." />
-                :
-                <TableSkeleton title="Títulos a Receber" subTitle="Dados dos Recebimentos dos próximos 30 dias." />
-            }
-            {dashboardData.receivedTitles ?
-                <Table title="Títulos Recebidos" data={dashboardData.receivedTitles}
-                    subTitle="Recebimentos dos últimos 30 dias." />
-                :
-                <TableSkeleton title="Títulos Recebidos" subTitle="Recebimentos dos últimos 30 dias." />
-            }
+            <Table title="Títulos a Receber" data={dashboardData.titlesToReceive}
+                subTitle="Dados dos Recebimentos dos próximos 30 dias." />
+            <Table title="Títulos Recebidos" data={dashboardData.receivedTitles}
+                subTitle="Recebimentos dos últimos 30 dias." />
         </div>
     );
 }

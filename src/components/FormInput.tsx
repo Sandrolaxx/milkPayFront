@@ -1,8 +1,8 @@
-import MilkPayIcon from "../assets/icons/milkpay.svg";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import LockIcon from "../assets/icons/lock.svg";
 import EmailIcon from "../assets/icons/mail.svg";
+import MilkPayIcon from "../assets/icons/milkpay.svg";
 import UserIcon from "../assets/icons/user.svg";
 import { createAccount, getUserToken } from "../utils/restClient";
 import { EnumFormType, FormInputProps } from "../utils/types";

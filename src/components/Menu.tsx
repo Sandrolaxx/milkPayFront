@@ -26,7 +26,8 @@ export default function Menu({ changeFunction }: MenuProps) {
     return (
         <div className="animate-fade-down md:animate-fade-left">
             <Header />
-            <div className="hidden flex-col md:fixed md:flex bg-cover bg-[url('../assets/images/menu.png')] h-screen text-light-color">
+            <div className={`hidden flex-col md:fixed md:flex bg-cover bg-[url('../assets/images/menu.png')] 
+                h-screen text-light-color`}>
                 <nav>
                     <div className="flex items-center m-2 mt-6 mb-6 animate-fade-in-slow">
                         <MilkPayIcon fill="#F1F1F1" width={42} height={42} name="Logo MilkPay" />
@@ -34,21 +35,24 @@ export default function Menu({ changeFunction }: MenuProps) {
                     </div>
                     <hr className="rounded-sm m-4 animate-fade-in-slow" />
                     <ul className="w-full animate-fade-in-fast">
-                        <button className={`flex w-full items-center p-4 rounded-lg ${equalsEnum(selectedScreen, EnumScreens.DASHBOARD) ?
-                            'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
+                        <button className={`flex w-full items-center p-4 rounded-lg 
+                            ${equalsEnum(selectedScreen, EnumScreens.DASHBOARD) ?
+                                'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelect(EnumScreens.DASHBOARD)}>
                             <HomeIcon stroke="#F1F1F1" name="Painel Principal" />
                             <li className="ml-1 text-sm xl:text-xl">Painel Principal</li>
                         </button>
-                        <button className={`flex w-full p-4 items-center rounded-xl ${equalsEnum(selectedScreen, EnumScreens.SEARCH_TITLE) ?
-                            'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
+                        <button className={`flex w-full p-4 items-center rounded-xl 
+                            ${equalsEnum(selectedScreen, EnumScreens.SEARCH_TITLE) ?
+                                'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelect(EnumScreens.SEARCH_TITLE)}>
                             <FileTextIcon stroke="#F1F1F1" name="Consultas Títulos" />
                             <li className="ml-1 text-sm xl:text-xl">Consultas Títulos</li>
                         </button>
                     </ul>
                 </nav>
-                <button onClick={handleExit} className="flex w-full mt-auto p-4 rounded-lg animate-fade-in-slow hover:opacity-60">
+                <button onClick={handleExit} className={`flex w-full mt-auto p-4 rounded-lg hover:opacity-60
+                    animate-fade-in-slow`}>
                     <LogoutIcon transform="rotate(180)" stroke="#F1F1F1" width={24} height={24} name="Sair" />
                     <p className="text-xl ml-1">Sair</p>
                 </button>
