@@ -2,14 +2,14 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDataContext } from "src/context/data";
 import { consultPixKey, pixPayment } from "src/utils/restClient";
-import { ConsultPixKey, EnumModalSteps, ModalCardProps } from "src/utils/types";
+import { ConsultPixKey, EnumModalSteps, EnumPaymentType, ModalCardProps } from "src/utils/types";
 import { equalsEnum, formatMoney, getPixDto } from "src/utils/utils";
 import ModalCardButtons from "./ModalCardButtons";
 import ModalCardStepTwoSkeleton from "./skeleton/ModalCardStepTwoSkeleton";
 
 export default function ModalCard({ title, handleClose }: ModalCardProps) {
     const [step, setStep] = useState(EnumModalSteps.STEP_ONE);
-    const [isConsultPixKey, setConsultPixKey] = useState(true);
+    const [isConsultData, setConsultData] = useState(true);
     const [pixKeyData, setPixKeyData] = useState<ConsultPixKey>();
     const [isPaymentDataCorrect, setPaymentDataCorrect] = useState(false);
     const [isPaymentConfirmed, setPaymentConfirmed] = useState(false);
@@ -19,17 +19,37 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     function handleStartStepTwo() {
         setStep(EnumModalSteps.STEP_TWO);
 
-        handleConsultPixKey();
+        if (equalsEnum(title.paymentType, EnumPaymentType.PIX)) {
+            handleConsultPixKey();
+        } else {
+            handleConsultBoleto();
+        }
+
     }
 
     function handleConsultPixKey() {
         consultPixKey(title.pixKey).then(res => {
             setPixKeyData(res);
-            setConsultPixKey(false);
+            setConsultData(false);
         }).catch(() => router.push("/auth"));
     }
 
+    function handleConsultBoleto() {
+        console.log("TO-DO fluxo boleto");
+    }
+
     function handlePayment() {
+
+        if (equalsEnum(title.paymentType, EnumPaymentType.PIX)) {
+            handlePaymentPix()
+        } else {
+            handlePaymentBoleto();
+        }
+
+        handleClose();
+    }
+
+    function handlePaymentPix() {
         const pixDto = getPixDto(pixKeyData!, title.id);
 
         pixPayment(pixDto)
@@ -40,8 +60,10 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                 console.log(res.receipt)
             })
             .catch(() => router.push("/auth"));
+    }
 
-        handleClose();
+    function handlePaymentBoleto() {
+        console.log("TO-DO fluxo boleto");
     }
 
     return (
@@ -75,7 +97,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
             {equalsEnum(step, EnumModalSteps.STEP_TWO) &&
                 <div className="w-full h-full flex flex-col justify-start items-center">
                     <h1 className="font-medium text-lg my-6">Dados do Recebedor</h1>
-                    {isConsultPixKey ?
+                    {isConsultData && equalsEnum(title.paymentType, EnumPaymentType.PIX) ?
                         <ModalCardStepTwoSkeleton />
                         :
                         <>

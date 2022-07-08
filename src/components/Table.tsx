@@ -39,7 +39,7 @@ export default function Table({ title, subTitle, data }: TableProps) {
                                 <TableLineSkeleton />
                                 :
                                 <TableBody titles={data.results} titleType={table.titleType!}
-                                    handleShowModal={table.handleShowModal} handleShowReceipt={() => console.log()} />
+                                    handleShowModal={table.handleShowModal} handleShowReceipt={() => console.log("Teste comprovante")} />
                             }
                         </table>
                         {table.renderPageNavigation() ?

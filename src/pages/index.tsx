@@ -34,7 +34,7 @@ export default function Home() {
     }
 
     return (
-        isAuth && //bg-cyan-300 sm:bg-red-300 md:bg-yellow-300 lg:bg-purple-300 xl:bg-orange-300 2xl:bg-slate-300
+        isAuth &&
         <div className="block md:flex">
             <div className="w-full md:w-54 lg:w-52 xl:w-64">
                 <Menu changeFunction={changeView} />

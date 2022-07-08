@@ -97,7 +97,7 @@ export type Totalizers = {
 export type TitleData = {
     id: number;
     nfNumber: string;
-    paymentType: string;
+    paymentType: EnumPaymentType;
     digitable: string;
     barcode: string;
     pixKey: string;
@@ -187,4 +187,9 @@ export enum EnumTitleTypes {
     ALL,
     RECEIVED,
     TO_RECEIVE
+}
+
+export enum EnumPaymentType {
+    PIX = "PIX",
+    BOLETO = "BOLETO"
 }

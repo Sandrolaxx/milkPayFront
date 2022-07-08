@@ -1,4 +1,4 @@
-import { ModalCardButtonProps } from "src/utils/types";
+import { EnumError, ModalCardButtonProps } from "src/utils/types";
 
 export default function ModalCardButtons({ handleClose, handleContinue, isEnabled = true }: ModalCardButtonProps) {
     return (
