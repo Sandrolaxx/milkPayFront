@@ -178,6 +178,8 @@ export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
         .then(res => res.json())
         .then(response => {
             if (response.error) {
+                console.log(response);
+
                 const err = EnumError.ERRO_CONSULTAR_CHAVE.concat(response.error).concat(".Tente novamente.");
                 toast.update(toastify, getToastError(err));
 
@@ -197,7 +199,7 @@ export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
             }
 
             throw new Error(EnumError.SESSAO_EXPIRADA);
-        });
+        })
 }
 
 export function pixPayment(pixPayment: PixPayment) {

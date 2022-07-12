@@ -28,10 +28,11 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     }
 
     function handleConsultPixKey() {
-        consultPixKey(title.pixKey).then(res => {
-            setPixKeyData(res);
-            setConsultData(false);
-        }).catch(() => router.push("/auth"));
+        consultPixKey(title.pixKey)
+            .then(res => {
+                setPixKeyData(res);
+                setConsultData(false);
+            }).catch(err => router.push("/auth"));
     }
 
     function handleConsultBoleto() {
