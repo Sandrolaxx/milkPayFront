@@ -17,13 +17,14 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     const router = useRouter();
 
     function handleStartStepTwo() {
-        setStep(EnumModalSteps.STEP_TWO);
 
         if (equalsEnum(title.paymentType, EnumPaymentType.PIX)) {
             handleConsultPixKey();
         } else {
             handleConsultBoleto();
         }
+
+        setStep(EnumModalSteps.STEP_TWO);
 
     }
 
@@ -32,7 +33,9 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
             .then(res => {
                 setPixKeyData(res);
                 setConsultData(false);
-            }).catch(err => router.push("/auth"));
+            }).catch(() => {
+                handleClose();
+            });
     }
 
     function handleConsultBoleto() {

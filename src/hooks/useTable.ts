@@ -25,8 +25,8 @@ export default function useTable() {
     }
 
     function handleCloseModal() {
-        setSelectedTitle(undefined);
         setShowModal(false);
+        setSelectedTitle(undefined);
     }
 
     function changePage(pageIndex: number) {
