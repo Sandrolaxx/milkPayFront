@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDataContext } from "src/context/data";
 import { consultPixKey, pixPayment } from "src/utils/restClient";
 import { ConsultPixKey, EnumModalSteps, EnumPaymentType, ModalCardProps } from "src/utils/types";
-import { equalsEnum, formatMoney, getPixDto } from "src/utils/utils";
+import { equalsEnum, formatMoney, getPixDto, getTotalInterest } from "src/utils/utils";
 import ModalCardButtons from "./ModalCardButtons";
 import ModalCardStepTwoSkeleton from "./skeleton/ModalCardStepTwoSkeleton";
 
@@ -17,7 +17,6 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     const router = useRouter();
 
     function handleStartStepTwo() {
-
         if (equalsEnum(title.paymentType, EnumPaymentType.PIX)) {
             handleConsultPixKey();
         } else {
@@ -25,7 +24,6 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
         }
 
         setStep(EnumModalSteps.STEP_TWO);
-
     }
 
     function handleConsultPixKey() {
@@ -43,7 +41,6 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     }
 
     function handlePayment() {
-
         if (equalsEnum(title.paymentType, EnumPaymentType.PIX)) {
             handlePaymentPix()
         } else {
@@ -86,7 +83,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                     </span>
                     <span className="w-full flex my- flex-row justify-between px-6 py-1">
                         <p className="font-medium">Juro total</p>
-                        <p>{title.dailyInterest}%</p>
+                        <p>{getTotalInterest(title.dailyInterest, new Date(title.dueDate))}%</p>
                     </span>
                     <span className="w-full flex my- flex-row justify-between px-6 py-1">
                         <p className="font-medium">Valor juro</p>

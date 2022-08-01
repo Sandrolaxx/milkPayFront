@@ -16,7 +16,9 @@ export default function useTable() {
     }
 
     function updateTitleType(data: FecthTitleResponse) {
-        setTitleType(firstElement(data.results)!.liquidated ? EnumTitleTypes.RECEIVED : EnumTitleTypes.TO_RECEIVE);
+        if (firstElement(data.results)) {
+            setTitleType(firstElement(data.results).liquidated ? EnumTitleTypes.RECEIVED : EnumTitleTypes.TO_RECEIVE);
+        }
     }
 
     function handleShowModal(title: TitleData) {

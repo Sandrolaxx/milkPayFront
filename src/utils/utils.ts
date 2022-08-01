@@ -170,8 +170,8 @@ export function formatDDMMYYYY(date: Date): string {
     return DD.concat("/").concat(MM).concat("/").concat(YYYY);
 }
 
-export function firstElement<T>(array: T[]): T | undefined {
-    return array.at(0);
+export function firstElement<T>(array: T[]): T {
+    return array.at(0)!;
 }
 
 export function getPixDto(pixKeyData: ConsultPixKey, titleId: number): PixPayment {
@@ -194,4 +194,25 @@ export function getArrayOfElements(lineSize?: number): number[] {
 
 export function getDefaultPageSize() {
     return defaultPageSize;
+}
+
+export function getTotalInterest(dailyInterest: number, dueDate: Date): number {
+    var timeDiff = Math.abs(dueDate.getTime() - new Date().getTime());
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    return Math.floor(diffDays * dailyInterest);
+}
+
+export function formatDecimalValue(num: number, places: number) {
+    if (!("" + num).includes("e")) {
+        return +(Math.round(num.toString() + "e+" + places.toString()) + "e-" + places);
+    } else {
+        let arr = ("" + num).split("e");
+        let sig = ""
+        if (+arr[1] + places > 0) {
+            sig = "+";
+        }
+
+        return +(Math.round(+arr[0] + "e" + sig + (+arr[1] + places)) + "e-" + places);
+    }
 }
