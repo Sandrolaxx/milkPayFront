@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDataContext } from "src/context/data";
-import { consultPixKey, pixPayment } from "src/utils/restClient";
-import { ConsultPixKey, EnumModalSteps, EnumPaymentType, ModalCardProps } from "src/utils/types";
+import { consultBankSlip, consultPixKey, pixPayment } from "src/utils/restClient";
+import { BankSlip, ConsultPixKey, EnumModalSteps, EnumPaymentType, ModalCardProps } from "src/utils/types";
 import { equalsEnum, formatMoney, getPixDto, getTotalInterest } from "src/utils/utils";
 import ModalCardButtons from "./ModalCardButtons";
 import ModalCardStepTwoSkeleton from "./skeleton/ModalCardStepTwoSkeleton";
@@ -11,6 +11,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     const [step, setStep] = useState(EnumModalSteps.STEP_ONE);
     const [isConsultData, setConsultData] = useState(true);
     const [pixKeyData, setPixKeyData] = useState<ConsultPixKey>();
+    const [bankSlipData, setBankSlipData] = useState<BankSlip>();
     const [isPaymentDataCorrect, setPaymentDataCorrect] = useState(false);
     const [isPaymentConfirmed, setPaymentConfirmed] = useState(false);
     const { titlesData } = useDataContext();
@@ -37,7 +38,18 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     }
 
     function handleConsultBoleto() {
-        console.log("TO-DO fluxo boleto");
+        const bankSlip: BankSlip = {
+            barcode: title.barcode,
+            digitable: title.digitable
+        }
+
+        consultBankSlip(bankSlip)
+            .then(res => {
+                setBankSlipData(res);
+                setConsultData(false);
+            }).catch(() => {
+                handleClose();
+            });
     }
 
     function handlePayment() {
@@ -105,83 +117,98 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
             {equalsEnum(step, EnumModalSteps.STEP_TWO) &&
                 <div className="w-full h-full flex flex-col justify-start items-center">
                     <h1 className="font-medium text-lg my-6">Dados do Recebedor</h1>
-                    {isConsultData && equalsEnum(title.paymentType, EnumPaymentType.PIX) ?
+
+                    {isConsultData ?
                         <ModalCardStepTwoSkeleton />
                         :
-                        <>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Nome</p>
-                                <p>{pixKeyData?.owner.name}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Documento</p>
-                                <p>{pixKeyData?.owner.taxIdNumber}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Chave</p>
-                                <p>{pixKeyData?.key}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Tipo</p>
-                                <p>{pixKeyData?.keyType}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Banco</p>
-                                <p>{pixKeyData?.account.participant}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Agência</p>
-                                <p>{pixKeyData?.account.branch}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Conta</p>
-                                <p>{pixKeyData?.account.accountNumber}</p>
-                            </span>
-                            <span className="w-full flex justify-center items-center py-1">
-                                <input className="mx-2" type="checkbox" name="confirmPaymentData" id="checkbox"
-                                    onChange={e => setPaymentDataCorrect(e.target.checked)} />
-                                <p>Dados da Transferência Corretos</p>
-                            </span>
-                        </>
-                    }
-                    {isConsultData && equalsEnum(title.paymentType, EnumPaymentType.BOLETO) ?
-                        <ModalCardStepTwoSkeleton />
-                        :
-                        <>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Nome</p>
-                                <p>{pixKeyData?.owner.name}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Documento</p>
-                                <p>{pixKeyData?.owner.taxIdNumber}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Chave</p>
-                                <p>{pixKeyData?.key}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Tipo</p>
-                                <p>{pixKeyData?.keyType}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Banco</p>
-                                <p>{pixKeyData?.account.participant}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Agência</p>
-                                <p>{pixKeyData?.account.branch}</p>
-                            </span>
-                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                                <p className="font-medium">Conta</p>
-                                <p>{pixKeyData?.account.accountNumber}</p>
-                            </span>
-                            <span className="w-full flex justify-center items-center py-1">
-                                <input className="mx-2" type="checkbox" name="confirmPaymentData" id="checkbox"
-                                    onChange={e => setPaymentDataCorrect(e.target.checked)} />
-                                <p>Dados da Transferência Corretos</p>
-                            </span>
-                        </>
+                        equalsEnum(title.paymentType, EnumPaymentType.PIX) ?
+                            <>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Nome</p>
+                                    <p>{pixKeyData?.owner.name}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Documento</p>
+                                    <p>{pixKeyData?.owner.taxIdNumber}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Chave</p>
+                                    <p>{pixKeyData?.key}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Tipo</p>
+                                    <p>{pixKeyData?.keyType}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Banco</p>
+                                    <p>{pixKeyData?.account.participant}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Agência</p>
+                                    <p>{pixKeyData?.account.branch}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Conta</p>
+                                    <p>{pixKeyData?.account.accountNumber}</p>
+                                </span>
+                                <span className="w-full flex justify-center items-center py-1">
+                                    <input className="mx-2" type="checkbox" name="confirmPaymentData" id="checkbox"
+                                        onChange={e => setPaymentDataCorrect(e.target.checked)} />
+                                    <p>Dados da Transferência Corretos</p>
+                                </span>
+                            </>
+                            :
+                            <>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Banco</p>
+                                    <p>{bankSlipData?.bank}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Nome Pagador</p>
+                                    <p>{bankSlipData?.payer}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Documento Pagador</p>
+                                    <p>{bankSlipData?.documentPayer}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Nome Beneficiário</p>
+                                    <p>{bankSlipData?.recipient}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Documento Beneficiário</p>
+                                    <p>{bankSlipData?.documentRecipient}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Linha Digitável</p>
+                                    <p>{bankSlipData?.digitable}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Vencimento</p>
+                                    <p>{bankSlipData?.dueDate}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Multa</p>
+                                    <p>{formatMoney(bankSlipData?.fine!)}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Juro</p>
+                                    <p>{formatMoney(bankSlipData?.interest!)}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Desconto</p>
+                                    <p>{formatMoney(bankSlipData?.discount!)}</p>
+                                </span>
+                                <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                    <p className="font-medium">Valor</p>
+                                    <p>{formatMoney(bankSlipData?.amount!)}</p>
+                                </span>
+                                <span className="w-full flex justify-center items-center py-1">
+                                    <input className="mx-2" type="checkbox" name="confirmPaymentData" id="checkbox"
+                                        onChange={e => setPaymentDataCorrect(e.target.checked)} />
+                                    <p>Dados da Transferência Corretos</p>
+                                </span>
+                            </>
                     }
                     <ModalCardButtons isEnabled={isPaymentDataCorrect} handleClose={handleClose}
                         handleContinue={() => setStep(EnumModalSteps.STEP_THREE)} />
@@ -191,7 +218,8 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                 <div className="w-full h-full flex flex-col justify-start items-center">
                     <h1 className="font-medium text-lg my-6">Confirmação de Antecipação</h1>
                     <p className="mx-6 mb-4 text-lg text-center">
-                        Deseja mesmo realizar a antecipação no valor de {formatMoney(title.finalAmount)}?
+                        Deseja mesmo realizar a antecipação no valor de
+                        {formatMoney(title.finalAmount ? title.finalAmount : title.amount)}?
                     </p>
                     <span className="w-full flex justify-center items-center py-1">
                         <input className="mx-2" type="checkbox" name="confirmPaymentData" id="checkbox"

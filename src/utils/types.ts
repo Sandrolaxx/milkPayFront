@@ -116,43 +116,59 @@ export type FecthTitleResponse = {
 }
 
 export type FecthTitleParams = {
-    offset: string,
-    limit: string,
-    pageIndex: number,
-    pageSize: number,
-    liquidated: boolean
+    offset: string;
+    limit: string;
+    pageIndex: number;
+    pageSize: number;
+    liquidated: boolean;
 }
 
 export type ConsultPixKey = {
-    account: ConsultPixKeyAccount,
-    endtoendid: string,
-    key: string,
-    keyType: string,
-    owner: ConsultPixKeyOwner
+    account: ConsultPixKeyAccount;
+    endtoendid: string;
+    key: string;
+    keyType: string;
+    owner: ConsultPixKeyOwner;
 }
 
 export type ConsultPixKeyAccount = {
-    accountNumber: string,
-    accountType: string,
-    branch: number,
-    participant: string
+    accountNumber: string;
+    accountType: string;
+    branch: number;
+    participant: string;
 }
 
 export type ConsultPixKeyOwner = {
-    name: string,
-    taxIdNumber: string,
+    name: string;
+    taxIdNumber: string;
 }
 
 export type PixPayment = {
-    titleId: number,
-	endToEndId: string,
-	receiverKey: string,
-	receiverBank: string,
-	receiverAccount: string,
-	receiverBranch: number,
-	receiverDocument: string,
-	receiverAccountType: string,
-	receiverName: string
+    titleId: number;
+	endToEndId: string;
+	receiverKey: string;
+	receiverBank: string;
+	receiverAccount: string;
+	receiverBranch: number;
+	receiverDocument: string;
+	receiverAccountType: string;
+	receiverName: string;
+}
+
+export type BankSlip = {
+    digitable: string;
+    barcode: string;
+    bank?: string;
+    documentPayer?: string;
+    documentRecipient?: string;
+    dueDate?: string;
+    payer?: string;
+    recipient?: string;
+    transactionId?: number;
+    amount?: number;
+    discount?: number;
+    fine?: number;
+    interest?: number;
 }
 
 //==========Enum's==========//
@@ -175,7 +191,8 @@ export enum EnumError {
     ERRO_CONSULTAR_TITULOS = "Ocorreu um erro ao buscar os títulos ",
     SERVICOS_INDISPONIVEIS = "Serviços da MilkPay indisponíveis! Não foi possível realizar a",
     SESSAO_EXPIRADA = "Sessão expirada! Realize o login novamente.",
-    ERRO_AO_REALIZAR_PAGAMENTO = "Erro ao realizar o pagamento do título. Verifique se os serviços estão disponíveis."
+    ERRO_AO_REALIZAR_PAGAMENTO = "Erro ao realizar o pagamento do título. Verifique se os serviços estão disponíveis.",
+    ERRO_CONSULTAR_TITULO = "Ocorreu um erro ao consultar Título! Erro: "
 }
 
 export enum EnumModalSteps {

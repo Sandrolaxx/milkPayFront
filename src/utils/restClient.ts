@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { ConsultPixKey, EnumError, FecthTitleParams, FecthTitleResponse, PixPayment, Totalizers } from "./types";
+import { BankSlip, ConsultPixKey, EnumError, FecthTitleParams, FecthTitleResponse, PixPayment, Totalizers } from "./types";
 import { addQueryParams, getBasicToken, getBearerToken, getToastError, getToastSuccess } from "./utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -14,9 +14,9 @@ const titlePath = process.env.NEXT_PUBLIC_TITLE_PATH;
 const pixPath = process.env.NEXT_PUBLIC_PIX_PATH;
 const bankslipPath = process.env.NEXT_PUBLIC_BANKSLIP_PATH;
 const totalizersPath = process.env.NEXT_PUBLIC_TOTALIZERS_PATH;
+const consultKeyPath = process.env.NEXT_PUBLIC_CONSULT_PIX_KEY_PATH;
 const consultPath = process.env.NEXT_PUBLIC_CONSULT_PATH;
 const paymentPath = process.env.NEXT_PUBLIC_PAYMENT_PATH;
-const consultBankSlipPath = process.env.NEXT_PUBLIC_CONSULT_PATH;
 
 export async function createAccount(document: string, password: string) {
     const userDto = { document, password };
@@ -165,7 +165,7 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
 
 export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
     const toastify = toast.loading("Consultando Chave🗝");
-    const urlConsultPix = new URL(baseUrl.concat(pixPath.concat(consultPath)));
+    const urlConsultPix = new URL(baseUrl.concat(pixPath.concat(consultKeyPath)));
     const token = localStorage.getItem("token");
 
     const request: RequestInit = {
@@ -203,7 +203,7 @@ export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
 }
 
 export function pixPayment(pixPayment: PixPayment) {
-    const toastify = toast.loading("Realizando Pagamento");
+    const toastify = toast.loading("Realizando Pagamento...💸");
     const urlPaymentPix = new URL(baseUrl.concat(pixPath.concat(paymentPath)));
     const token = localStorage.getItem("token");
 
@@ -241,41 +241,81 @@ export function pixPayment(pixPayment: PixPayment) {
         });
 }
 
-export function consultBankSlip(pixKey: string): Promise<ConsultPixKey> {
+export function consultBankSlip(bankSlip: BankSlip): Promise<BankSlip> {
     const toastify = toast.loading("Consultando Boleto📃");
-    const urlConsultBankSlipPath = new URL(baseUrl.concat(bankslipPath.concat(consultBankSlipPath)));
+    const urlConsultBankSlip = new URL(baseUrl.concat(bankslipPath.concat(consultPath)));
     const token = localStorage.getItem("token");
 
     const request: RequestInit = {
         headers: {
             "Authorization": getBearerToken(token!),
             "Content-Type": "application/json",
-            "key": pixKey
         },
+        method: "POST",
+        body: JSON.stringify(bankSlip)
     }
 
-    return fetch(urlConsultBankSlipPath, request)
+    return fetch(urlConsultBankSlip, request)
         .then(res => res.json())
         .then(response => {
             if (response.error) {
-                const err = EnumError.ERRO_CONSULTAR_CHAVE.concat(response.error).concat(" Tente novamente.");
+                const err = EnumError.ERRO_CONSULTAR_TITULO.concat(response.error).concat(" Tente novamente.");
                 toast.update(toastify, getToastError(err));
 
                 throw new Error(err);
             }
 
-            toast.update(toastify, getToastSuccess("Chave consultada com sucesso!"));
+            toast.update(toastify, getToastSuccess("Boleto consultado com sucesso!"));
 
             return response;
         })
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
-                toast.update(toastify, getToastError(EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta da chave pix")));
+                toast.update(toastify, getToastError(EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta do boleto")));
             } else {
                 toast.update(toastify, getToastError(err));
             }
 
             throw new Error(EnumError.SESSAO_EXPIRADA);
         })
+}
+
+export function bankSlipayment(bankSlip: BankSlip) {
+    const toastify = toast.loading("Realizando Pagamento...💸");
+    const urlPaymentBankSlip = new URL(baseUrl.concat(bankslipPath.concat(paymentPath)));
+    const token = localStorage.getItem("token");
+
+    const request: RequestInit = {
+        headers: {
+            "Authorization": getBearerToken(token!),
+            "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(bankSlip)
+    }
+
+    return fetch(urlPaymentBankSlip, request)
+        .then(res => res.json())
+        .then(response => {
+            if (response.error) {
+                toast.update(toastify, getToastError(response.error));
+
+                throw new Error(response.error);
+            }
+
+            toast.update(toastify, getToastSuccess("Pagamento realizado com sucesso!"));
+
+            return response;
+        })
+        .catch(err => {
+            if (err instanceof TypeError
+                && err.message == "Failed to fetch") {
+                toast.update(toastify, getToastError(EnumError.ERRO_AO_REALIZAR_PAGAMENTO));
+            } else {
+                toast.update(toastify, getToastError(err));
+            }
+
+            throw new Error(EnumError.SESSAO_EXPIRADA);
+        });
 }
