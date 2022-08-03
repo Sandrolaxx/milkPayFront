@@ -104,6 +104,7 @@ export type TitleData = {
     inclusionDate: string;
     dueDate: string;
     amount: number;
+    finalAmount: number;
     dailyInterest: number;
     liquidated: boolean;
 }

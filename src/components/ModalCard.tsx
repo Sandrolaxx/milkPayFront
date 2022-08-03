@@ -74,31 +74,77 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                 <div className="w-full h-full flex flex-col justify-start items-center">
                     <h1 className="font-medium text-lg my-6">Dados da Transação</h1>
                     <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                        <p className="font-medium">Valor</p>
+                        <p className="font-medium">
+                            {equalsEnum(title.paymentType, EnumPaymentType.PIX) ? 'Valor Bruto' : 'Total'}
+                        </p>
                         <p>{formatMoney(title.amount)}</p>
                     </span>
-                    <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                        <p className="font-medium">Juro diário</p>
-                        <p>{title.dailyInterest}%</p>
-                    </span>
-                    <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                        <p className="font-medium">Juro total</p>
-                        <p>{getTotalInterest(title.dailyInterest, new Date(title.dueDate))}%</p>
-                    </span>
-                    <span className="w-full flex my- flex-row justify-between px-6 py-1">
-                        <p className="font-medium">Valor juro</p>
-                        <p>{title.dailyInterest}</p>
-                    </span>
-                    <span className="w-full flex my- flex-row justify-between px-6 py-4">
-                        <p className="font-medium">Total</p>
-                        <p>{formatMoney(title.amount)}</p>
-                    </span>
+                    {
+                        equalsEnum(title.paymentType, EnumPaymentType.PIX) &&
+                        <>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                <p className="font-medium">Juro diário</p>
+                                <p>{title.dailyInterest}%</p>
+                            </span>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                <p className="font-medium">Juro total</p>
+                                <p>{getTotalInterest(title.dailyInterest, new Date(title.dueDate))}%</p>
+                            </span>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                <p className="font-medium">Valor juro</p>
+                                <p>{formatMoney(title.amount - title.finalAmount)}</p>
+                            </span>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-4">
+                                <p className="font-medium">Total</p>
+                                <p>{formatMoney(title.finalAmount)}</p>
+                            </span>
+                        </>
+                    }
                     <ModalCardButtons isEnabled handleClose={handleClose} handleContinue={handleStartStepTwo} />
                 </div>}
             {equalsEnum(step, EnumModalSteps.STEP_TWO) &&
                 <div className="w-full h-full flex flex-col justify-start items-center">
                     <h1 className="font-medium text-lg my-6">Dados do Recebedor</h1>
                     {isConsultData && equalsEnum(title.paymentType, EnumPaymentType.PIX) ?
+                        <ModalCardStepTwoSkeleton />
+                        :
+                        <>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                <p className="font-medium">Nome</p>
+                                <p>{pixKeyData?.owner.name}</p>
+                            </span>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                <p className="font-medium">Documento</p>
+                                <p>{pixKeyData?.owner.taxIdNumber}</p>
+                            </span>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                <p className="font-medium">Chave</p>
+                                <p>{pixKeyData?.key}</p>
+                            </span>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                <p className="font-medium">Tipo</p>
+                                <p>{pixKeyData?.keyType}</p>
+                            </span>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                <p className="font-medium">Banco</p>
+                                <p>{pixKeyData?.account.participant}</p>
+                            </span>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                <p className="font-medium">Agência</p>
+                                <p>{pixKeyData?.account.branch}</p>
+                            </span>
+                            <span className="w-full flex my- flex-row justify-between px-6 py-1">
+                                <p className="font-medium">Conta</p>
+                                <p>{pixKeyData?.account.accountNumber}</p>
+                            </span>
+                            <span className="w-full flex justify-center items-center py-1">
+                                <input className="mx-2" type="checkbox" name="confirmPaymentData" id="checkbox"
+                                    onChange={e => setPaymentDataCorrect(e.target.checked)} />
+                                <p>Dados da Transferência Corretos</p>
+                            </span>
+                        </>
+                    }
+                    {isConsultData && equalsEnum(title.paymentType, EnumPaymentType.BOLETO) ?
                         <ModalCardStepTwoSkeleton />
                         :
                         <>
@@ -145,7 +191,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                 <div className="w-full h-full flex flex-col justify-start items-center">
                     <h1 className="font-medium text-lg my-6">Confirmação de Antecipação</h1>
                     <p className="mx-6 mb-4 text-lg text-center">
-                        Deseja mesmo realizar a antecipação no valor de {formatMoney(title.amount)}?
+                        Deseja mesmo realizar a antecipação no valor de {formatMoney(title.finalAmount)}?
                     </p>
                     <span className="w-full flex justify-center items-center py-1">
                         <input className="mx-2" type="checkbox" name="confirmPaymentData" id="checkbox"
