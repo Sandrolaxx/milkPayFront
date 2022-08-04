@@ -202,3 +202,7 @@ export function getTotalInterest(dailyInterest: number, dueDate: Date): string {
 
     return (diffDays * dailyInterest).toFixed(2);
 }
+
+export function formatTextSize(text: string, maxSize: number): string {
+    return text.length > maxSize ? text.slice(0, maxSize).concat("...") : text;
+}
