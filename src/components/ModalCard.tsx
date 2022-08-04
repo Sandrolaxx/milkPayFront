@@ -118,7 +118,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                 <div className="w-full h-full flex flex-col justify-start items-center">
                     <h1 className="font-medium text-lg my-2">Dados do Recebedor</h1>
                     {isConsultData ?
-                        <ModalCardStepTwoSkeleton />
+                        <ModalCardStepTwoSkeleton isBankslipPayment={equalsEnum(title.paymentType, EnumPaymentType.BOLETO)} />
                         :
                         equalsEnum(title.paymentType, EnumPaymentType.PIX) ?
                             <>

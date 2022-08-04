@@ -63,6 +63,10 @@ export interface TableBodyProps {
     handleShowReceipt: Function;
 }
 
+export interface ModalCardSkeleton {
+    isBankslipPayment?: boolean;
+}
+
 //==========Types==========//
 export type DataContext = {
     cardsData: {
