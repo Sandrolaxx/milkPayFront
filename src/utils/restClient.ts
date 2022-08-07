@@ -1,6 +1,12 @@
 import { toast } from "react-toastify";
-import { BankSlip, ConsultPixKey, EnumError, FecthTitleParams, FecthTitleResponse, PixPayment, Totalizers } from "./types";
-import { addQueryParams, getBasicToken, getBearerToken, getToastError, getToastSuccess } from "./utils";
+import {
+    BankSlip, ConsultPixKey, EnumError, FecthTitleParams,
+    FecthTitleResponse, PixPayment, Totalizers
+} from "./types";
+import {
+    addQueryParams, getBasicToken, getBearerToken, getToastError,
+    getToastSuccess, handleError, handleReponseError, handleToastifyError, handleToastifyResponseError
+} from "./utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 const tokenBaseUrl = process.env.NEXT_PUBLIC_TOKENBASE_URL;
@@ -25,7 +31,9 @@ export async function createAccount(document: string, password: string) {
     const toastify = toast.loading("Criando usuário...");
 
     if (!token) {
-        toast.update(toastify, getToastError("Serviços indisponíveis!"));
+        const error = EnumError.SERVICOS_INDISPONIVEIS.concat("a criação de conta.");
+        handleToastifyError(toastify, error, false);
+
         return;
     }
 
@@ -42,14 +50,20 @@ export async function createAccount(document: string, password: string) {
         .then(res => {
             if (res.ok) {
                 toast.update(toastify, getToastSuccess("Usuário criado com sucesso!"));
-            } else {
-                res.json()
-                    .then(res => {
-                        toast.update(toastify, getToastError(res.error));
-                    });
+                return;
             }
+
+            handleToastifyResponseError(res, toastify, true);
         })
-        .catch(() => toast.update(toastify, getToastError(EnumError.CADASTRO_INDISPONIVEL)));
+        .catch(err => {
+            if (err instanceof TypeError
+                && err.message == "Failed to fetch") {
+                const error = EnumError.SERVICOS_INDISPONIVEIS.concat("o cadastro do usúario!");
+                handleError(toast, error, true);
+            } else {
+                handleError(toast, err, true);
+            }
+        });
 }
 
 function getToken(tokenUser: string, tokenPassword: string) {
@@ -99,24 +113,19 @@ export function fetchTotalizers(): Promise<Totalizers> {
     }
 
     return fetch(urlTotalizers, request)
-        .then(res => res.json())
-        .then(response => {
-            if (response.error) {
-                throw new Error(EnumError.ERRO_CONSULTAR_TOTALIZADORES.concat(response.error)
-                    .concat(". Realize o login novamente!"));
-            }
+        .then(res => {
+            handleReponseError(res, toast, true);
 
-            return response;
+            return res.json();
         })
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
-                toast.error(EnumError.SERVICOS_INDISPONIVEIS.concat("consulta dos totalizadores!"));
+                const error = EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta dos totalizadores!");
+                handleError(toast, error, true);
             } else {
-                toast.error(err);
+                handleError(toast, err, true);
             }
-
-            throw new Error(EnumError.SESSAO_EXPIRADA);
         });
 }
 
@@ -140,26 +149,19 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
     }
 
     return fetch(urlTitles, request)
-        .then(res => res.json())
-        .then(response => {
-            if (response.error) {
-                const error = EnumError.ERRO_CONSULTAR_TITULOS.concat(errorMsgType)
-                    .concat(".Erro: ").concat(response.error).concat(". Realize o login novamente!");
+        .then(res => {
+            handleReponseError(res, toast, true);
 
-                throw new Error(error);
-            }
-
-            return response;
+            return res.json();
         })
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
-                toast.error(EnumError.SERVICOS_INDISPONIVEIS.concat("consulta dos títulos ").concat(errorMsgType));
+                const error = EnumError.SERVICOS_INDISPONIVEIS.concat("consulta dos títulos ").concat(errorMsgType);
+                handleError(toast, error, true);
             } else {
-                toast.error(err);
+                handleError(toast, err, true);
             }
-
-            throw new Error(EnumError.SESSAO_EXPIRADA);
         });
 }
 
@@ -177,29 +179,26 @@ export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
     }
 
     return fetch(urlConsultPix, request)
-        .then(res => res.json())
-        .then(response => {
-            if (response.error) {
-                const err = EnumError.ERRO_CONSULTAR_CHAVE.concat(response.error).concat(" Tente novamente.");
-                toast.update(toastify, getToastError(err));
+        .then(res => {
+            if (res.ok) {
+                toast.update(toastify, getToastSuccess("Chave consultada com sucesso!"));
 
-                throw new Error(err);
+                return res.json();
             }
 
-            toast.update(toastify, getToastSuccess("Chave consultada com sucesso!"));
+            handleToastifyResponseError(res, toastify, false);
 
-            return response;
+            return null;
         })
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
-                toast.update(toastify, getToastError(EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta da chave pix")));
+                const error = EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta da chave PIX.");
+                handleToastifyError(toastify, error, true);
             } else {
-                toast.update(toastify, getToastError(err));
+                handleToastifyError(toastify, err, true);
             }
-
-            throw new Error(EnumError.SESSAO_EXPIRADA);
-        })
+        });
 }
 
 export function pixPayment(pixPayment: PixPayment) {
@@ -217,27 +216,25 @@ export function pixPayment(pixPayment: PixPayment) {
     }
 
     return fetch(urlPaymentPix, request)
-        .then(res => res.json())
-        .then(response => {
-            if (response.error) {
-                toast.update(toastify, getToastError(response.error));
+        .then(res => {
+            if (res.ok) {
+                toast.update(toastify, getToastSuccess("Pagamento realizado com sucesso!"));
 
-                throw new Error(response.error);
+                return res.json();
             }
 
-            toast.update(toastify, getToastSuccess("Pagamento realizado com sucesso!"));
+            handleToastifyResponseError(res, toastify, false);
 
-            return response;
+            return null;
         })
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
-                toast.update(toastify, getToastError(EnumError.ERRO_AO_REALIZAR_PAGAMENTO));
+                const error = EnumError.SERVICOS_INDISPONIVEIS.concat("o pagamento PIX.");
+                handleToastifyError(toastify, error, true);
             } else {
-                toast.update(toastify, getToastError(err));
+                handleToastifyError(toastify, err, true);
             }
-
-            throw new Error(EnumError.SESSAO_EXPIRADA);
         });
 }
 
@@ -256,29 +253,26 @@ export function consultBankSlip(bankSlip: BankSlip): Promise<BankSlip> {
     }
 
     return fetch(urlConsultBankSlip, request)
-        .then(res => res.json())
-        .then(response => {
-            if (response.error) {
-                const err = EnumError.ERRO_CONSULTAR_TITULO.concat(response.error).concat(" Tente novamente.");
-                toast.update(toastify, getToastError(err));
+        .then(res => {
+            if (res.ok) {
+                toast.update(toastify, getToastSuccess("Boleto consultado com sucesso!"));
 
-                throw new Error(err);
+                return res.json();
             }
 
-            toast.update(toastify, getToastSuccess("Boleto consultado com sucesso!"));
+            handleToastifyResponseError(res, toastify, false);
 
-            return response;
+            return null;
         })
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
-                toast.update(toastify, getToastError(EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta do boleto")));
+                const error = EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta do boleto.");
+                handleToastifyError(toastify, error, true);
             } else {
-                toast.update(toastify, getToastError(err));
+                handleToastifyError(toastify, err, true);
             }
-
-            throw new Error(EnumError.SESSAO_EXPIRADA);
-        })
+        });
 }
 
 export function bankSlipayment(bankSlip: BankSlip) {
@@ -296,26 +290,24 @@ export function bankSlipayment(bankSlip: BankSlip) {
     }
 
     return fetch(urlPaymentBankSlip, request)
-        .then(res => res.json())
-        .then(response => {
-            if (response.error) {
-                toast.update(toastify, getToastError(response.error));
+        .then(res => {
+            if (res.ok) {
+                toast.update(toastify, getToastSuccess("Pagamento realizado com sucesso!"));
 
-                throw new Error(response.error);
+                return res.json();
             }
 
-            toast.update(toastify, getToastSuccess("Pagamento realizado com sucesso!"));
+            handleToastifyResponseError(res, toastify, false);
 
-            return response;
+            return null;
         })
         .catch(err => {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
-                toast.update(toastify, getToastError(EnumError.ERRO_AO_REALIZAR_PAGAMENTO));
+                const error = EnumError.SERVICOS_INDISPONIVEIS.concat("o pagamento do Boleto.");
+                handleToastifyError(toastify, error, true);
             } else {
-                toast.update(toastify, getToastError(err));
+                handleToastifyError(toastify, err, true);
             }
-
-            throw new Error(EnumError.SESSAO_EXPIRADA);
         });
 }

@@ -30,11 +30,14 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     function handleConsultPixKey() {
         consultPixKey(title.pixKey)
             .then(res => {
+                if (res == null) {
+                    handleClose();
+                }
+
                 setPixKeyData(res);
                 setConsultData(false);
-            }).catch(() => {
-                handleClose();
-            });
+            })
+            .catch(() => router.push("/auth"));
     }
 
     function handleConsultBoleto() {
@@ -45,11 +48,14 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
 
         consultBankSlip(bankSlip)
             .then(res => {
+                if (res == null) {
+                    handleClose();
+                }
+
                 setBankSlipData(res);
                 setConsultData(false);
-            }).catch(() => {
-                handleClose();
-            });
+            })
+            .catch(() => router.push("/auth"));
     }
 
     function handlePayment() {
@@ -67,12 +73,15 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
 
         pixPayment(pixDto)
             .then(res => {
+                if (res == null) {
+                    handleClose();
+                }
+
                 titlesData.fetchRecivedTitlesData();
                 titlesData.fetchTitlesToReciveData();
 
-                console.log(res.receipt)
-            })
-            .catch(() => router.push("/auth"));
+                console.log(res.receipt);
+            });
     }
 
     function handlePaymentBoleto() {

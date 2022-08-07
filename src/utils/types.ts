@@ -149,14 +149,14 @@ export type ConsultPixKeyOwner = {
 
 export type PixPayment = {
     titleId: number;
-	endToEndId: string;
-	receiverKey: string;
-	receiverBank: string;
-	receiverAccount: string;
-	receiverBranch: number;
-	receiverDocument: string;
-	receiverAccountType: string;
-	receiverName: string;
+    endToEndId: string;
+    receiverKey: string;
+    receiverBank: string;
+    receiverAccount: string;
+    receiverBranch: number;
+    receiverDocument: string;
+    receiverAccountType: string;
+    receiverName: string;
 }
 
 export type BankSlip = {
@@ -188,15 +188,10 @@ export enum EnumScreens {
 }
 
 export enum EnumError {
-    CADASTRO_INDISPONIVEL = "Serviço de cadastro indisponível. Tente novamente em instantes.",
+    ERRO_CADASTRAR_USUARIO = "Ocorreu um erro ao cadastrar usuário! Erro: ",
     ERRO_LOGIN = "Erro ao realizar login! Verifique os campos informados.",
-    ERRO_CONSULTAR_CHAVE = "Ocorreu um erro ao consultar chave! Erro: ",
-    ERRO_CONSULTAR_TOTALIZADORES = "Ocorreu um erro ao buscar os totalizadores! Erro: ",
-    ERRO_CONSULTAR_TITULOS = "Ocorreu um erro ao buscar os títulos ",
-    SERVICOS_INDISPONIVEIS = "Serviços da MilkPay indisponíveis! Não foi possível realizar a",
+    SERVICOS_INDISPONIVEIS = "Serviços da MilkPay indisponíveis! Não foi possível realizar ",
     SESSAO_EXPIRADA = "Sessão expirada! Realize o login novamente.",
-    ERRO_AO_REALIZAR_PAGAMENTO = "Erro ao realizar o pagamento do título. Verifique se os serviços estão disponíveis.",
-    ERRO_CONSULTAR_TITULO = "Ocorreu um erro ao consultar Título! Erro: "
 }
 
 export enum EnumModalSteps {

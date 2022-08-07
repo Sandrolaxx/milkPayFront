@@ -1,11 +1,11 @@
-import { UpdateOptions } from "react-toastify";
+import { toast, UpdateOptions } from "react-toastify";
 import { URL } from "url";
 import CalendarIcon from "../assets/icons/calendar.svg";
 import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
 import AmountReceiveToIcon from "../assets/icons/dollar-sign.svg";
 import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
-import { CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers } from "./types";
+import { CardTotalizers, ConsultPixKey, EnumError, FecthTitleParams, PixPayment, Totalizers } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 const defaultPageSize = process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE;
@@ -205,4 +205,54 @@ export function getTotalInterest(dailyInterest: number, dueDate: Date): string {
 
 export function formatTextSize(text: string, maxSize: number): string {
     return text.length > maxSize ? text.slice(0, maxSize).concat("...") : text;
+}
+
+export function handleReponseError(response: Response, toast: any, throws?: boolean) {
+
+    if (response.status == 401) {
+        throw new Error(EnumError.SESSAO_EXPIRADA);
+    }
+
+    if (!response.ok) {
+        response.json()
+            .then(res => {
+                if (throws) {
+                    throw new Error(res.error.concat(". Realize o login novamente!"));
+                }
+
+                toast.error(res.error);
+            });
+    }
+}
+
+export function handleError(toast: any, error: string, throws?: boolean) {
+    toast.error(error);
+
+    if (throws) {
+        throw new Error(error);
+    }
+}
+
+export function handleToastifyResponseError(response: Response, toastify: any, throws?: boolean) {
+
+    if (response.status == 401) {
+        throw new Error(EnumError.SESSAO_EXPIRADA);
+    }
+
+    response.json()
+        .then(res => {
+            if (throws) {
+                throw new Error(res.error.concat(" Tente novamente."));
+            }
+            
+            toast.update(toastify, getToastError(res.error.concat(" Tente novamente.")));
+        });
+}
+
+export function handleToastifyError(toastify: any, error: string, throws?: boolean) {
+    toast.update(toastify, getToastError(error));
+
+    if (throws) {
+        throw new Error(error);
+    }
 }
