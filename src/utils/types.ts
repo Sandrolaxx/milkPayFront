@@ -175,6 +175,11 @@ export type BankSlip = {
     interest?: number;
 }
 
+export type PaymentResponse = {
+    txId: number;
+    receiptImage: string;
+}
+
 //==========Enum's==========//
 export enum EnumFormType {
     LOGIN,

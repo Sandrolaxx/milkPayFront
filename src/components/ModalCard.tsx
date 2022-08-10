@@ -80,7 +80,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                 titlesData.fetchRecivedTitlesData();
                 titlesData.fetchTitlesToReciveData();
 
-                console.log(res.receipt);
+                console.log(res);
             });
     }
 

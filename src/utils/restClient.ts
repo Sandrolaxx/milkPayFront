@@ -201,7 +201,7 @@ export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
         });
 }
 
-export function pixPayment(pixPayment: PixPayment) {
+export function pixPayment(pixPayment: PixPayment): Promise<PaymentResponse> {
     const toastify = toast.loading("Realizando Pagamento...💸");
     const urlPaymentPix = new URL(baseUrl.concat(pixPath.concat(paymentPath)));
     const token = localStorage.getItem("token");
@@ -275,7 +275,7 @@ export function consultBankSlip(bankSlip: BankSlip): Promise<BankSlip> {
         });
 }
 
-export function bankSlipayment(bankSlip: BankSlip) {
+export function bankSlipayment(bankSlip: BankSlip): Promise<PaymentResponse> {
     const toastify = toast.loading("Realizando Pagamento...💸");
     const urlPaymentBankSlip = new URL(baseUrl.concat(bankslipPath.concat(paymentPath)));
     const token = localStorage.getItem("token");
