@@ -85,7 +85,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     }
 
     function handlePaymentBoleto() {
-        console.log("TO-DO fluxo boleto");
+        console.log("TO-DO fluxo boleto");//h-screen overflow-y-hidden
     }
 
     return (
