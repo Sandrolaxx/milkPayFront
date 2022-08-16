@@ -39,6 +39,7 @@ export interface TableProps {
     title: string;
     subTitle: string;
     data: FecthTitleResponse;
+    setShowModal: Function;
 }
 
 export interface ModalCardProps {
@@ -48,7 +49,7 @@ export interface ModalCardProps {
 
 export interface ModalCardButtonProps {
     handleClose: Function;
-    handleContinue: Function;
+    handleContinue?: Function;
     isEnabled: boolean
 }
 
@@ -202,7 +203,8 @@ export enum EnumError {
 export enum EnumModalSteps {
     STEP_ONE,
     STEP_TWO,
-    STEP_THREE
+    STEP_THREE,
+    STEP_RECEIPT
 }
 
 export enum EnumTitleTypes {

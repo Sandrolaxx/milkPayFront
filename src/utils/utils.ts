@@ -219,6 +219,7 @@ export function handleReponseError(response: Response, toast: any, throws?: bool
                 const error = res.error ? res.error : "Erro desconhecido. ";
 
                 if (throws) {
+                    toast.error(error.concat(". Realize o login novamente!"));
                     throw new Error(error.concat(". Realize o login novamente!"));
                 }
 
@@ -246,6 +247,7 @@ export function handleToastifyResponseError(response: Response, toastify: any, t
             const error = res.error ? res.error : "Erro desconhecido. ";
 
             if (throws) {
+                toast.update(toastify, getToastError(error.concat("Tente novamente.")));
                 throw new Error(error.concat("Tente novamente."));
             }
 

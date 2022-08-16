@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import useTable from "src/hooks/useTable";
-import { TableProps } from "src/utils/types";
+import { TableProps, TitleData } from "src/utils/types";
 import ArrowRightIcon from "../assets/icons/arrow-left.svg";
 import ArrowLeftIcon from "../assets/icons/arrow-right.svg";
 import ModalCard from "./ModalCard";
@@ -8,7 +8,7 @@ import TableLineSkeleton from "./skeleton/TableLineSkeleton";
 import TableBody from "./TableBody";
 import TableHead from "./TableHead";
 
-export default function Table({ title, subTitle, data }: TableProps) {
+export default function Table({ title, subTitle, data, setShowModal }: TableProps) {
     const table = useTable();
 
     useEffect(() => {
@@ -19,11 +19,21 @@ export default function Table({ title, subTitle, data }: TableProps) {
         }
     }, [data]);
 
+    function handleShowModal(title: TitleData) {
+        table.handleShowModal(title);
+        setShowModal();
+    }
+
+    function handleCloseModal() {
+        table.handleCloseModal();
+        setShowModal();
+    }
+
     return (
         <>
             {table.showModal &&
-                <div className="fixed z-10 inset-0 backdrop-blur-[2px] flex justify-center items-center">
-                    <ModalCard title={table.selectedTitle!} handleClose={table.handleCloseModal} />
+                <div className="fixed z-10 inset-0 backdrop-blur-[2px] overflow-auto flex justify-center items-center">
+                    <ModalCard title={table.selectedTitle!} handleClose={handleCloseModal} />
                 </div>
             }
             <div className="container min-w-full py-4 pr-4 xl:pr-0">
@@ -39,7 +49,7 @@ export default function Table({ title, subTitle, data }: TableProps) {
                                 <TableLineSkeleton />
                                 :
                                 <TableBody titles={data.results} titleType={table.titleType!}
-                                    handleShowModal={table.handleShowModal} handleShowReceipt={() => console.log("Teste comprovante")} />
+                                    handleShowModal={handleShowModal} handleShowReceipt={() => console.log("Teste comprovante")} />
                             }
                         </table>
                         {table.renderPageNavigation() ?

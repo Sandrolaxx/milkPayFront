@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDataContext } from "src/context/data";
@@ -6,9 +7,11 @@ import { BankSlip, ConsultPixKey, EnumModalSteps, EnumPaymentType, ModalCardProp
 import { equalsEnum, formatMoney, formatTextSize, getPixDto, getTotalInterest } from "src/utils/utils";
 import ModalCardButtons from "./ModalCardButtons";
 import ModalCardStepTwoSkeleton from "./skeleton/ModalCardStepTwoSkeleton";
+import receiptImage from "../assets/comprovante.png";
+import DownloadIcon from "../assets/icons/download.svg";
 
 export default function ModalCard({ title, handleClose }: ModalCardProps) {
-    const [step, setStep] = useState(EnumModalSteps.STEP_ONE);
+    const [step, setStep] = useState(EnumModalSteps.STEP_RECEIPT);
     const [isConsultData, setConsultData] = useState(true);
     const [pixKeyData, setPixKeyData] = useState<ConsultPixKey>();
     const [bankSlipData, setBankSlipData] = useState<BankSlip>();
@@ -85,7 +88,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     }
 
     function handlePaymentBoleto() {
-        console.log("TO-DO fluxo boleto");//h-screen overflow-y-hidden
+        console.log("TO-DO fluxo boleto");
     }
 
     return (
@@ -246,6 +249,19 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                     </span>
                     <ModalCardButtons isEnabled={isPaymentConfirmed} handleClose={handleClose}
                         handleContinue={handlePayment} />
+                </div>}
+            {equalsEnum(step, EnumModalSteps.STEP_RECEIPT) &&
+                <div className="w-full h-full flex flex-col justify-start items-center">
+                    <h1 className="font-medium text-lg my-2">Comprovante de Pagamento📃</h1>
+                    <div className="flex flex-col items-center rounded-3xl bg-purple-600">
+                        <Image className="rounded-3xl" src={receiptImage} width={320} height={640}
+                            quality={100} layout="fixed" />
+                        <span title="Realizar download do comprovante" className="w-full cursor-pointer">
+                            <DownloadIcon className="w-full text-white my-2"
+                                width={28} key={"Download Icon"} />
+                        </span>
+                    </div>
+                    <ModalCardButtons isEnabled={isPaymentConfirmed} handleClose={handleClose} />
                 </div>}
         </div>
     );
