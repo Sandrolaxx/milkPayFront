@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDataContext } from "src/context/data";
 import { consultBankSlip, consultPixKey, pixPayment } from "src/utils/restClient";
 import { BankSlip, ConsultPixKey, EnumModalSteps, EnumPaymentType, ModalCardProps } from "src/utils/types";
@@ -9,16 +9,25 @@ import ModalCardButtons from "./ModalCardButtons";
 import ModalCardStepTwoSkeleton from "./skeleton/ModalCardStepTwoSkeleton";
 import receiptImage from "../assets/comprovante.png";
 import DownloadIcon from "../assets/icons/download.svg";
+import ModalReceiptSkeleton from "./skeleton/ModalReceiptSkeleton";
 
 export default function ModalCard({ title, handleClose }: ModalCardProps) {
-    const [step, setStep] = useState(EnumModalSteps.STEP_RECEIPT);
-    const [isConsultData, setConsultData] = useState(true);
+    const router = useRouter();
+    const { titlesData } = useDataContext();
+    const [step, setStep] = useState<EnumModalSteps>();
     const [pixKeyData, setPixKeyData] = useState<ConsultPixKey>();
     const [bankSlipData, setBankSlipData] = useState<BankSlip>();
+    const [isConsultData, setConsultData] = useState(true);
     const [isPaymentDataCorrect, setPaymentDataCorrect] = useState(false);
     const [isPaymentConfirmed, setPaymentConfirmed] = useState(false);
-    const { titlesData } = useDataContext();
-    const router = useRouter();
+
+    useEffect(() => {
+        if (title.liquidated) {
+            return setStep(EnumModalSteps.STEP_RECEIPT);
+        }
+
+        return setStep(EnumModalSteps.STEP_ONE);
+    }, []);
 
     function handleStartStepTwo() {
         if (equalsEnum(title.paymentType, EnumPaymentType.PIX)) {
@@ -251,18 +260,22 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                         handleContinue={handlePayment} />
                 </div>}
             {equalsEnum(step, EnumModalSteps.STEP_RECEIPT) &&
-                <div className="w-full h-full flex flex-col justify-start items-center">
-                    <h1 className="font-medium text-lg my-2">Comprovante de Pagamento📃</h1>
-                    <div className="flex flex-col items-center rounded-3xl bg-purple-600">
-                        <Image className="rounded-3xl" src={receiptImage} width={320} height={640}
-                            quality={100} layout="fixed" />
-                        <span title="Realizar download do comprovante" className="w-full cursor-pointer">
-                            <DownloadIcon className="w-full text-white my-2"
-                                width={28} key={"Download Icon"} />
-                        </span>
+                (isConsultData ?
+                    <ModalReceiptSkeleton />
+                    :
+                    <div className="w-full h-full flex flex-col justify-start items-center">
+                        <h1 className="font-medium text-lg my-2">Comprovante de Pagamento📃</h1>
+                        <div className="flex flex-col items-center rounded-3xl bg-purple-600">
+                            <Image className="rounded-3xl" src={receiptImage} width={320} height={640}
+                                quality={100} layout="fixed" />
+                            <span title="Realizar download do comprovante" className="w-full cursor-pointer">
+                                <DownloadIcon className="w-full text-white my-2" width={28} key={"Download Icon"} />
+                            </span>
+                        </div>
+                        <ModalCardButtons isEnabled={isPaymentConfirmed} handleClose={handleClose} />
                     </div>
-                    <ModalCardButtons isEnabled={isPaymentConfirmed} handleClose={handleClose} />
-                </div>}
+                )
+            }
         </div>
     );
 }

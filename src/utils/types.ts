@@ -61,7 +61,6 @@ export interface TableBodyProps {
     titles: TitleData[];
     titleType: EnumTitleTypes;
     handleShowModal: Function;
-    handleShowReceipt: Function;
 }
 
 export interface ModalCardSkeleton {

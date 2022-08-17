@@ -48,8 +48,7 @@ export default function Table({ title, subTitle, data, setShowModal }: TableProp
                             {table.isFetchingData ?
                                 <TableLineSkeleton />
                                 :
-                                <TableBody titles={data.results} titleType={table.titleType!}
-                                    handleShowModal={handleShowModal} handleShowReceipt={() => console.log("Teste comprovante")} />
+                                <TableBody titles={data.results} titleType={table.titleType!} handleShowModal={handleShowModal} />
                             }
                         </table>
                         {table.renderPageNavigation() ?
