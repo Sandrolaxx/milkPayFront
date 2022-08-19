@@ -111,6 +111,7 @@ export type TitleData = {
     finalAmount: number;
     dailyInterest: number;
     liquidated: boolean;
+    txId: number;
 }
 
 export type FecthTitleResponse = {
@@ -177,6 +178,10 @@ export type BankSlip = {
 
 export type PaymentResponse = {
     txId: number;
+    receiptImage: string;
+}
+
+export type Receipt = {
     receiptImage: string;
 }
 

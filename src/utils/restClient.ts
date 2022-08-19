@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import {
     BankSlip, ConsultPixKey, EnumError, FecthTitleParams,
-    FecthTitleResponse, PixPayment, Totalizers
+    FecthTitleResponse, PixPayment, Receipt, Totalizers
 } from "./types";
 import {
     addQueryParams, getBasicToken, getBearerToken, getToastError,
@@ -23,6 +23,7 @@ const totalizersPath = process.env.NEXT_PUBLIC_TOTALIZERS_PATH;
 const consultKeyPath = process.env.NEXT_PUBLIC_CONSULT_PIX_KEY_PATH;
 const consultPath = process.env.NEXT_PUBLIC_CONSULT_PATH;
 const paymentPath = process.env.NEXT_PUBLIC_PAYMENT_PATH;
+const receiptPath = process.env.NEXT_PUBLIC_RECEIPT_PATH;
 
 export async function createAccount(document: string, password: string) {
     const userDto = { document, password };
@@ -305,6 +306,42 @@ export function bankSlipayment(bankSlip: BankSlip): Promise<PaymentResponse> {
             if (err instanceof TypeError
                 && err.message == "Failed to fetch") {
                 const error = EnumError.SERVICOS_INDISPONIVEIS.concat("o pagamento do Boleto.");
+                handleToastifyError(toastify, error, true);
+            } else {
+                handleToastifyError(toastify, err, true);
+            }
+        });
+}
+
+export function consultReceipt(txId: number): Promise<Receipt> {
+    const toastify = toast.loading("Consultando Comprovante📃");
+    const urlConsultReceipt = new URL(baseUrl.concat(receiptPath));
+    const token = localStorage.getItem("token");
+
+    const request: RequestInit = {
+        headers: {
+            "Authorization": getBearerToken(token!),
+            "Content-Type": "application/json",
+            "txId": txId.toString()
+        },
+    }
+
+    return fetch(urlConsultReceipt, request)
+        .then(res => {
+            if (res.ok) {
+                toast.update(toastify, getToastSuccess("Comprovante consultado com sucesso!"));
+
+                return res.json();
+            }
+
+            handleToastifyResponseError(res, toastify, false);
+
+            return null;
+        })
+        .catch(err => {
+            if (err instanceof TypeError
+                && err.message == "Failed to fetch") {
+                const error = EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta do comprovante.");
                 handleToastifyError(toastify, error, true);
             } else {
                 handleToastifyError(toastify, err, true);

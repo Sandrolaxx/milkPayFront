@@ -16,5 +16,6 @@ declare namespace NodeJS {
         NEXT_PUBLIC_BANKSLIP_PATH: string;
         NEXT_PUBLIC_PAYMENT_PATH: string;
         NEXT_PUBLIC_CONSULT_PATH: string;
+        NEXT_PUBLIC_RECEIPT_PATH: string;
     }
 }

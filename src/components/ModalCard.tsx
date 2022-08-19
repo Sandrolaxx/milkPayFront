@@ -2,12 +2,11 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDataContext } from "src/context/data";
-import { consultBankSlip, consultPixKey, pixPayment } from "src/utils/restClient";
+import { consultBankSlip, consultPixKey, consultReceipt, pixPayment } from "src/utils/restClient";
 import { BankSlip, ConsultPixKey, EnumModalSteps, EnumPaymentType, ModalCardProps } from "src/utils/types";
 import { equalsEnum, formatMoney, formatTextSize, getPixDto, getTotalInterest } from "src/utils/utils";
 import ModalCardButtons from "./ModalCardButtons";
 import ModalCardStepTwoSkeleton from "./skeleton/ModalCardStepTwoSkeleton";
-import receiptImage from "../assets/comprovante.png";
 import DownloadIcon from "../assets/icons/download.svg";
 import ModalReceiptSkeleton from "./skeleton/ModalReceiptSkeleton";
 
@@ -17,13 +16,17 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     const [step, setStep] = useState<EnumModalSteps>();
     const [pixKeyData, setPixKeyData] = useState<ConsultPixKey>();
     const [bankSlipData, setBankSlipData] = useState<BankSlip>();
+    const [receiptData, setReceipt] = useState<string>();
     const [isConsultData, setConsultData] = useState(true);
     const [isPaymentDataCorrect, setPaymentDataCorrect] = useState(false);
     const [isPaymentConfirmed, setPaymentConfirmed] = useState(false);
 
     useEffect(() => {
         if (title.liquidated) {
-            return setStep(EnumModalSteps.STEP_RECEIPT);
+            setStep(EnumModalSteps.STEP_RECEIPT);
+            handleConsultReceipt();
+
+            return;
         }
 
         return setStep(EnumModalSteps.STEP_ONE);
@@ -65,6 +68,19 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                 }
 
                 setBankSlipData(res);
+                setConsultData(false);
+            })
+            .catch(() => router.push("/auth"));
+    }
+
+    function handleConsultReceipt() {
+        consultReceipt(title.txId)
+            .then(res => {
+                if (res == null) {
+                    handleClose();
+                }
+
+                setReceipt(res.receiptImage);
                 setConsultData(false);
             })
             .catch(() => router.push("/auth"));
@@ -260,21 +276,21 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                         handleContinue={handlePayment} />
                 </div>}
             {equalsEnum(step, EnumModalSteps.STEP_RECEIPT) &&
-                (isConsultData ?
-                    <ModalReceiptSkeleton />
-                    :
-                    <div className="w-full h-full flex flex-col justify-start items-center">
-                        <h1 className="font-medium text-lg my-2">Comprovante de Pagamento📃</h1>
+                <div className="w-full h-full flex flex-col justify-start items-center">
+                    <h1 className="font-medium text-lg my-2">Comprovante de Pagamento📃</h1>
+                    {isConsultData ?
+                        <ModalReceiptSkeleton />
+                        :
                         <div className="flex flex-col items-center rounded-3xl bg-purple-600">
-                            <Image className="rounded-3xl" src={receiptImage} width={320} height={640}
+                            <Image className="rounded-3xl" src={receiptData!} width={320} height={636}
                                 quality={100} layout="fixed" />
                             <span title="Realizar download do comprovante" className="w-full cursor-pointer">
                                 <DownloadIcon className="w-full text-white my-2" width={28} key={"Download Icon"} />
                             </span>
                         </div>
-                        <ModalCardButtons isEnabled={isPaymentConfirmed} handleClose={handleClose} />
-                    </div>
-                )
+                    }
+                    <ModalCardButtons isEnabled={isPaymentConfirmed} handleClose={handleClose} />
+                </div>
             }
         </div>
     );
