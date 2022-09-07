@@ -32,7 +32,7 @@ export default function Table({ title, subTitle, data, setShowModal }: TableProp
     return (
         <>
             {table.showModal &&
-                <div className="fixed z-10 inset-0 backdrop-blur-[2px] overflow-auto flex justify-center items-center">
+                <div className="fixed z-10 inset-0 backdrop-blur-[2px] flex justify-center items-center">
                     <ModalCard title={table.selectedTitle!} handleClose={handleCloseModal} />
                 </div>
             }
