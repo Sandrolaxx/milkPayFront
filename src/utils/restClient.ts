@@ -137,6 +137,7 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
         pageIndex: params.pageIndex.toString(),
         pageSize: params.pageSize.toString()
     });
+    
     const urlTitles = addQueryParams(searchParams, new URL(baseUrl.concat(titlePath)));
     const token = localStorage.getItem("token");
     const errorMsgType = params.liquidated ? "recebidos" : "a receber";
