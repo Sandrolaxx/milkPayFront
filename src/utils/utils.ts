@@ -91,6 +91,9 @@ export function isUserAuth(): boolean {
     const token = localStorage.getItem("token");
     const hasAuth = !isNullOrEmpty(expiration) && !isNullOrEmpty(token);
 
+    console.log(hasAuth);
+    console.log(isValidToken(expiration!));
+
     if (!hasAuth
         || (hasAuth && !isValidToken(expiration!))) {
         return false;
@@ -261,4 +264,36 @@ export function handleToastifyError(toastify: any, error: string, throws?: boole
     if (throws) {
         throw new Error(error);
     }
+}
+
+export function getHeaderWithToken(contentTypeHeader?: string, params?: Map<string, string>): RequestInit {
+    const token = localStorage.getItem("token");
+    
+    if (params && contentTypeHeader) {
+        const h = {
+            headers: {
+                Authorization: "Bearer ".concat(token!),
+                "Content-Type": contentTypeHeader,
+            },
+        };
+
+        return h;
+    } else if (params) {
+        
+    }
+
+    if (contentTypeHeader) {
+        return {
+            headers: {
+                Authorization: "Bearer ".concat(token!),
+                "Content-Type": contentTypeHeader,
+            },
+        };
+    }
+
+    return {
+        headers: {
+            Authorization: "Bearer ".concat(token!),
+        },
+    };
 }

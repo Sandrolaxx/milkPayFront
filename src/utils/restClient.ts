@@ -1,11 +1,8 @@
 import { toast } from "react-toastify";
+import { BankSlip, ConsultPixKey, EnumError, FecthTitleParams, FecthTitleResponse, PixPayment, Receipt, Totalizers } from "./types";
 import {
-    BankSlip, ConsultPixKey, EnumError, FecthTitleParams,
-    FecthTitleResponse, PixPayment, Receipt, Totalizers
-} from "./types";
-import {
-    addQueryParams, getBasicToken, getBearerToken, getToastError,
-    getToastSuccess, handleError, handleReponseError, handleToastifyError, handleToastifyResponseError
+    addQueryParams, getBasicToken, getBearerToken, getHeaderWithToken, getToastError, getToastSuccess, handleError, handleReponseError,
+    handleToastifyError, handleToastifyResponseError,
 } from "./utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -40,12 +37,12 @@ export async function createAccount(document: string, password: string) {
 
     const request: RequestInit = {
         headers: {
-            "Authorization": getBearerToken(token!),
-            "Content-Type": "application/json"
+            Authorization: getBearerToken(token!),
+            "Content-Type": "application/json",
         },
         method: "POST",
         body: JSON.stringify(userDto),
-    }
+    };
 
     return fetch(url, request)
         .then(res => {
@@ -54,11 +51,10 @@ export async function createAccount(document: string, password: string) {
                 return;
             }
 
-            handleToastifyResponseError(res, toastify, true);
+            return handleToastifyResponseError(res, toastify, true);
         })
         .catch(err => {
-            if (err instanceof TypeError
-                && err.message == "Failed to fetch") {
+            if (err instanceof TypeError && err.message == "Failed to fetch") {
                 const error = EnumError.SERVICOS_INDISPONIVEIS.concat("o cadastro do usúario!");
                 handleError(toast, error, true);
             } else {
@@ -76,12 +72,12 @@ function getToken(tokenUser: string, tokenPassword: string) {
 
     const request: RequestInit = {
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/x-www-form-urlencoded",
             authorization: getBasicToken(tokenAuth),
         },
         body: form,
-        method: "POST"
-    }
+        method: "POST",
+    };
 
     return fetch(tokenBaseUrl, request)
         .then(res => res.json())
@@ -104,14 +100,7 @@ export async function getUserToken(document: string, password: string) {
 
 export function fetchTotalizers(): Promise<Totalizers> {
     const urlTotalizers = baseUrl.concat(titlePath).concat(totalizersPath);
-    const token = localStorage.getItem("token");
-
-    const request: RequestInit = {
-        headers: {
-            "Authorization": getBearerToken(token!),
-            "Content-Type": "application/json"
-        }
-    }
+    const request = getHeaderWithToken();
 
     return fetch(urlTotalizers, request)
         .then(res => {
@@ -120,8 +109,7 @@ export function fetchTotalizers(): Promise<Totalizers> {
             return res.json();
         })
         .catch(err => {
-            if (err instanceof TypeError
-                && err.message == "Failed to fetch") {
+            if (err instanceof TypeError && err.message == "Failed to fetch") {
                 const error = EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta dos totalizadores!");
                 handleError(toast, error, true);
             } else {
@@ -135,7 +123,7 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
         offset: params.offset,
         limit: params.limit,
         pageIndex: params.pageIndex.toString(),
-        pageSize: params.pageSize.toString()
+        pageSize: params.pageSize.toString(),
     });
     
     const urlTitles = addQueryParams(searchParams, new URL(baseUrl.concat(titlePath)));
@@ -157,8 +145,7 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
             return res.json();
         })
         .catch(err => {
-            if (err instanceof TypeError
-                && err.message == "Failed to fetch") {
+            if (err instanceof TypeError && err.message == "Failed to fetch") {
                 const error = EnumError.SERVICOS_INDISPONIVEIS.concat("consulta dos títulos ").concat(errorMsgType);
                 handleError(toast, error, true);
             } else {
@@ -174,11 +161,11 @@ export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
 
     const request: RequestInit = {
         headers: {
-            "Authorization": getBearerToken(token!),
+            Authorization: getBearerToken(token!),
             "Content-Type": "application/json",
-            "key": pixKey
+            key: pixKey,
         },
-    }
+    };
 
     return fetch(urlConsultPix, request)
         .then(res => {
@@ -188,13 +175,10 @@ export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
                 return res.json();
             }
 
-            handleToastifyResponseError(res, toastify, false);
-
-            return null;
+            return handleToastifyResponseError(res, toastify, false);
         })
         .catch(err => {
-            if (err instanceof TypeError
-                && err.message == "Failed to fetch") {
+            if (err instanceof TypeError && err.message == "Failed to fetch") {
                 const error = EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta da chave PIX.");
                 handleToastifyError(toastify, error, true);
             } else {
@@ -210,12 +194,12 @@ export function pixPayment(pixPayment: PixPayment): Promise<PaymentResponse> {
 
     const request: RequestInit = {
         headers: {
-            "Authorization": getBearerToken(token!),
-            "Content-Type": "application/json"
+            Authorization: getBearerToken(token!),
+            "Content-Type": "application/json",
         },
         method: "POST",
-        body: JSON.stringify(pixPayment)
-    }
+        body: JSON.stringify(pixPayment),
+    };
 
     return fetch(urlPaymentPix, request)
         .then(res => {
@@ -230,8 +214,7 @@ export function pixPayment(pixPayment: PixPayment): Promise<PaymentResponse> {
             return null;
         })
         .catch(err => {
-            if (err instanceof TypeError
-                && err.message == "Failed to fetch") {
+            if (err instanceof TypeError && err.message == "Failed to fetch") {
                 const error = EnumError.SERVICOS_INDISPONIVEIS.concat("o pagamento PIX.");
                 handleToastifyError(toastify, error, true);
             } else {
@@ -247,12 +230,12 @@ export function consultBankSlip(bankSlip: BankSlip): Promise<BankSlip> {
 
     const request: RequestInit = {
         headers: {
-            "Authorization": getBearerToken(token!),
+            Authorization: getBearerToken(token!),
             "Content-Type": "application/json",
         },
         method: "POST",
-        body: JSON.stringify(bankSlip)
-    }
+        body: JSON.stringify(bankSlip),
+    };
 
     return fetch(urlConsultBankSlip, request)
         .then(res => {
@@ -267,8 +250,7 @@ export function consultBankSlip(bankSlip: BankSlip): Promise<BankSlip> {
             return null;
         })
         .catch(err => {
-            if (err instanceof TypeError
-                && err.message == "Failed to fetch") {
+            if (err instanceof TypeError && err.message == "Failed to fetch") {
                 const error = EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta do boleto.");
                 handleToastifyError(toastify, error, true);
             } else {
@@ -284,12 +266,12 @@ export function bankSlipayment(bankSlip: BankSlip): Promise<PaymentResponse> {
 
     const request: RequestInit = {
         headers: {
-            "Authorization": getBearerToken(token!),
+            Authorization: getBearerToken(token!),
             "Content-Type": "application/json",
         },
         method: "POST",
-        body: JSON.stringify(bankSlip)
-    }
+        body: JSON.stringify(bankSlip),
+    };
 
     return fetch(urlPaymentBankSlip, request)
         .then(res => {
@@ -304,8 +286,7 @@ export function bankSlipayment(bankSlip: BankSlip): Promise<PaymentResponse> {
             return null;
         })
         .catch(err => {
-            if (err instanceof TypeError
-                && err.message == "Failed to fetch") {
+            if (err instanceof TypeError && err.message == "Failed to fetch") {
                 const error = EnumError.SERVICOS_INDISPONIVEIS.concat("o pagamento do Boleto.");
                 handleToastifyError(toastify, error, true);
             } else {
@@ -321,11 +302,11 @@ export function consultReceipt(txId: number): Promise<Receipt> {
 
     const request: RequestInit = {
         headers: {
-            "Authorization": getBearerToken(token!),
+            Authorization: getBearerToken(token!),
             "Content-Type": "application/json",
-            "txId": txId.toString()
+            txId: txId.toString(),
         },
-    }
+    };
 
     return fetch(urlConsultReceipt, request)
         .then(res => {
@@ -340,8 +321,7 @@ export function consultReceipt(txId: number): Promise<Receipt> {
             return null;
         })
         .catch(err => {
-            if (err instanceof TypeError
-                && err.message == "Failed to fetch") {
+            if (err instanceof TypeError && err.message == "Failed to fetch") {
                 const error = EnumError.SERVICOS_INDISPONIVEIS.concat("a consulta do comprovante.");
                 handleToastifyError(toastify, error, true);
             } else {

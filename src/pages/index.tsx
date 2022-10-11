@@ -22,11 +22,11 @@ export default function Home() {
     }, []);
 
     function fetchData() {
-        setAuth(true);
-
         cardsData.fetchCardsData();
         titlesData.fetchRecivedTitlesData();
         titlesData.fetchTitlesToReciveData();
+
+        setAuth(true);
     }
 
     function changeView(selectedScreen: EnumScreens) {
