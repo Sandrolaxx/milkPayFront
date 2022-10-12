@@ -91,9 +91,6 @@ export function isUserAuth(): boolean {
     const token = localStorage.getItem("token");
     const hasAuth = !isNullOrEmpty(expiration) && !isNullOrEmpty(token);
 
-    console.log(hasAuth);
-    console.log(isValidToken(expiration!));
-
     if (!hasAuth
         || (hasAuth && !isValidToken(expiration!))) {
         return false;

@@ -16,7 +16,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     const [step, setStep] = useState<EnumModalSteps>();
     const [pixKeyData, setPixKeyData] = useState<ConsultPixKey>();
     const [bankSlipData, setBankSlipData] = useState<BankSlip>();
-    const [receiptData, setReceipt] = useState("");
+    const [receiptData, setReceipt] = useState<string>();
     const [isConsultData, setConsultData] = useState(true);
     const [isPaymentDataCorrect, setPaymentDataCorrect] = useState(false);
     const [isPaymentConfirmed, setPaymentConfirmed] = useState(false);
@@ -79,7 +79,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                 if (res == null) {
                     handleClose();
                 }
-                
+
                 setReceipt("data:image/png;base64," + res.receiptImage);
                 setConsultData(false);
             })
@@ -282,10 +282,10 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                         <div className="flex flex-col items-center rounded-3xl bg-purple-600">
                             {receiptData &&
                                 <>
-                                    <Image className="rounded-3xl" src={receiptData} width={320} height={636} quality={100}/>
-                                    <span title="Realizar download do comprovante" className="w-full cursor-pointer">
+                                    <Image className="rounded-3xl" src={receiptData} width={320} height={636} quality={100} />
+                                    <a href={receiptData} title="Realizar download do comprovante" className="w-full cursor-pointer">
                                         <DownloadIcon className="w-full text-white my-2" width={28} key={"Download Icon"} />
-                                    </span>
+                                    </a>
                                 </>
                             }
                         </div>
