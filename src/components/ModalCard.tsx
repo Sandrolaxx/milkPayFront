@@ -283,7 +283,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                             {receiptData &&
                                 <>
                                     <Image className="rounded-3xl" src={receiptData} width={320} height={636} quality={100} />
-                                    <a href={receiptData} title="Realizar download do comprovante" className="w-full cursor-pointer">
+                                    <a href={receiptData} download={"comprovante.png"} title="Realizar download do comprovante" className="w-full cursor-pointer">
                                         <DownloadIcon className="w-full text-white my-2" width={28} key={"Download Icon"} />
                                     </a>
                                 </>
