@@ -1,11 +1,11 @@
-import { toast, UpdateOptions } from "react-toastify";
+import { Id, toast, UpdateOptions } from "react-toastify";
 import { URL } from "url";
 import CalendarIcon from "../assets/icons/calendar.svg";
 import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
 import AmountReceiveToIcon from "../assets/icons/dollar-sign.svg";
 import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
-import { CardTotalizers, ConsultPixKey, EnumError, FecthTitleParams, PixPayment, Totalizers } from "./types";
+import { CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 const defaultPageSize = process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE;
@@ -32,7 +32,7 @@ export function getToastError(msg: string): UpdateOptions {
         type: "error",
         isLoading: false,
         autoClose: 5000,
-        closeButton: true
+        closeButton: true,
     };
 }
 
@@ -42,16 +42,20 @@ export function getToastSuccess(msg: string): UpdateOptions {
         type: "success",
         isLoading: false,
         autoClose: 5000,
-        closeButton: true
+        closeButton: true,
     };
 }
 
 export function getTokenExpirationDate() {
-    return (new Date().getTime() + (expirationTime * 1000)).toString();
+    return (getNow().getTime() + expirationTime * 1000).toString();
+}
+
+export function getNow(): Date {
+    return new Date(Date.now() - new Date().getTimezoneOffset() * 60 * 1000);
 }
 
 export function isValidToken(expiration: string) {
-    return Number.parseInt(expiration) > new Date().getTime();
+    return Number.parseInt(expiration) > getNow().getTime();
 }
 
 export function formatDateStrToDDMMYYYY(date: string): string {
@@ -70,7 +74,8 @@ export function formatDateStrToDDMMYYYYHHMMSS(date: string): string {
 }
 
 export function formatMoney(amount: number) {
-    return amount.toFixed(2)
+    return amount
+        .toFixed(2)
         .replace("", "R$ ")
         .replace(".", ",")
         .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
@@ -91,8 +96,7 @@ export function isUserAuth(): boolean {
     const token = localStorage.getItem("token");
     const hasAuth = !isNullOrEmpty(expiration) && !isNullOrEmpty(token);
 
-    if (!hasAuth
-        || (hasAuth && !isValidToken(expiration!))) {
+    if (!hasAuth || (hasAuth && !isValidToken(expiration!))) {
         return false;
     }
 
@@ -104,50 +108,49 @@ export function getTotalCardComponentData(totalizers: Totalizers): CardTotalizer
         {
             title: "Títulos Recebidos",
             subTitle: "Últimos 12 meses",
-            value: totalizers.titlesReceived.toString(),
+            value: totalizers.titlesReceived ? totalizers.titlesReceived.toString() : "0",
             bigIcon: RecivedTitlesIcon,
             smallIcon: CalendarIcon,
-            iconAreaColor: "bg-dark-color"
+            iconAreaColor: "bg-dark-color",
         },
         {
             title: "Valor Recebido",
             subTitle: "Últimos 12 meses",
-            value: formatMoney(totalizers.amountReceived),
+            value: totalizers.amountReceived ? formatMoney(totalizers.amountReceived) : formatMoney(0),
             bigIcon: AmountRecivedIcon,
             smallIcon: CalendarIcon,
-            iconAreaColor: "bg-primary-color"
+            iconAreaColor: "bg-primary-color",
         },
         {
             title: "Títulos a Receber",
             subTitle: "Próximos 30 dias",
-            value: totalizers.titlesToReceive.toString(),
+            value: totalizers.titlesToReceive ? totalizers.titlesToReceive.toString() : formatMoney(0),
             bigIcon: TitlesToReceiveIcon,
             smallIcon: CalendarIcon,
-            iconAreaColor: "bg-dark-color"
+            iconAreaColor: "bg-dark-color",
         },
         {
             title: "Valor  a Receber",
             subTitle: "Próximos 30 dias",
-            value: formatMoney(totalizers.amountToReceive),
+            value: totalizers.amountToReceive ? formatMoney(totalizers.amountToReceive) : formatMoney(0),
             bigIcon: AmountReceiveToIcon,
             smallIcon: CalendarIcon,
-            iconAreaColor: "bg-primary-color"
-        }
+            iconAreaColor: "bg-primary-color",
+        },
     ];
-};
+}
 
 export function addQueryParams(params: URLSearchParams, url: URL): URL {
     params.forEach((k, v) => {
         url.searchParams.append(v, k);
-    })
+    });
 
     return url;
 }
 
-export function getFetchTitlesParams(liquidated: boolean, pageIndex?: number,
-    pageSize?: number): FecthTitleParams {
-    const today = new Date();
-    const nextMonth = new Date();
+export function getFetchTitlesParams(liquidated: boolean, pageIndex?: number, pageSize?: number): FecthTitleParams {
+    const today = getNow();
+    const nextMonth = getNow();
     nextMonth.setMonth(today.getMonth() + 1);
 
     return {
@@ -155,16 +158,16 @@ export function getFetchTitlesParams(liquidated: boolean, pageIndex?: number,
         limit: formatDDMMYYYY(nextMonth),
         pageIndex: pageIndex ?? 0,
         pageSize: pageSize ?? 5,
-        liquidated
-    }
+        liquidated,
+    };
 }
 
 export function formatDDMMYYYY(date: Date): string {
     const month = date.getUTCMonth() + 1;
     const day = date.getDate();
 
-    const DD = day < 10 ? ("0").concat(day.toString()) : day.toString();
-    const MM = month < 10 ? ("0").concat(month.toString()) : month.toString();
+    const DD = day < 10 ? "0".concat(day.toString()) : day.toString();
+    const MM = month < 10 ? "0".concat(month.toString()) : month.toString();
     const YYYY = date.getUTCFullYear().toString();
 
     return DD.concat("/").concat(MM).concat("/").concat(YYYY);
@@ -184,8 +187,8 @@ export function getPixDto(pixKeyData: ConsultPixKey, titleId: number): PixPaymen
         receiverKey: pixKeyData.key,
         receiverBranch: pixKeyData.account.branch,
         receiverDocument: pixKeyData.owner.taxIdNumber,
-        receiverName: pixKeyData.owner.name
-    }
+        receiverName: pixKeyData.owner.name,
+    };
 }
 
 export function getArrayOfElements(lineSize?: number): number[] {
@@ -197,7 +200,7 @@ export function getDefaultPageSize() {
 }
 
 export function getTotalInterest(dailyInterest: number, dueDate: Date): string {
-    var timeDiff = Math.abs(dueDate.getTime() - new Date().getTime());
+    var timeDiff = Math.abs(dueDate.getTime() - getNow().getTime());
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     return (diffDays * dailyInterest).toFixed(2);
@@ -207,52 +210,20 @@ export function formatTextSize(text: string, maxSize: number): string {
     return text.length > maxSize ? text.slice(0, maxSize).concat("...") : text;
 }
 
-export function handleReponseError(response: Response, toast: any, throws?: boolean) {
+export function resolveRequestError(err: any, toastify?: any) {
+    if (err instanceof TypeError && err.message == "Failed to fetch") {
+        const error = "Serviços Overtech indisponíveis!";
 
-    if (response.status == 401) {
-        throw new Error(EnumError.SESSAO_EXPIRADA);
+        if (toastify) {
+            handleToastifyError(toastify, error, true);
+        } else {
+            handleError(error, true);
+        }
+    } else {
+        const error = err.message ? err.message : "Erro desconhecido ao realizar operação.";
+
+        toastify ? handleToastifyError(toastify, error, true) : handleError(error, true);
     }
-
-    if (!response.ok) {
-        response.json()
-            .then(res => {
-                const error = res.error ? res.error : "Erro desconhecido. ";
-
-                if (throws) {
-                    toast.error(error.concat(". Realize o login novamente!"));
-                    throw new Error(error.concat(". Realize o login novamente!"));
-                }
-
-                toast.error(error);
-            });
-    }
-}
-
-export function handleError(toast: any, error: string, throws?: boolean) {
-    toast.error(error);
-
-    if (throws) {
-        throw new Error(error);
-    }
-}
-
-export function handleToastifyResponseError(response: Response, toastify: any, throws?: boolean) {
-
-    if (response.status == 401) {
-        throw new Error(EnumError.SESSAO_EXPIRADA);
-    }
-
-    response.json()
-        .then(res => {
-            const error = res.error ? res.error : "Erro desconhecido. ";
-
-            if (throws) {
-                toast.update(toastify, getToastError(error.concat("Tente novamente.")));
-                throw new Error(error.concat("Tente novamente."));
-            }
-
-            toast.update(toastify, getToastError(error.concat("Tente novamente.")));
-        });
 }
 
 export function handleToastifyError(toastify: any, error: string, throws?: boolean) {
@@ -263,9 +234,37 @@ export function handleToastifyError(toastify: any, error: string, throws?: boole
     }
 }
 
+export function handleError(error: string, throws?: boolean) {
+    toast.error(error);
+
+    if (throws) {
+        throw new Error(error);
+    }
+}
+
+export function handleReponseError(res: Response, toastify?: Id | null, throws?: boolean) {
+    return res.json().then(err => {
+        let error = err.error ? err.error : "Erro desconhecido ao realizar operação.";
+
+        if (toastify) {
+            if (throws) {
+                toast.update(toastify, getToastError(error));
+
+                throw new Error(error);
+            }
+
+            toast.update(toastify, getToastError(error));
+        } else {
+            if (throws) {
+                throw new Error(error);
+            }
+        }
+    });
+}
+
 export function getHeaderWithToken(contentTypeHeader?: string, params?: Map<string, string>): RequestInit {
     const token = localStorage.getItem("token");
-    
+
     if (params && contentTypeHeader) {
         const h = {
             headers: {
@@ -276,7 +275,6 @@ export function getHeaderWithToken(contentTypeHeader?: string, params?: Map<stri
 
         return h;
     } else if (params) {
-        
     }
 
     if (contentTypeHeader) {

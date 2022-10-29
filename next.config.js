@@ -1,16 +1,20 @@
 /** @type {import('next').NextConfig} */
-const withReactSvg = require('next-react-svg')
-const path = require('path')
+const withReactSvg = require("next-react-svg");
+const path = require("path");
 const nextConfig = {
-  reactStrictMode: true,
-  
-}
+    reactStrictMode: true,
+    swcMinify: true,
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 
 module.exports = withReactSvg({
     include: path.resolve(__dirname, "src/assets/icons"),
+    images: {
+        domains: ["overtechidro.com.br"],
+    },
+
     webpack(config, options) {
-      return config
+        return config;
     },
 })

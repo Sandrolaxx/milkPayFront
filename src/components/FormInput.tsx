@@ -15,21 +15,21 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
 
-    async function handleLogin() {
-        const token = await getUserToken(document, password);
+    function handleLogin() {
+        getUserToken(document, password)
+            .then(res => {
+                localStorage.setItem("token", res);
+                localStorage.setItem("expiration", getTokenExpirationDate());
 
-        if (token) {
-            localStorage.setItem("token", token);
-            localStorage.setItem("expiration", getTokenExpirationDate());
-
-            router.push("/");
-        }
+                router.push("/");
+            })
+            .catch(err => err);
     }
 
-    async function handleRegister() {
-        await createAccount(document, password);
-
-        changeInput(EnumFormType.LOGIN);
+    function handleRegister() {
+        createAccount(document, password)
+            .then(() => changeInput(EnumFormType.LOGIN))
+            .catch(err => err);
     }
 
     function handleForgotPassword() {

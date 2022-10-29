@@ -8,7 +8,7 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
     const [showModal, setShowModal] = useState(false);
 
     return (
-        <div className={`w-full flex flex-col overflow-hidden md:pr-2 animate-fade-in-fast ${showModal && 'h-screen overflow-y-hidden'}`}>
+        <div className={`w-full h-full flex flex-col overflow-hidden md:pr-2 animate-fade-in-fast ${showModal && 'h-screen overflow-y-hidden'}`}>
             <div className={`w-full h-full mt-6 p-2 grid grid-flow-row grid-cols-1 
                     gap-y-8 gap-x-4 sm:grid-cols-2 lg:flex lg:gap-0 lg:p-1`}>
                 {dashboardData.cardsData ?

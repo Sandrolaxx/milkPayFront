@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDataContext } from "src/context/data";
@@ -9,10 +8,11 @@ import ModalCardButtons from "./ModalCardButtons";
 import ModalCardStepTwoSkeleton from "./skeleton/ModalCardStepTwoSkeleton";
 import DownloadIcon from "../assets/icons/download.svg";
 import ModalReceiptSkeleton from "./skeleton/ModalReceiptSkeleton";
+import Image from "next/image";
 
 export default function ModalCard({ title, handleClose }: ModalCardProps) {
     const router = useRouter();
-    const { titlesData } = useDataContext();
+    const { titlesData, cardsData } = useDataContext();
     const [step, setStep] = useState<EnumModalSteps>();
     const [pixKeyData, setPixKeyData] = useState<ConsultPixKey>();
     const [bankSlipData, setBankSlipData] = useState<BankSlip>();
@@ -80,6 +80,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                     handleClose();
                 }
 
+                setStep(EnumModalSteps.STEP_RECEIPT);
                 setReceipt("data:image/png;base64," + res.receiptImage);
                 setConsultData(false);
             })
@@ -92,8 +93,6 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
         } else {
             handlePaymentBoleto();
         }
-
-        handleClose();
     }
 
     function handlePaymentPix() {
@@ -107,6 +106,10 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
 
                 titlesData.fetchRecivedTitlesData();
                 titlesData.fetchTitlesToReciveData();
+                cardsData.fetchCardsData();
+
+                setStep(EnumModalSteps.STEP_RECEIPT);
+                setReceipt("data:image/png;base64," + res.receiptImage);
             });
     }
 
@@ -115,10 +118,9 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     }
 
     return (
-        <div className={`w-96  min-w-0 min-h-min flex bg-light-color rounded-3xl 
-            border-2 shadow-md animate-fade-down`}>
+        <div className={`w-96 min-w-0 min-h-min flex bg-light-color rounded-3xl border-2 shadow-md animate-fade-down`}>
             {equalsEnum(step, EnumModalSteps.STEP_ONE) &&
-                <div className="w-full h-full flex flex-col justify-start items-center">
+                <div className="w-full h-full flex flex-col justify-start items-center mt-2">
                     <h1 className="font-medium text-lg my-2">Dados da Transação</h1>
                     <span className="w-full flex flex-row justify-between px-6 py-1">
                         <p className="font-medium">
@@ -150,7 +152,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                     <ModalCardButtons isEnabled handleClose={handleClose} handleContinue={handleStartStepTwo} />
                 </div>}
             {equalsEnum(step, EnumModalSteps.STEP_TWO) &&
-                <div className="w-full h-full flex flex-col justify-start items-center">
+                <div className="w-full h-full flex flex-col justify-start items-center mt-2">
                     <h1 className="font-medium text-lg my-2">Dados do Recebedor</h1>
                     {isConsultData ?
                         <ModalCardStepTwoSkeleton isBankslipPayment={equalsEnum(title.paymentType, EnumPaymentType.BOLETO)} />
@@ -257,7 +259,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                 </div>
             }
             {equalsEnum(step, EnumModalSteps.STEP_THREE) &&
-                <div className="w-full h-full flex flex-col justify-start items-center">
+                <div className="w-full h-full flex flex-col justify-start items-center mt-2">
                     <h1 className="font-medium text-lg my-2">Confirmação de Antecipação</h1>
                     <p className="mx-6 mb-4 text-lg text-center">
                         Deseja mesmo realizar a antecipação no valor de {
@@ -270,11 +272,10 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                         <p className="mr-1">Concordo com os</p>
                         <p className="underline">termos de uso.</p>
                     </span>
-                    <ModalCardButtons isEnabled={isPaymentConfirmed} handleClose={handleClose}
-                        handleContinue={handlePayment} />
+                    <ModalCardButtons isEnabled={isPaymentConfirmed} handleClose={handleClose} handleContinue={handlePayment} />
                 </div>}
             {equalsEnum(step, EnumModalSteps.STEP_RECEIPT) &&
-                <div className="w-full h-full flex flex-col justify-start items-center">
+                <div className="w-full h-full flex flex-col justify-start items-center mt-2">
                     <h1 className="font-medium text-lg my-2">Comprovante de Pagamento📃</h1>
                     {isConsultData ?
                         <ModalReceiptSkeleton />
@@ -282,7 +283,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                         <div className="flex flex-col items-center rounded-3xl bg-purple-600">
                             {receiptData &&
                                 <>
-                                    <Image className="rounded-3xl" src={receiptData} width={320} height={636} quality={100} />
+                                    <Image alt="Logo MilkPay" className="rounded-3xl" src={receiptData} width={320} height={636} quality={100} />
                                     <a href={receiptData} download={"comprovante.png"} title="Realizar download do comprovante" className="w-full cursor-pointer">
                                         <DownloadIcon className="w-full text-white my-2" width={28} key={"Download Icon"} />
                                     </a>

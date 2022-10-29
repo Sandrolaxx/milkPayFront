@@ -67,6 +67,19 @@ export interface ModalCardSkeleton {
     isBankslipPayment?: boolean;
 }
 
+export interface IDataContext {
+    cardsData: {
+        cardsData: CardTotalizers[] | undefined;
+        fetchCardsData: () => void
+    },
+    titlesData: {
+        titlesToReceive: FecthTitleResponse | undefined;
+        receivedTitles: FecthTitleResponse | undefined;
+        fetchTitlesToReciveData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
+        fetchRecivedTitlesData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
+    },
+}
+
 //==========Types==========//
 export type DataContext = {
     cardsData: {
@@ -78,8 +91,7 @@ export type DataContext = {
         receivedTitles: FecthTitleResponse | undefined;
         fetchTitlesToReciveData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
         fetchRecivedTitlesData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
-    },
-    isAuth: boolean
+    }
 }
 
 export type CardTotalizers = {

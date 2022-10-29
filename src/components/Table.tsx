@@ -31,12 +31,7 @@ export default function Table({ title, subTitle, data, setShowModal }: TableProp
 
     return (
         <>
-            {table.showModal &&
-                <div className="fixed z-10 inset-0 backdrop-blur-[2px] flex justify-center items-center">
-                    <ModalCard title={table.selectedTitle!} handleClose={handleCloseModal} />
-                </div>
-            }
-            <div className="container min-w-full py-4 pr-4 xl:pr-0">
+            <div className="w-full h-full container py-4 pr-4 xl:pr-0">
                 <div className="px-4 overflow-x-auto">
                     <div className="relative h-16 p-3 -mb-6 mx-4 rounded-2xl bg-purple-600 xl:py-2">
                         <p className="font-medium text-base xl:text-lg text-light-color">{title}</p>
@@ -66,7 +61,7 @@ export default function Table({ title, subTitle, data, setShowModal }: TableProp
                                         </button>
                                     ))}
                                     <button type="button" onClick={() => table.goNextPage(data.page, table.listPageSize?.length!)}
-                                        className="p-2 border-t border-b border-r rounded-r-xl hover:bg-gray-100">
+                                        className="p-2 border rounded-r-xl hover:bg-gray-100">
                                         <ArrowLeftIcon width={16} stroke="#7E22CE" />
                                     </button>
                                 </div>
@@ -79,6 +74,11 @@ export default function Table({ title, subTitle, data, setShowModal }: TableProp
                     </div>
                 </div>
             </div>
+            {table.showModal &&
+                <div className="fixed z-10 inset-0 backdrop-blur-[4px] backdrop-brightness-90 flex justify-center items-center">
+                    <ModalCard title={table.selectedTitle!} handleClose={handleCloseModal} />
+                </div>
+            }
         </>
     );
 }
