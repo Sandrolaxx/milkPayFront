@@ -9,7 +9,7 @@ module.exports = {
         ...theme("colors"),
         "primary-color": "#01ACE2",
         "secondary-color": "#7001DF",
-        "light-color": "#faf9f9",
+        "light-color": "#FAF9F9",
         "dark-color": "#212121",
         "secondary-dark-color": "#373737",
         "gray-color": "#737380",

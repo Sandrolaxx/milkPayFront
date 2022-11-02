@@ -111,7 +111,7 @@ export function fetchTotalizers(): Promise<Totalizers> {
 
             return handleReponseError(res, null, true);
         })
-        .catch(err => resolveRequestError(err, toast));
+        .catch(err => resolveRequestError(err));
 }
 
 export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleResponse> {
@@ -141,7 +141,7 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
 
             return handleReponseError(res, null, true);
         })
-        .catch(err => resolveRequestError(err, toast));
+        .catch(err => err);
 }
 
 export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {

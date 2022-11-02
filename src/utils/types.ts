@@ -211,6 +211,7 @@ export enum EnumFormType {
 export enum EnumScreens {
     DASHBOARD,
     SEARCH_TITLE,
+    PROFILE
 }
 
 export enum EnumError {

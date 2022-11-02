@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Dashboard from "src/components/Dashboard";
 import Menu from "src/components/Menu";
+import Profile from "src/components/Profile";
+import Search from "src/components/Search";
 import { useDataContext } from "src/context/data";
 import { EnumScreens } from "src/utils/types";
 import { equalsEnum, isUserAuth } from "src/utils/utils";
@@ -36,11 +38,13 @@ export default function Home() {
     return (
         isAuth &&
         <div className="block md:flex">
-            <div className="w-full md:w-54 lg:w-52 xl:w-64">
-                <Menu changeFunction={changeView} />
-            </div>
+            <Menu changeFunction={changeView} />
             {equalsEnum(selectedScreen, EnumScreens.DASHBOARD)
                 && <Dashboard dashboardData={dashboardData} />}
+            {equalsEnum(selectedScreen, EnumScreens.SEARCH_TITLE)
+                && <Search />}
+            {equalsEnum(selectedScreen, EnumScreens.PROFILE)
+                && <Profile />}
         </div>
     );
 }

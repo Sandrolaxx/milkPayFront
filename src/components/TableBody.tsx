@@ -13,7 +13,7 @@ export default function TableBody({ titles, titleType, handleShowModal }: TableB
                             {result.id}
                         </p>
                     </td>
-                    <td className="p-5 border-b border-gray-200 text-sm">
+                    <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                         <p className="text-dark-colorwhitespace-no-wrap">
                             {result.nfNumber}
                         </p>
@@ -31,17 +31,17 @@ export default function TableBody({ titles, titleType, handleShowModal }: TableB
                             <PixIcon width={32} height={32} stroke="#212121" />
                         }
                     </td>
-                    <td className="p-5 border-b border-gray-200 text-sm">
+                    <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                         <p className="text-dark-color whitespace-no-wrap">
                             {utils.formatDateStrToDDMMYYYYHHMMSS(result.inclusionDate)}
                         </p>
                     </td>
-                    <td className="p-5 border-b border-gray-200 text-sm">
+                    <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                         <p className="text-dark-color whitespace-no-wrap">
                             {utils.formatDateStrToDDMMYYYY(result.dueDate)}
                         </p>
                     </td>
-                    <td className="p-5 border-b border-gray-200 text-sm">
+                    <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                         <p className="text-dark-color whitespace-no-wrap">
                             {utils.formatMoney(result.amount)}
                         </p>
@@ -57,17 +57,17 @@ export default function TableBody({ titles, titleType, handleShowModal }: TableB
                     {(utils.equalsEnum(titleType, EnumTitleTypes.RECEIVED)
                         || utils.equalsEnum(titleType, EnumTitleTypes.ALL)) &&
                         <>
-                            <td className="p-5 border-b border-gray-200 text-sm">
+                            <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                                 <p className="text-dark-color whitespace-no-wrap">
                                     {utils.formatMoney((result.amount - result.finalAmount))}
                                 </p>
                             </td>
-                            <td className="p-5 border-b border-gray-200 text-sm">
+                            <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                                 <p className="text-dark-color whitespace-no-wrap">
                                     {utils.formatMoney(result.finalAmount)}
                                 </p>
                             </td>
-                            <td className="p-5 border-b border-gray-200 text-sm">
+                            <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                                 <button onClick={() => handleShowModal(result)} className={`px-3 py-1 
                                                 font-semibold bg-dark-color rounded-full text-light-color leading-tight`}>
                                     COMPROVANTE
