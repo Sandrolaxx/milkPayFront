@@ -40,10 +40,20 @@ export default function TableHead({ titleType }: TableHeadProps) {
                     </th>
                 }
                 {equalsEnum(titleType, EnumTitleTypes.RECEIVED) &&
-                    <th title="Visualizar Comprovante" scope="col" className={`pt-8 px-5 py-3 border-b 
+                    <>
+                        <th title="Visualizar Comprovante" scope="col" className={`pt-8 px-5 py-3 border-b 
                         cursor-help border-gray-200 text-purple-700 text-left text-sm font-normal`}>
-                        Comprovante
-                    </th>
+                            Valor Juro
+                        </th>
+                        <th title="Visualizar Comprovante" scope="col" className={`pt-8 px-5 py-3 border-b 
+                        cursor-help border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                            Valor Recebido
+                        </th>
+                        <th title="Visualizar Comprovante" scope="col" className={`pt-8 px-5 py-3 border-b 
+                        cursor-help border-gray-200 text-purple-700 text-left text-sm font-normal`}>
+                            Comprovante
+                        </th>
+                    </>
                 }
             </tr>
         </thead>

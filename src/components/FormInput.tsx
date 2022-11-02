@@ -18,10 +18,12 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
     function handleLogin() {
         getUserToken(document, password)
             .then(res => {
-                localStorage.setItem("token", res);
-                localStorage.setItem("expiration", getTokenExpirationDate());
-
-                router.push("/");
+                if (res) {
+                    localStorage.setItem("token", res);
+                    localStorage.setItem("expiration", getTokenExpirationDate());
+                    
+                    router.push("/");
+                }
             })
             .catch(err => err);
     }

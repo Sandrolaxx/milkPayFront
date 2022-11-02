@@ -1,14 +1,14 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDataContext } from "src/context/data";
-import { consultBankSlip, consultPixKey, consultReceipt, pixPayment } from "src/utils/restClient";
-import { BankSlip, ConsultPixKey, EnumModalSteps, EnumPaymentType, ModalCardProps } from "src/utils/types";
-import { equalsEnum, formatMoney, formatTextSize, getPixDto, getTotalInterest } from "src/utils/utils";
+import { bankSlipayment, consultBankSlip, consultPixKey, consultReceipt, pixPayment } from "src/utils/restClient";
+import { BankSlip, ConsultPixKey, EnumModalSteps, EnumPaymentType, ModalCardProps, PaymentResponse } from "src/utils/types";
+import { equalsEnum, formatMoney, formatTextSize, getPixPaymentDto, getTotalInterest } from "src/utils/utils";
+import DownloadIcon from "../assets/icons/download.svg";
 import ModalCardButtons from "./ModalCardButtons";
 import ModalCardStepTwoSkeleton from "./skeleton/ModalCardStepTwoSkeleton";
-import DownloadIcon from "../assets/icons/download.svg";
 import ModalReceiptSkeleton from "./skeleton/ModalReceiptSkeleton";
-import Image from "next/image";
 
 export default function ModalCard({ title, handleClose }: ModalCardProps) {
     const router = useRouter();
@@ -96,25 +96,33 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
     }
 
     function handlePaymentPix() {
-        const pixDto = getPixDto(pixKeyData!, title.id);
+        const pixDto = getPixPaymentDto(pixKeyData!, title.id);
 
         pixPayment(pixDto)
-            .then(res => {
-                if (res == null) {
-                    handleClose();
-                }
-
-                titlesData.fetchRecivedTitlesData();
-                titlesData.fetchTitlesToReciveData();
-                cardsData.fetchCardsData();
-
-                setStep(EnumModalSteps.STEP_RECEIPT);
-                setReceipt("data:image/png;base64," + res.receiptImage);
-            });
+            .then(handleShowReceiptAfterPayment)
+            .catch(err => err);
     }
 
     function handlePaymentBoleto() {
-        console.log("TO-DO fluxo boleto");
+        bankSlipData!.titleId = title.id;
+        console.log(JSON.stringify(bankSlipData));
+
+        bankSlipayment(bankSlipData!)
+            .then(handleShowReceiptAfterPayment)
+            .catch(err => err);
+    }
+
+    function handleShowReceiptAfterPayment(paymentRes: PaymentResponse) {
+        if (!paymentRes) {
+            handleClose();
+        }
+
+        titlesData.fetchRecivedTitlesData();
+        titlesData.fetchTitlesToReciveData();
+        cardsData.fetchCardsData();
+
+        setStep(EnumModalSteps.STEP_RECEIPT);
+        setReceipt("data:image/png;base64," + paymentRes.receiptImage);
     }
 
     return (
@@ -197,29 +205,29 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                             <>
                                 <span className="w-full flex flex-row justify-between px-6 py-1">
                                     <p className="font-medium">Banco</p>
-                                    <p title={bankSlipData?.bank} className="cursor-help">
-                                        {formatTextSize(bankSlipData?.bank!, 24)}
+                                    <p title={bankSlipData?.receiverBank} className="cursor-help">
+                                        {formatTextSize(bankSlipData?.receiverBank!, 22)}
                                     </p>
                                 </span>
                                 <span className="w-full flex flex-row justify-between px-6 py-1">
                                     <p className="font-medium">Nome Pagador</p>
-                                    <p title={bankSlipData?.payer} className="cursor-help">
-                                        {formatTextSize(bankSlipData?.payer!, 24)}
+                                    <p title={bankSlipData?.payerName} className="cursor-help">
+                                        {formatTextSize(bankSlipData?.payerName!, 20)}
                                     </p>
                                 </span>
                                 <span className="w-full flex flex-row justify-between px-6 py-1">
                                     <p className="font-medium">Doc. Pagador</p>
-                                    <p>{bankSlipData?.documentPayer}</p>
+                                    <p>{bankSlipData?.payerDocument}</p>
                                 </span>
                                 <span className="w-full flex flex-row justify-between px-6 py-1">
                                     <p className="font-medium">Nome Beneficiário</p>
-                                    <p title={bankSlipData?.recipient} className="cursor-help">
-                                        {formatTextSize(bankSlipData?.recipient!, 18)}
+                                    <p title={bankSlipData?.receiverName} className="cursor-help">
+                                        {formatTextSize(bankSlipData?.receiverName!, 20)}
                                     </p>
                                 </span>
                                 <span className="w-full flex flex-row justify-between px-6 py-1">
                                     <p className="font-medium">Doc. Beneficiário</p>
-                                    <p>{bankSlipData?.documentRecipient}</p>
+                                    <p>{bankSlipData?.receiverDocument}</p>
                                 </span>
                                 <span className="w-full flex flex-row justify-between px-6 py-1">
                                     <p className="font-medium">Linha Digitável</p>
@@ -276,16 +284,16 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                 </div>}
             {equalsEnum(step, EnumModalSteps.STEP_RECEIPT) &&
                 <div className="w-full h-full flex flex-col justify-start items-center mt-2">
-                    <h1 className="font-medium text-lg my-2">Comprovante de Pagamento📃</h1>
+                    <h1 className="font-medium text-lg my-2 mt-2">Comprovante de Pagamento📃</h1>
                     {isConsultData ?
                         <ModalReceiptSkeleton />
                         :
                         <div className="flex flex-col items-center rounded-3xl bg-purple-600">
                             {receiptData &&
                                 <>
-                                    <Image alt="Logo MilkPay" className="rounded-3xl" src={receiptData} width={320} height={636} quality={100} />
+                                    <Image alt="Logo MilkPay" className="rounded-b-3xl rounded-t-2xl" src={receiptData} width={320} height={636} quality={100} />
                                     <a href={receiptData} download={"comprovante.png"} title="Realizar download do comprovante" className="w-full cursor-pointer">
-                                        <DownloadIcon className="w-full text-white my-2" width={28} key={"Download Icon"} />
+                                        <DownloadIcon className="w-full text-white my-3" width={28} key={"Download Icon"} />
                                     </a>
                                 </>
                             }

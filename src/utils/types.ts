@@ -50,7 +50,7 @@ export interface ModalCardProps {
 export interface ModalCardButtonProps {
     handleClose: Function;
     handleContinue?: Function;
-    isEnabled: boolean
+    isEnabled: boolean;
 }
 
 export interface TableHeadProps {
@@ -63,36 +63,40 @@ export interface TableBodyProps {
     handleShowModal: Function;
 }
 
-export interface ModalCardSkeleton {
+export interface ModalCardSkeletonProps {
     isBankslipPayment?: boolean;
+}
+
+export interface TableLinekeletonProps {
+    titleType: EnumTitleTypes;
 }
 
 export interface IDataContext {
     cardsData: {
         cardsData: CardTotalizers[] | undefined;
-        fetchCardsData: () => void
-    },
+        fetchCardsData: () => void;
+    };
     titlesData: {
         titlesToReceive: FecthTitleResponse | undefined;
         receivedTitles: FecthTitleResponse | undefined;
         fetchTitlesToReciveData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
         fetchRecivedTitlesData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
-    },
+    };
 }
 
 //==========Types==========//
 export type DataContext = {
     cardsData: {
         cardsData: CardTotalizers[] | undefined;
-        fetchCardsData: () => void
-    },
+        fetchCardsData: () => void;
+    };
     titlesData: {
         titlesToReceive: FecthTitleResponse | undefined;
         receivedTitles: FecthTitleResponse | undefined;
         fetchTitlesToReciveData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
         fetchRecivedTitlesData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
-    }
-}
+    };
+};
 
 export type CardTotalizers = {
     title: string;
@@ -101,14 +105,14 @@ export type CardTotalizers = {
     bigIcon: any;
     smallIcon: any;
     iconAreaColor: string;
-}
+};
 
 export type Totalizers = {
     amountReceived: number;
     amountToReceive: number;
     titlesReceived: number;
     titlesToReceive: number;
-}
+};
 
 export type TitleData = {
     id: number;
@@ -124,13 +128,13 @@ export type TitleData = {
     dailyInterest: number;
     liquidated: boolean;
     txId: number;
-}
+};
 
 export type FecthTitleResponse = {
     allResultsSize: number;
     page: number;
     results: TitleData[];
-}
+};
 
 export type FecthTitleParams = {
     offset: string;
@@ -138,7 +142,7 @@ export type FecthTitleParams = {
     pageIndex: number;
     pageSize: number;
     liquidated: boolean;
-}
+};
 
 export type ConsultPixKey = {
     account: ConsultPixKeyAccount;
@@ -146,19 +150,19 @@ export type ConsultPixKey = {
     key: string;
     keyType: string;
     owner: ConsultPixKeyOwner;
-}
+};
 
 export type ConsultPixKeyAccount = {
     accountNumber: string;
     accountType: string;
     branch: number;
     participant: string;
-}
+};
 
 export type ConsultPixKeyOwner = {
     name: string;
     taxIdNumber: string;
-}
+};
 
 export type PixPayment = {
     titleId: number;
@@ -170,43 +174,43 @@ export type PixPayment = {
     receiverDocument: string;
     receiverAccountType: string;
     receiverName: string;
-}
+};
 
 export type BankSlip = {
     digitable: string;
     barcode: string;
-    bank?: string;
-    documentPayer?: string;
-    documentRecipient?: string;
     dueDate?: string;
-    payer?: string;
-    recipient?: string;
     transactionId?: number;
     amount?: number;
     discount?: number;
     fine?: number;
     interest?: number;
-}
+    titleId?: number;
+    payerName?: string;
+    payerDocument?: string;
+    receiverBank?: string;
+    receiverName?: string;
+    receiverDocument?: string;
+};
 
 export type PaymentResponse = {
-    txId: number;
     receiptImage: string;
-}
+};
 
 export type Receipt = {
     receiptImage: string;
-}
+};
 
 //==========Enum's==========//
 export enum EnumFormType {
     LOGIN,
     REGISTER,
-    FORGOT_PASSWORD
+    FORGOT_PASSWORD,
 }
 
 export enum EnumScreens {
     DASHBOARD,
-    SEARCH_TITLE
+    SEARCH_TITLE,
 }
 
 export enum EnumError {
@@ -220,16 +224,16 @@ export enum EnumModalSteps {
     STEP_ONE,
     STEP_TWO,
     STEP_THREE,
-    STEP_RECEIPT
+    STEP_RECEIPT,
 }
 
 export enum EnumTitleTypes {
     ALL,
     RECEIVED,
-    TO_RECEIVE
+    TO_RECEIVE,
 }
 
 export enum EnumPaymentType {
     PIX = "PIX",
-    BOLETO = "BOLETO"
+    BOLETO = "BOLETO",
 }

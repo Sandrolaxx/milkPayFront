@@ -1,6 +1,7 @@
-import { getArrayOfElements } from "src/utils/utils";
+import { EnumTitleTypes, TableLinekeletonProps } from "src/utils/types";
+import { equalsEnum, getArrayOfElements } from "src/utils/utils";
 
-export default function TableLineSkeleton() {
+export default function TableLineSkeleton({ titleType }: TableLinekeletonProps) {
     const arrayOfElements = getArrayOfElements();
 
     return (
@@ -39,6 +40,14 @@ export default function TableLineSkeleton() {
                         <div className="w-24 h-6 animate-pulse bg-gray-300 rounded-sm" >
                         </div>
                     </td>
+                    {(equalsEnum(titleType, EnumTitleTypes.RECEIVED)
+                        || equalsEnum(titleType, EnumTitleTypes.ALL)) &&
+
+                        <td className="p-5 border-b border-gray-200 text-sm">
+                            <div className="w-24 h-6 animate-pulse bg-gray-300 rounded-sm" >
+                            </div>
+                        </td>
+                    }
                 </tr>
             ))}
         </tbody>

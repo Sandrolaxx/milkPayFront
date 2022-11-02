@@ -41,7 +41,7 @@ export default function Table({ title, subTitle, data, setShowModal }: TableProp
                         <table className="min-w-full leading-normal">
                             <TableHead titleType={table.titleType!} />
                             {table.isFetchingData ?
-                                <TableLineSkeleton />
+                                <TableLineSkeleton titleType={table.titleType!} />
                                 :
                                 <TableBody titles={data.results} titleType={table.titleType!} handleShowModal={handleShowModal} />
                             }

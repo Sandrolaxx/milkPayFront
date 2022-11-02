@@ -56,12 +56,24 @@ export default function TableBody({ titles, titleType, handleShowModal }: TableB
                     }
                     {(utils.equalsEnum(titleType, EnumTitleTypes.RECEIVED)
                         || utils.equalsEnum(titleType, EnumTitleTypes.ALL)) &&
-                        <td className="p-5 border-b border-gray-200 text-sm">
-                            <button onClick={() => handleShowModal(result)} className={`px-3 py-1 
+                        <>
+                            <td className="p-5 border-b border-gray-200 text-sm">
+                                <p className="text-dark-color whitespace-no-wrap">
+                                    {utils.formatMoney((result.amount - result.finalAmount))}
+                                </p>
+                            </td>
+                            <td className="p-5 border-b border-gray-200 text-sm">
+                                <p className="text-dark-color whitespace-no-wrap">
+                                    {utils.formatMoney(result.finalAmount)}
+                                </p>
+                            </td>
+                            <td className="p-5 border-b border-gray-200 text-sm">
+                                <button onClick={() => handleShowModal(result)} className={`px-3 py-1 
                                                 font-semibold bg-dark-color rounded-full text-light-color leading-tight`}>
-                                COMPROVANTE
-                            </button>
-                        </td>
+                                    COMPROVANTE
+                                </button>
+                            </td>
+                        </>
                     }
                 </tr>
             ))}

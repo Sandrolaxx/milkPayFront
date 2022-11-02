@@ -5,7 +5,7 @@ import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
 import AmountReceiveToIcon from "../assets/icons/dollar-sign.svg";
 import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
-import { CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers } from "./types";
+import { BankSlip, CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 const defaultPageSize = process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE;
@@ -177,7 +177,7 @@ export function firstElement<T>(array: T[]): T {
     return array.at(0)!;
 }
 
-export function getPixDto(pixKeyData: ConsultPixKey, titleId: number): PixPayment {
+export function getPixPaymentDto(pixKeyData: ConsultPixKey, titleId: number): PixPayment {
     return {
         titleId,
         endToEndId: pixKeyData.endtoendid,
@@ -212,7 +212,7 @@ export function formatTextSize(text: string, maxSize: number): string {
 
 export function resolveRequestError(err: any, toastify?: any) {
     if (err instanceof TypeError && err.message == "Failed to fetch") {
-        const error = "Serviços Overtech indisponíveis!";
+        const error = "Serviços MilkPay indisponíveis!";
 
         if (toastify) {
             handleToastifyError(toastify, error, true);
@@ -243,23 +243,39 @@ export function handleError(error: string, throws?: boolean) {
 }
 
 export function handleReponseError(res: Response, toastify?: Id | null, throws?: boolean) {
-    return res.json().then(err => {
-        let error = err.error ? err.error : "Erro desconhecido ao realizar operação.";
+    const defaultError = "Erro desconhecido ao realizar operação.";
+
+    if (res && res.status == 401) {
+        const unauthorizedError = "Token expirado, realize o login novamente!";
 
         if (toastify) {
-            if (throws) {
-                toast.update(toastify, getToastError(error));
-
-                throw new Error(error);
-            }
-
-            toast.update(toastify, getToastError(error));
-        } else {
-            if (throws) {
-                throw new Error(error);
-            }
+            toast.update(toastify, getToastError(unauthorizedError));
         }
-    });
+
+        throw new Error(unauthorizedError);
+    }
+
+    if (res && res.status != 401) {
+        return res.json().then(err => {
+            let error = err.error ? err.error : defaultError;
+
+            if (toastify) {
+                if (throws) {
+                    toast.update(toastify, getToastError(error));
+
+                    throw new Error(error);
+                }
+
+                toast.update(toastify, getToastError(error));
+            } else {
+                if (throws) {
+                    throw new Error(error);
+                }
+            }
+        });
+    }
+
+    throw new Error(defaultError);
 }
 
 export function getHeaderWithToken(contentTypeHeader?: string, params?: Map<string, string>): RequestInit {

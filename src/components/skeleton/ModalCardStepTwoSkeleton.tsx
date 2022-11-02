@@ -1,6 +1,6 @@
-import { ModalCardSkeleton } from "src/utils/types";
+import { ModalCardSkeletonProps } from "src/utils/types";
 
-export default function ModalCardStepTwoSkeleton({ isBankslipPayment }: ModalCardSkeleton) {
+export default function ModalCardStepTwoSkeleton({ isBankslipPayment }: ModalCardSkeletonProps) {
     return (
         <>
             <span className="w-full flex flex-row justify-between px-6 py-2">

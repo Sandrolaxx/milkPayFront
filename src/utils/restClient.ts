@@ -252,7 +252,6 @@ export function bankSlipayment(bankSlip: BankSlip): Promise<PaymentResponse> {
 }
 
 export function consultReceipt(txId: number): Promise<Receipt> {
-    const toastify = toast.loading("Consultando Comprovante📃");
     const urlConsultReceipt = new URL(baseUrl.concat(receiptPath));
     const token = localStorage.getItem("token");
 
@@ -267,12 +266,10 @@ export function consultReceipt(txId: number): Promise<Receipt> {
     return fetch(urlConsultReceipt, request)
         .then(res => {
             if (res.ok) {
-                toast.update(toastify, getToastSuccess("Comprovante consultado com sucesso!"));
-
                 return res.json();
             }
 
-            handleReponseError(res, toastify, false);
+            handleReponseError(res, null, false);
         })
-        .catch(err => resolveRequestError(err, toastify));
+        .catch(err => resolveRequestError(err));
 }
