@@ -31,7 +31,7 @@ export default function Table({ title, subTitle, data, setShowModal }: TableProp
 
     return (
         <>
-            <div className="w-full h-full py-4 pr-4 xl:pr-0">
+            <div className="w-full py-4 pr-4 xl:pr-0">
                 <div className="px-4 overflow-x-auto">
                     <div className="relative h-16 p-3 -mb-6 mx-4 rounded-2xl bg-purple-600 xl:py-2">
                         <p className="font-medium text-base xl:text-lg text-light-color">{title}</p>

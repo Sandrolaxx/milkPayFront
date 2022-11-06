@@ -19,10 +19,6 @@ export interface FormInputProps {
     changeFunction: Function;
 }
 
-export interface MenuProps {
-    changeFunction: Function;
-}
-
 export interface DashboardProps {
     dashboardData: {
         cardsData: CardTotalizers[];
@@ -72,6 +68,13 @@ export interface TableLinekeletonProps {
 }
 
 export interface IDataContext {
+    userData: {
+        user: User | undefined;
+        setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+        fetchUser: () => void;
+        selectedScreen: EnumScreens;
+        changeView: (selectedScreen: EnumScreens) => void;
+    },
     cardsData: {
         cardsData: CardTotalizers[] | undefined;
         fetchCardsData: () => void;
@@ -86,6 +89,13 @@ export interface IDataContext {
 
 //==========Types==========//
 export type DataContext = {
+    userData: {
+        user: User | undefined;
+        setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+        fetchUser: () => void;
+        selectedScreen: EnumScreens;
+        changeView: (selectedScreen: EnumScreens) => void;
+    },
     cardsData: {
         cardsData: CardTotalizers[] | undefined;
         fetchCardsData: () => void;
@@ -96,6 +106,21 @@ export type DataContext = {
         fetchTitlesToReciveData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
         fetchRecivedTitlesData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
     };
+};
+
+export type User = {
+	acceptTerms: boolean,
+	active: boolean,
+	document: string,
+	email: string,
+	lastLogin: string,
+	name: string,
+	password: string,
+	phone: string,
+	pixKey: string,
+	postalCode: string,
+	address: string,
+	type: EnumUserType
 };
 
 export type CardTotalizers = {
@@ -202,6 +227,11 @@ export type Receipt = {
 };
 
 //==========Enum's==========//
+export enum EnumUserType {
+    COMMON,
+    ADMINISTRATIVE
+}
+
 export enum EnumFormType {
     LOGIN,
     REGISTER,

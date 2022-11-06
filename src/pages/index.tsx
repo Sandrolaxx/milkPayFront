@@ -10,8 +10,7 @@ import { equalsEnum, isUserAuth } from "src/utils/utils";
 
 export default function Home() {
     const router = useRouter();
-    const [selectedScreen, setSelectedScreen] = useState(EnumScreens.DASHBOARD);
-    const { cardsData, titlesData } = useDataContext();
+    const { userData, cardsData, titlesData } = useDataContext();
     const [isAuth, setAuth] = useState(false);
     const dashboardData = {
         cardsData: cardsData.cardsData!,
@@ -24,26 +23,27 @@ export default function Home() {
     }, []);
 
     function fetchData() {
+        userData.fetchUser();
         cardsData.fetchCardsData();
         titlesData.fetchRecivedTitlesData();
         titlesData.fetchTitlesToReciveData();
 
-        setAuth(true);
-    }
+        if (userData.user && !userData.user.acceptTerms) {
+            userData.changeView(EnumScreens.PROFILE);
+        }
 
-    function changeView(selectedScreen: EnumScreens) {
-        setSelectedScreen(selectedScreen);
+        setAuth(true);
     }
 
     return (
         isAuth &&
-        <div className="block md:flex">
-            <Menu changeFunction={changeView} />
-            {equalsEnum(selectedScreen, EnumScreens.DASHBOARD)
+        <div className="w-full h-screen block md:flex">
+            <Menu />
+            {equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD)
                 && <Dashboard dashboardData={dashboardData} />}
-            {equalsEnum(selectedScreen, EnumScreens.SEARCH_TITLE)
+            {equalsEnum(userData.selectedScreen, EnumScreens.SEARCH_TITLE)
                 && <Search />}
-            {equalsEnum(selectedScreen, EnumScreens.PROFILE)
+            {equalsEnum(userData.selectedScreen, EnumScreens.PROFILE)
                 && <Profile />}
         </div>
     );

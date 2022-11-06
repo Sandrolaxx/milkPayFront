@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { EnumScreens, MenuProps } from "src/utils/types";
+import { useDataContext } from "src/context/data";
+import { EnumScreens } from "src/utils/types";
 import { equalsEnum } from "src/utils/utils";
 import CloseIcon from "../assets/icons/close.svg";
 import FileTextIcon from "../assets/icons/file-text.svg";
@@ -11,9 +12,9 @@ import MilkPayIcon from "../assets/icons/milkpay.svg";
 import UserIcon from "../assets/icons/user.svg";
 import Header from "./Header";
 
-export default function Menu({ changeFunction }: MenuProps) {
-    const [selectedScreen, setSelectedScreen] = useState(EnumScreens.DASHBOARD);
+export default function Menu() {
     const [showMenuMobile, setShowMenuMobile] = useState(false);
+    const { userData } = useDataContext();
     const route = useRouter();
 
     function handleExit() {
@@ -23,13 +24,11 @@ export default function Menu({ changeFunction }: MenuProps) {
     }
 
     function handleSelect(selectedScreen: EnumScreens) {
-        setSelectedScreen(selectedScreen);
-        changeFunction(selectedScreen);
+        userData.changeView(selectedScreen);
     }
 
     function handleSelectMenu(selectedScreen: EnumScreens) {
-        setSelectedScreen(selectedScreen);
-        changeFunction(selectedScreen);
+        userData.changeView(selectedScreen);
 
         setShowMenuMobile(!showMenuMobile);
     }
@@ -47,21 +46,21 @@ export default function Menu({ changeFunction }: MenuProps) {
                     <hr className="rounded-sm m-4 animate-fade-in-slow" />
                     <nav className="w-full animate-fade-in-fast">
                         <button className={`flex w-full items-center p-4 rounded-lg 
-                            ${equalsEnum(selectedScreen, EnumScreens.DASHBOARD) ?
+                            ${equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelect(EnumScreens.DASHBOARD)}>
                             <HomeIcon stroke="#FAF9F9" width={24} height={24} name="Painel Principal" />
                             <p className="ml-2 text-sm xl:text-xl">Painel Principal</p>
                         </button>
                         <button className={`flex w-full p-4 items-center rounded-xl 
-                            ${equalsEnum(selectedScreen, EnumScreens.SEARCH_TITLE) ?
+                            ${equalsEnum(userData.selectedScreen, EnumScreens.SEARCH_TITLE) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelect(EnumScreens.SEARCH_TITLE)}>
                             <FileTextIcon stroke="#FAF9F9" width={24} height={24} name="Consulta Título" />
                             <p className="ml-2 text-sm xl:text-xl">Consulta Título</p>
                         </button>
                         <button className={`flex w-full p-4 items-center rounded-xl 
-                            ${equalsEnum(selectedScreen, EnumScreens.PROFILE) ?
+                            ${equalsEnum(userData.selectedScreen, EnumScreens.PROFILE) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelect(EnumScreens.PROFILE)}>
                             <UserIcon stroke="#FAF9F9" width={24} height={24} name="Perfil" />
@@ -93,32 +92,32 @@ export default function Menu({ changeFunction }: MenuProps) {
                 <div className="fixed z-10 inset-0 mt-16 flex flex-col bg-light-color animate-fade-left md:hidden">
                     <nav className="w-full h-full flex flex-col justify-center">
                         <button className={`flex w-full justify-center items-center p-4 rounded-lg 
-                            ${equalsEnum(selectedScreen, EnumScreens.DASHBOARD) ?
+                            ${equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelectMenu(EnumScreens.DASHBOARD)}>
-                            <HomeIcon stroke={equalsEnum(selectedScreen, EnumScreens.DASHBOARD) ? "#FAF9F9" : "#01ACE2"}
+                            <HomeIcon stroke={equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD) ? "#FAF9F9" : "#01ACE2"}
                                 width={24} height={24} name="Painel Principal" />
-                            <p className={`ml-2 text-lg ${equalsEnum(selectedScreen, EnumScreens.DASHBOARD) && "text-white"}`}>
+                            <p className={`ml-2 text-lg ${equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD) && "text-white"}`}>
                                 Painel Principal
                             </p>
                         </button>
                         <button className={`flex w-full p-4 justify-center items-center rounded-xl 
-                            ${equalsEnum(selectedScreen, EnumScreens.SEARCH_TITLE) ?
+                            ${equalsEnum(userData.selectedScreen, EnumScreens.SEARCH_TITLE) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelectMenu(EnumScreens.SEARCH_TITLE)}>
-                            <FileTextIcon stroke={equalsEnum(selectedScreen, EnumScreens.SEARCH_TITLE) ? "#FAF9F9" : "#01ACE2"}
+                            <FileTextIcon stroke={equalsEnum(userData.selectedScreen, EnumScreens.SEARCH_TITLE) ? "#FAF9F9" : "#01ACE2"}
                                 width={24} height={24} name="Consulta Título" />
-                            <p className={`ml-2 text-lg ${equalsEnum(selectedScreen, EnumScreens.SEARCH_TITLE) && "text-white"}`}>
+                            <p className={`ml-2 text-lg ${equalsEnum(userData.selectedScreen, EnumScreens.SEARCH_TITLE) && "text-white"}`}>
                                 Consulta Título
                             </p>
                         </button>
                         <button className={`flex w-full p-4 justify-center items-center rounded-xl 
-                            ${equalsEnum(selectedScreen, EnumScreens.PROFILE) ?
+                            ${equalsEnum(userData.selectedScreen, EnumScreens.PROFILE) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelectMenu(EnumScreens.PROFILE)}>
-                            <UserIcon stroke={equalsEnum(selectedScreen, EnumScreens.PROFILE) ? "#FAF9F9" : "#01ACE2"}
+                            <UserIcon stroke={equalsEnum(userData.selectedScreen, EnumScreens.PROFILE) ? "#FAF9F9" : "#01ACE2"}
                                 width={24} height={24} name="Perfil" />
-                            <p className={`ml-2 text-lg ${equalsEnum(selectedScreen, EnumScreens.PROFILE) && "text-white"}`}>
+                            <p className={`ml-2 text-lg ${equalsEnum(userData.selectedScreen, EnumScreens.PROFILE) && "text-white"}`}>
                                 Perfil
                             </p>
                         </button>

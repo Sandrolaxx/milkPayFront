@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { BankSlip, ConsultPixKey, EnumError, FecthTitleParams, FecthTitleResponse, PaymentResponse, PixPayment, Receipt, Totalizers } from "./types";
+import { BankSlip, ConsultPixKey, EnumError, FecthTitleParams, FecthTitleResponse, PaymentResponse, PixPayment, Receipt, Totalizers, User } from "./types";
 import {
     addQueryParams,
     getBasicToken,
@@ -101,6 +101,21 @@ export async function getUserToken(document: string, password: string) {
 
 export function fetchTotalizers(): Promise<Totalizers> {
     const urlTotalizers = baseUrl.concat(titlePath).concat(totalizersPath);
+    const request = getHeaderWithToken();
+
+    return fetch(urlTotalizers, request)
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            }
+
+            return handleReponseError(res, null, true);
+        })
+        .catch(err => resolveRequestError(err));
+}
+
+export function fetchUserData(): Promise<User> {
+    const urlTotalizers = baseUrl.concat(userPath);
     const request = getHeaderWithToken();
 
     return fetch(urlTotalizers, request)
