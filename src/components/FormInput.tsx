@@ -195,7 +195,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                 }
                 {equalsEnum(formType, EnumFormType.REGISTER) &&
 
-                    <Button text="Não possui uma conta?" handleFunction={() => changeInput(EnumFormType.LOGIN)} />
+                    <Button text="Já possui uma conta?" handleFunction={() => changeInput(EnumFormType.LOGIN)} />
                 }
                 {equalsEnum(formType, EnumFormType.FORGOT_PASSWORD) &&
                     <Button text="Não possui mais o e-mail cadastrado?" handleFunction={handleLoseEmail} />
