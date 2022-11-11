@@ -5,7 +5,7 @@ import { EnumScreens, User } from "src/utils/types";
 
 export function useUserData() {
     const [user, setUser] = useState<User>();
-    const [selectedScreen, setSelectedScreen] = useState(EnumScreens.DASHBOARD);
+    const [selectedScreen, setSelectedScreen] = useState(EnumScreens.NONE);
     const router = useRouter();
 
     function changeView(selectedScreen: EnumScreens) {
@@ -14,9 +14,17 @@ export function useUserData() {
 
     function fetchUser() {
         fetchUserData()
-            .then(res => setUser(res))
+            .then(res => {
+                setUser(res);
+
+                if (res && !res.acceptTerms) {
+                    changeView(EnumScreens.PROFILE);
+                } else {
+                    changeView(EnumScreens.DASHBOARD);
+                }
+            })
             .catch(() => router.push("/auth"));
     }
 
-    return { user, setUser, fetchUser, selectedScreen, changeView }
+    return { user, setUser, fetchUser, selectedScreen, changeView };
 }

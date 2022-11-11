@@ -7,7 +7,7 @@ export default function TableBody({ titles, titleType, handleShowModal }: TableB
     return (
         <tbody>
             {titles.map(result => (
-                <tr key={result.id} >
+                <tr key={result.id}>
                     <td className="px-6 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-dark-color whitespace-no-wrap">
                             {result.id}

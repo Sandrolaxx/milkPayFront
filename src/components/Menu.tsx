@@ -16,6 +16,7 @@ export default function Menu() {
     const [showMenuMobile, setShowMenuMobile] = useState(false);
     const { userData } = useDataContext();
     const route = useRouter();
+    const disableUserAction = userData.user && !userData.user.acceptTerms;
 
     function handleExit() {
         localStorage.removeItem("token");
@@ -24,7 +25,9 @@ export default function Menu() {
     }
 
     function handleSelect(selectedScreen: EnumScreens) {
-        userData.changeView(selectedScreen);
+        if (!disableUserAction) {
+            userData.changeView(selectedScreen);
+        }
     }
 
     function handleSelectMenu(selectedScreen: EnumScreens) {
@@ -49,15 +52,15 @@ export default function Menu() {
                             ${equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelect(EnumScreens.DASHBOARD)}>
-                            <HomeIcon stroke="#FAF9F9" width={24} height={24} name="Painel Principal" />
-                            <p className="ml-2 text-sm xl:text-xl">Painel Principal</p>
+                            <HomeIcon stroke={disableUserAction ? "#b6b6b6" : "#FAF9F9"} width={24} height={24} name="Painel Principal" />
+                            <p className={`ml-2 text-sm xl:text-xl ${disableUserAction && "text-gray-400"}`}>Painel Principal</p>
                         </button>
                         <button className={`flex w-full p-4 items-center rounded-xl 
                             ${equalsEnum(userData.selectedScreen, EnumScreens.SEARCH_TITLE) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelect(EnumScreens.SEARCH_TITLE)}>
-                            <FileTextIcon stroke="#FAF9F9" width={24} height={24} name="Consulta Título" />
-                            <p className="ml-2 text-sm xl:text-xl">Consulta Título</p>
+                            <FileTextIcon stroke={disableUserAction ? "#b6b6b6" : "#FAF9F9"} width={24} height={24} name="Consulta Título" />
+                            <p className={`ml-2 text-sm xl:text-xl ${disableUserAction && "text-gray-400"}`}>Consulta Título</p>
                         </button>
                         <button className={`flex w-full p-4 items-center rounded-xl 
                             ${equalsEnum(userData.selectedScreen, EnumScreens.PROFILE) ?

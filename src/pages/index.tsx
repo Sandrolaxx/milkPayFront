@@ -28,10 +28,6 @@ export default function Home() {
         titlesData.fetchRecivedTitlesData();
         titlesData.fetchTitlesToReciveData();
 
-        if (userData.user && !userData.user.acceptTerms) {
-            userData.changeView(EnumScreens.PROFILE);
-        }
-
         setAuth(true);
     }
 
