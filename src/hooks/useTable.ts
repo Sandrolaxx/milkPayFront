@@ -16,7 +16,7 @@ export default function useTable() {
     }
 
     function updateTitleType(data: FecthTitleResponse) {
-        if (firstElement(data.results)) {
+        if (data.results && firstElement(data.results)) {
             setTitleType(firstElement(data.results).liquidated ? EnumTitleTypes.RECEIVED : EnumTitleTypes.TO_RECEIVE);
         }
     }

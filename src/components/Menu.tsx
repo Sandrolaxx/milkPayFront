@@ -31,9 +31,11 @@ export default function Menu() {
     }
 
     function handleSelectMenu(selectedScreen: EnumScreens) {
-        userData.changeView(selectedScreen);
+        if (!disableUserAction) {
+            userData.changeView(selectedScreen);
 
-        setShowMenuMobile(!showMenuMobile);
+            setShowMenuMobile(!showMenuMobile);
+        }
     }
 
     return (
@@ -98,7 +100,8 @@ export default function Menu() {
                             ${equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelectMenu(EnumScreens.DASHBOARD)}>
-                            <HomeIcon stroke={equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD) ? "#FAF9F9" : "#01ACE2"}
+                            <HomeIcon stroke={disableUserAction ? "#b6b6b6" :
+                                equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD) ? "#FAF9F9" : "#01ACE2"}
                                 width={24} height={24} name="Painel Principal" />
                             <p className={`ml-2 text-lg ${equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD) && "text-white"}`}>
                                 Painel Principal
@@ -108,7 +111,8 @@ export default function Menu() {
                             ${equalsEnum(userData.selectedScreen, EnumScreens.SEARCH_TITLE) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelectMenu(EnumScreens.SEARCH_TITLE)}>
-                            <FileTextIcon stroke={equalsEnum(userData.selectedScreen, EnumScreens.SEARCH_TITLE) ? "#FAF9F9" : "#01ACE2"}
+                            <FileTextIcon stroke={disableUserAction ? "#b6b6b6" :
+                                equalsEnum(userData.selectedScreen, EnumScreens.SEARCH_TITLE) ? "#FAF9F9" : "#01ACE2"}
                                 width={24} height={24} name="Consulta Título" />
                             <p className={`ml-2 text-lg ${equalsEnum(userData.selectedScreen, EnumScreens.SEARCH_TITLE) && "text-white"}`}>
                                 Consulta Título

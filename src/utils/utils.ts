@@ -5,7 +5,7 @@ import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
 import AmountReceiveToIcon from "../assets/icons/dollar-sign.svg";
 import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
-import { CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers } from "./types";
+import { CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers, User, UserUpdateInfo } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 const defaultPageSize = process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE;
@@ -321,4 +321,40 @@ export function verifyValidPassword(password: string, confirmation: string) {
     }
 
     return true;
+}
+
+export function verifyValidUserFields(user: UserUpdateInfo) {
+    if (isNullOrEmpty(user.name) || isNullOrEmpty(user.phone)) {
+        return false;
+    }
+
+    if (isNullOrEmpty(user.password) || isNullOrEmpty(user.pixKey) || isNullOrEmpty(user.email)) {
+        return false;
+    }
+
+    return true;
+}
+
+export function verifyUserHasChanges(userNewIfnfo: UserUpdateInfo, user: User) {
+    if (userNewIfnfo.name != user.name
+        || userNewIfnfo.email != user.email) {
+        return true;
+    }
+
+    if (userNewIfnfo.phone != user.phone
+        || userNewIfnfo.password != user.password) {
+        return true;
+    }
+
+    if (userNewIfnfo.address != user.address
+        || userNewIfnfo.postalCode != user.postalCode) {
+        return true;
+    }
+
+    if (userNewIfnfo.pixKey != user.pixKey
+        || userNewIfnfo.acceptTerms != user.acceptTerms) {
+        return true;
+    }
+
+    return false;
 }

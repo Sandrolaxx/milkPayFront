@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { BankSlip, ConsultPixKey, EnumError, FecthTitleParams, FecthTitleResponse, PaymentResponse, PixPayment, Receipt, Totalizers, User } from "./types";
+import { BankSlip, ConsultPixKey, EnumError, FecthTitleParams, FecthTitleResponse, PaymentResponse, PixPayment, Receipt, Totalizers, User, UserUpdateInfo } from "./types";
 import {
     addQueryParams,
     getBasicToken,
@@ -289,7 +289,7 @@ export function consultReceipt(txId: number): Promise<Receipt> {
         .catch(err => resolveRequestError(err));
 }
 
-export function updateUser(userInfo: any): Promise<User> {
+export function updateUser(userInfo: UserUpdateInfo): Promise<User> {
     const urlUpdateUser = new URL(baseUrl.concat(userPath));
     const toastify = toast.loading("Atualizando Usuário...✨");
     const token = localStorage.getItem("token");
