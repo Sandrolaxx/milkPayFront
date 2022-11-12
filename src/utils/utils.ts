@@ -5,13 +5,17 @@ import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
 import AmountReceiveToIcon from "../assets/icons/dollar-sign.svg";
 import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
-import { BankSlip, CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers } from "./types";
+import { CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 const defaultPageSize = process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE;
 
 export function isNullOrEmpty(str: any): boolean {
     return str == null || str == undefined || str.trim() == "";
+}
+
+export function equalsStr(firstStr: string, secondStr: string) {
+    return firstStr === secondStr;
 }
 
 export function equalsEnum(firstEnum: any, secondEnum: any) {
@@ -307,4 +311,14 @@ export function getHeaderWithToken(contentTypeHeader?: string, params?: Map<stri
             Authorization: "Bearer ".concat(token!),
         },
     };
+}
+
+export function verifyValidPassword(password: string, confirmation: string) {
+    if (!equalsStr(password, confirmation)) {
+        handleError("Senha de confirmação diferente da senha informada!");
+
+        return false;
+    }
+
+    return true;
 }

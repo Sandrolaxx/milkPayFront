@@ -1,12 +1,15 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDataContext } from "src/context/data";
+import { updateUser } from "src/utils/restClient";
+import { verifyValidPassword } from "src/utils/utils";
 import Button from "./Button";
 
 export default function Profile() {
     const { userData } = useDataContext();
     const user = userData.user;
+    const router = useRouter();
     const [name, setName] = useState(user ? user.name : "");
-    const [document, setDocument] = useState(user ? user.document : "");
     const [email, setEmail] = useState(user ? user.email : "");
     const [phone, setPhone] = useState(user ? user.phone : "");
     const [password, setPassword] = useState(user ? user.password : "");
@@ -17,9 +20,24 @@ export default function Profile() {
     const [acceptTerms, setAcceptTerms] = useState(user ? user.acceptTerms : false);
 
     function updateUserInfo() {
-        //Validar senhas
-        //Criar objecto
-        //Realizar request
+        if (verifyValidPassword(password, confirmPassword)) {
+            const userNewInfo = {
+                name,
+                password,
+                email,
+                pixKey,
+                phone,
+                address,
+                postalCode,
+                acceptTerms
+            }
+
+            console.log(userNewInfo);
+
+            updateUser(userNewInfo)
+                .then(res => userData.setUser(res))
+                .catch(() => router.push("/auth"));
+        }
     }
 
     return (
@@ -55,7 +73,7 @@ export default function Profile() {
                                 <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-second-gray-color text-xs font-medium">
                                     Documento
                                 </p>
-                                <input disabled type="text" id="document" onChange={e => setDocument(e.target.value)} value={document}
+                                <input disabled type="text" id="document" value={user ? user.document : "Não encontrado"}
                                     placeholder="CPF/CNPJ" className="w-full h-14 px-4 border placeholder-gray-400 text-gray-400
                                rounded-md bg-white border-second-gray-color shadow-sm text-sm focus:outline-none 
                                focus:ring-1 focus:ring-primary-color focus:border-transparent appearance-none"
@@ -141,7 +159,7 @@ export default function Profile() {
                             </div>
                             <div className="w-full">
                                 <span className="w-full h-full flex justify-end items-end mt-3 md:mt-2">
-                                    <input className="mx-2 mb-1.5" type="checkbox" name="acceptTerms" id="checkboxTerms"
+                                    <input className="mx-2 mb-1.5" type="checkbox" checked={acceptTerms} name="acceptTerms" id="checkboxTerms"
                                         onChange={e => setAcceptTerms(e.target.checked)} />
                                     <p className="mr-1">Concordo com os</p>
                                     <a href="https://github.com/Sandrolaxx/sonsRodrigoFaroPrivacy/blob/main/privacyPolicy.md"

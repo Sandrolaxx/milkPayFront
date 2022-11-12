@@ -288,3 +288,30 @@ export function consultReceipt(txId: number): Promise<Receipt> {
         })
         .catch(err => resolveRequestError(err));
 }
+
+export function updateUser(userInfo: any): Promise<User> {
+    const urlUpdateUser = new URL(baseUrl.concat(userPath));
+    const toastify = toast.loading("Atualizando Usuário...✨");
+    const token = localStorage.getItem("token");
+
+    const request: RequestInit = {
+        headers: {
+            Authorization: getBearerToken(token!),
+            "Content-Type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify(userInfo),
+    };
+
+    return fetch(urlUpdateUser, request)
+        .then(res => {
+            if (res.ok) {
+                toast.update(toastify, getToastSuccess("Usuário atualizado com sucesso!"));
+
+                return res.json();
+            }
+
+            handleReponseError(res, toastify, false);
+        })
+        .catch(err => resolveRequestError(err, toastify));
+}
