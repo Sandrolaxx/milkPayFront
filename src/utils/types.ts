@@ -74,7 +74,7 @@ export interface IDataContext {
         fetchUser: () => void;
         selectedScreen: EnumScreens;
         changeView: (selectedScreen: EnumScreens) => void;
-    },
+    };
     cardsData: {
         cardsData: CardTotalizers[] | undefined;
         fetchCardsData: () => void;
@@ -95,7 +95,7 @@ export type DataContext = {
         fetchUser: () => void;
         selectedScreen: EnumScreens;
         changeView: (selectedScreen: EnumScreens) => void;
-    },
+    };
     cardsData: {
         cardsData: CardTotalizers[] | undefined;
         fetchCardsData: () => void;
@@ -109,18 +109,29 @@ export type DataContext = {
 };
 
 export type User = {
-	acceptTerms: boolean,
-	active: boolean,
-	document: string,
-	email: string,
-	lastLogin: string,
-	name: string,
-	password: string,
-	phone: string,
-	pixKey: string,
-	postalCode: string,
-	address: string,
-	type: EnumUserType
+    acceptTerms: boolean;
+    active: boolean;
+    document: string;
+    email: string;
+    lastLogin: string;
+    name: string;
+    password: string;
+    phone: string;
+    pixKey: string;
+    postalCode: string;
+    address: string;
+    type: EnumUserType;
+};
+
+export type UserUpdateInfo = {
+    name: string;
+    password: string;
+    email: string;
+    pixKey: string;
+    phone: string;
+    address: string;
+    postalCode: string;
+    acceptTerms: boolean;
 };
 
 export type CardTotalizers = {
@@ -229,7 +240,7 @@ export type Receipt = {
 //==========Enum's==========//
 export enum EnumUserType {
     COMMON,
-    ADMINISTRATIVE
+    ADMINISTRATIVE,
 }
 
 export enum EnumFormType {
@@ -242,7 +253,7 @@ export enum EnumScreens {
     DASHBOARD,
     SEARCH_TITLE,
     PROFILE,
-    NONE
+    NONE,
 }
 
 export enum EnumError {
