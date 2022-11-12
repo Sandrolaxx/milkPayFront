@@ -7,7 +7,8 @@ export interface LayoutProps {
 export interface ButtonProps {
     text: string;
     handleFunction: Function;
-    stylized?: boolean;
+    dafaultStyle?: boolean;
+    customStile?: string;
 }
 
 export interface FormTypeProps {
@@ -177,7 +178,7 @@ export type FecthTitleParams = {
     limit: string;
     pageIndex: number;
     pageSize: number;
-    liquidated: boolean;
+    liquidated?: boolean;
 };
 
 export type ConsultPixKey = {

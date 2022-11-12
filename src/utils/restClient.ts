@@ -137,14 +137,17 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
         pageSize: params.pageSize.toString(),
     });
 
+    if (params.liquidated != undefined) {
+        searchParams.set("liquidated", JSON.stringify(params.liquidated));
+    }
+
     const urlTitles = addQueryParams(searchParams, new URL(baseUrl.concat(titlePath)));
     const token = localStorage.getItem("token");
 
     const request: RequestInit = {
         headers: {
             Authorization: getBearerToken(token!),
-            "Content-Type": "application/json",
-            liquidated: JSON.stringify(params.liquidated),
+            "Content-Type": "application/json"
         },
     };
 

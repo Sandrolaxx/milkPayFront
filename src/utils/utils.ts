@@ -152,7 +152,7 @@ export function addQueryParams(params: URLSearchParams, url: URL): URL {
     return url;
 }
 
-export function getFetchTitlesParams(liquidated: boolean, pageIndex?: number, pageSize?: number): FecthTitleParams {
+export function getFetchTitlesParams(pageIndex?: number, pageSize?: number, liquidated?: boolean): FecthTitleParams {
     const today = getNow();
     const nextMonth = getNow();
     nextMonth.setMonth(today.getMonth() + 1);
@@ -162,7 +162,7 @@ export function getFetchTitlesParams(liquidated: boolean, pageIndex?: number, pa
         limit: formatDDMMYYYY(nextMonth),
         pageIndex: pageIndex ?? 0,
         pageSize: pageSize ?? 5,
-        liquidated,
+        liquidated
     };
 }
 

@@ -50,7 +50,7 @@ export default function Menu() {
                     </div>
                     <hr className="rounded-sm m-4 animate-fade-in-slow" />
                     <nav className="w-full animate-fade-in-fast">
-                        <button className={`flex w-full items-center p-4 rounded-lg 
+                        <button className={`flex w-full items-center p-4 rounded-lg
                             ${equalsEnum(userData.selectedScreen, EnumScreens.DASHBOARD) ?
                                 'bg-primary-color animate-fade-in-fast' : 'bg-none hover:opacity-60'}`}
                             onClick={() => handleSelect(EnumScreens.DASHBOARD)}>

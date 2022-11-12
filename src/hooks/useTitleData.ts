@@ -10,7 +10,7 @@ export function useTitleData() {
     const router = useRouter();
 
     function fetchTitlesToReciveData(pageIndex?: number, pageSize?: number) {
-        const titlesToReceiveParams = getFetchTitlesParams(false, pageIndex, pageSize);
+        const titlesToReceiveParams = getFetchTitlesParams(pageIndex, pageSize, false);
         
         fetchTitles(titlesToReceiveParams)
             .then(res => {
@@ -20,7 +20,7 @@ export function useTitleData() {
     }
 
     function fetchRecivedTitlesData(pageIndex?: number, pageSize?: number) {
-        const receivedTitlesParams = getFetchTitlesParams(true, pageIndex, pageSize);
+        const receivedTitlesParams = getFetchTitlesParams(pageIndex, pageSize, true);
 
         fetchTitles(receivedTitlesParams)
             .then(res => {

@@ -158,7 +158,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                             <div className={`flex items-center mb-6 text-xs font-normal sm:text-sm 
                         text-gray-600 hover:text-gray-500 dark:text-gray-100 dark:hover:text-white`}>
                                 <div className="flex ml-auto">
-                                    <Button text="Voltar ao Login" handleFunction={() => changeInput(EnumFormType.LOGIN)} />
+                                    <Button text="Voltar ao Login" handleFunction={() => changeInput(EnumFormType.LOGIN)}  />
                                 </div>
                             </div>
                         </>
@@ -173,17 +173,17 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                     }
                     {equalsEnum(formType, EnumFormType.LOGIN) &&
                         <div className="flex w-full">
-                            <Button  text="Login" stylized={true} handleFunction={handleLogin} />
+                            <Button  text="Login" dafaultStyle handleFunction={handleLogin} />
                         </div>
                     }
                     {equalsEnum(formType, EnumFormType.REGISTER) &&
                         <div className="flex w-full mt-12">
-                            <Button text="Registrar" stylized={true} handleFunction={handleRegister} />
+                            <Button text="Registrar" dafaultStyle handleFunction={handleRegister} />
                         </div>
                     }
                     {equalsEnum(formType, EnumFormType.FORGOT_PASSWORD) &&
                         <div className="flex w-full mt-16">
-                            <Button text="Enviar" stylized={true} handleFunction={handleForgotPassword} />
+                            <Button text="Enviar" dafaultStyle handleFunction={handleForgotPassword} />
                         </div>
                     }
                 </form>

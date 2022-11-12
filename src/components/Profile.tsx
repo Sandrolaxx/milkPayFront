@@ -62,7 +62,7 @@ export default function Profile() {
                     <form onSubmit={e => e.preventDefault()}>
                         <div className="flex flex-col md:flex-row md:justify-between">
                             <div className="w-full mt-6 relative md:mr-4">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-second-gray-color text-xs font-medium">
+                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
                                     Nome
                                 </p>
                                 <input required type="text" id="name" onChange={e => setName(e.target.value)} value={name}
@@ -72,7 +72,7 @@ export default function Profile() {
                                 />
                             </div>
                             <div className="w-full mt-7 relative md:mt-6">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-second-gray-color text-xs font-medium">
+                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
                                     Documento
                                 </p>
                                 <input disabled type="text" id="document" value={user ? user.document : "Não encontrado"}
@@ -84,7 +84,7 @@ export default function Profile() {
                         </div>
                         <div className="flex flex-col md:flex-row md:justify-between">
                             <div className="w-full mt-6 relative md:mr-4">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-second-gray-color text-xs font-medium">
+                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
                                     E-mail
                                 </p>
                                 <input required type="email" id="email" onChange={e => setEmail(e.target.value)} value={email}
@@ -94,7 +94,7 @@ export default function Profile() {
                                 />
                             </div>
                             <div className="w-full mt-7 relative md:mt-6">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-second-gray-color text-xs font-medium">
+                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
                                     Telefone
                                 </p>
                                 <input required type="text" id="phone" onChange={e => setPhone(e.target.value)} value={phone}
@@ -106,7 +106,7 @@ export default function Profile() {
                         </div>
                         <div className="flex flex-col md:flex-row md:justify-between">
                             <div className="w-full mt-6 relative md:mr-4">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-second-gray-color text-xs font-medium">
+                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
                                     Senha
                                 </p>
                                 <input type="password" id="password" onChange={e => setPassword(e.target.value)} value={password}
@@ -116,7 +116,7 @@ export default function Profile() {
                                 />
                             </div>
                             <div className="w-full mt-7 relative md:mt-6">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-second-gray-color text-xs font-medium">
+                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
                                     Confirmar Senha
                                 </p>
                                 <input type="password" id="passwordConfirmation" onChange={e => setConfirmPassword(e.target.value)}
@@ -128,7 +128,7 @@ export default function Profile() {
                         </div>
                         <div className="flex flex-col md:flex-row md:justify-between">
                             <div className="w-full mt-6 relative md:mr-4">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-second-gray-color text-xs font-medium">
+                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
                                     Endereço
                                 </p>
                                 <input type="text" id="address" onChange={e => setAddress(e.target.value)} value={address}
@@ -138,7 +138,7 @@ export default function Profile() {
                                 />
                             </div>
                             <div className="w-full mt-7 relative md:mt-6">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-second-gray-color text-xs font-medium">
+                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
                                     CEP
                                 </p>
                                 <input type="text" id="postaCode" onChange={e => setPostalCode(e.target.value)} value={postalCode}
@@ -150,7 +150,7 @@ export default function Profile() {
                         </div>
                         <div className="flex flex-col md:flex-row md:justify-between">
                             <div className="w-full mt-6 relative md:mr-4">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-second-gray-color text-xs font-medium">
+                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
                                     Chave PIX
                                 </p>
                                 <input required type="text" id="pixKey" onChange={e => setPixKey(e.target.value)} value={pixKey}
@@ -175,7 +175,7 @@ export default function Profile() {
                             <div className="w-full" />
                             <div className="w-full" />
                             <div className="w-full mt-6">
-                                <Button text="Atualizar" key="BtnCadastro" handleFunction={updateUserInfo} stylized />
+                                <Button text="Atualizar" key="BtnCadastro" handleFunction={updateUserInfo} dafaultStyle />
                             </div>
                         </div>
                     </form>
