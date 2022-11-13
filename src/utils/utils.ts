@@ -5,7 +5,7 @@ import AmountRecivedIcon from "../assets/icons/chevrons-down.svg";
 import RecivedTitlesIcon from "../assets/icons/chevrons-up.svg";
 import AmountReceiveToIcon from "../assets/icons/dollar-sign.svg";
 import TitlesToReceiveIcon from "../assets/icons/trending-up.svg";
-import { CardTotalizers, ConsultPixKey, FecthTitleParams, PixPayment, Totalizers, User, UserUpdateInfo } from "./types";
+import { CardTotalizers, ConsultPixKey, EnumFilterTitle, FecthTitleParams, PixPayment, Totalizers, User, UserUpdateInfo } from "./types";
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 const defaultPageSize = process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE;
@@ -152,6 +152,38 @@ export function addQueryParams(params: URLSearchParams, url: URL): URL {
     return url;
 }
 
+export function getTitleURLSearchParams(params: FecthTitleParams) {
+    let searchParams;
+
+    if (params.offset && params.limit) {
+        searchParams = new URLSearchParams({
+            offset: params.offset,
+            limit: params.limit,
+            pageIndex: params.pageIndex.toString(),
+            pageSize: params.pageSize.toString(),
+        });
+    } else {
+        searchParams = new URLSearchParams({
+            pageIndex: params.pageIndex.toString(),
+            pageSize: params.pageSize.toString(),
+        });
+    }
+
+    if (params.liquidated != undefined) {
+        searchParams.set("liquidated", JSON.stringify(params.liquidated));
+    }
+
+    if (params.filterBy) {
+        searchParams.set("filterBy", params.filterBy);
+    }
+
+    if (params.filterValue) {
+        searchParams.set("filterValue", params.filterValue);
+    }
+
+    return searchParams;
+}
+
 export function getFetchTitlesParams(pageIndex?: number, pageSize?: number, liquidated?: boolean): FecthTitleParams {
     const today = getNow();
     const nextMonth = getNow();
@@ -162,7 +194,18 @@ export function getFetchTitlesParams(pageIndex?: number, pageSize?: number, liqu
         limit: formatDDMMYYYY(nextMonth),
         pageIndex: pageIndex ?? 0,
         pageSize: pageSize ?? 5,
-        liquidated
+        liquidated,
+    };
+}
+
+export function getFetchTitlesParamsWithFilter(filterBy: EnumFilterTitle, filterValue: string,
+        pageIndex?: number, pageSize?: number, liquidated?: boolean): FecthTitleParams {
+    return {
+        pageIndex: pageIndex ?? 0,
+        pageSize: pageSize ?? 5,
+        liquidated,
+        filterBy,
+        filterValue
     };
 }
 
@@ -336,25 +379,46 @@ export function verifyValidUserFields(user: UserUpdateInfo) {
 }
 
 export function verifyUserHasChanges(userNewIfnfo: UserUpdateInfo, user: User) {
-    if (userNewIfnfo.name != user.name
-        || userNewIfnfo.email != user.email) {
+    if (userNewIfnfo.name != user.name || userNewIfnfo.email != user.email) {
         return true;
     }
 
-    if (userNewIfnfo.phone != user.phone
-        || userNewIfnfo.password != user.password) {
+    if (userNewIfnfo.phone != user.phone || userNewIfnfo.password != user.password) {
         return true;
     }
 
-    if (userNewIfnfo.address != user.address
-        || userNewIfnfo.postalCode != user.postalCode) {
+    if (userNewIfnfo.address != user.address || userNewIfnfo.postalCode != user.postalCode) {
         return true;
     }
 
-    if (userNewIfnfo.pixKey != user.pixKey
-        || userNewIfnfo.acceptTerms != user.acceptTerms) {
+    if (userNewIfnfo.pixKey != user.pixKey || userNewIfnfo.acceptTerms != user.acceptTerms) {
         return true;
     }
 
     return false;
+}
+
+export function parseStrToFilterTitleEnum(strValue: string): EnumFilterTitle {
+    switch (strValue) {
+        case "ID":
+            return EnumFilterTitle.ID;
+        case "Status":
+            return EnumFilterTitle.STATUS;
+        case "Número NF":
+            return EnumFilterTitle.NF_NUMBER;
+        case "Tipo Recebimento":
+            return EnumFilterTitle.PAYMENT_TYPE;
+        case "Data Serviço/Venda":
+            return EnumFilterTitle.INCLUSION_DATE;
+        case "Data Recebimento":
+            return EnumFilterTitle.DUE_DATE;
+        case "Valor Total Título":
+            return EnumFilterTitle.AMOUNT;
+        case "Linha Digitável":
+            return EnumFilterTitle.DIGITABLE;
+        case "Código de Barras":
+            return EnumFilterTitle.BARCODE;
+        default:
+            return EnumFilterTitle.NONE;
+    }
 }

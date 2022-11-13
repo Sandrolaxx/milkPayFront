@@ -5,6 +5,7 @@ import {
     getBasicToken,
     getBearerToken,
     getHeaderWithToken,
+    getTitleURLSearchParams,
     getToastError,
     getToastSuccess,
     handleReponseError,
@@ -130,19 +131,10 @@ export function fetchUserData(): Promise<User> {
 }
 
 export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleResponse> {
-    const searchParams = new URLSearchParams({
-        offset: params.offset,
-        limit: params.limit,
-        pageIndex: params.pageIndex.toString(),
-        pageSize: params.pageSize.toString(),
-    });
-
-    if (params.liquidated != undefined) {
-        searchParams.set("liquidated", JSON.stringify(params.liquidated));
-    }
-
-    const urlTitles = addQueryParams(searchParams, new URL(baseUrl.concat(titlePath)));
+    const urlTitles = addQueryParams(getTitleURLSearchParams(params), new URL(baseUrl.concat(titlePath)));
     const token = localStorage.getItem("token");
+
+    console.log(urlTitles);
 
     const request: RequestInit = {
         headers: {

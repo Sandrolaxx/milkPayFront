@@ -11,11 +11,9 @@ export function useTitleData() {
 
     function fetchTitlesToReciveData(pageIndex?: number, pageSize?: number) {
         const titlesToReceiveParams = getFetchTitlesParams(pageIndex, pageSize, false);
-        
+
         fetchTitles(titlesToReceiveParams)
-            .then(res => {
-                setTitlesRecive(res);
-            })
+            .then(res => setTitlesRecive(res))
             .catch(() => router.push("/auth"));
     }
 
@@ -23,14 +21,14 @@ export function useTitleData() {
         const receivedTitlesParams = getFetchTitlesParams(pageIndex, pageSize, true);
 
         fetchTitles(receivedTitlesParams)
-            .then(res => {
-                setReceivedTitles(res);
-            })
+            .then(res => setReceivedTitles(res))
             .catch(() => router.push("/auth"));
     }
 
     return {
-        titlesToReceive, receivedTitles,
-        fetchTitlesToReciveData, fetchRecivedTitlesData
-    }
-} 
+        titlesToReceive,
+        receivedTitles,
+        fetchTitlesToReciveData,
+        fetchRecivedTitlesData,
+    };
+}

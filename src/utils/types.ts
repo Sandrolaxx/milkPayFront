@@ -37,6 +37,7 @@ export interface TableProps {
     subTitle: string;
     data: FecthTitleResponse;
     setShowModal: Function;
+    titleType?: EnumTitleType
 }
 
 export interface ModalCardProps {
@@ -51,12 +52,12 @@ export interface ModalCardButtonProps {
 }
 
 export interface TableHeadProps {
-    titleType: EnumTitleTypes;
+    titleType: EnumTitleType;
 }
 
 export interface TableBodyProps {
     titles: TitleData[];
-    titleType: EnumTitleTypes;
+    titleType: EnumTitleType;
     handleShowModal: Function;
 }
 
@@ -65,7 +66,7 @@ export interface ModalCardSkeletonProps {
 }
 
 export interface TableLinekeletonProps {
-    titleType: EnumTitleTypes;
+    titleType: EnumTitleType;
 }
 
 export interface IDataContext {
@@ -174,11 +175,13 @@ export type FecthTitleResponse = {
 };
 
 export type FecthTitleParams = {
-    offset: string;
-    limit: string;
+    offset?: string;
+    limit?: string;
     pageIndex: number;
     pageSize: number;
     liquidated?: boolean;
+    filterBy?: EnumFilterTitle;
+    filterValue?: string;
 };
 
 export type ConsultPixKey = {
@@ -271,7 +274,7 @@ export enum EnumModalSteps {
     STEP_RECEIPT,
 }
 
-export enum EnumTitleTypes {
+export enum EnumTitleType {
     ALL,
     RECEIVED,
     TO_RECEIVE,
@@ -280,4 +283,17 @@ export enum EnumTitleTypes {
 export enum EnumPaymentType {
     PIX = "PIX",
     BOLETO = "BOLETO",
+}
+
+export enum EnumFilterTitle {
+    ID = "ID",
+    AMOUNT = "AMOUNT",
+    DUE_DATE = "DUE_DATE",
+    INCLUSION_DATE = "INCLUSION_DATE",
+    NF_NUMBER = "NF_NUMBER",
+    BARCODE = "BARCODE",
+    DIGITABLE = "DIGITABLE",
+    PAYMENT_TYPE = "PAYMENT_TYPE",
+    STATUS = "STATUS",
+    NONE = "NONE"
 }

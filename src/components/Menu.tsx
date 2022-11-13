@@ -129,6 +129,10 @@ export default function Menu() {
                             </p>
                         </button>
                     </nav>
+                    <button onClick={handleExit} className={`flex w-full justify-center p-4 mb-4 rounded-lg hover:opacity-60 animate-fade-up`}>
+                        <LogoutIcon transform="rotate(180)" stroke="#212121" width={24} height={24} name="Sair" />
+                        <p className="text-xl ml-1">Sair</p>
+                    </button>
                 </div>
             }
         </div>

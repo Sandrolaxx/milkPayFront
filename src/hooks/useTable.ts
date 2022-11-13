@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDataContext } from "src/context/data";
-import { EnumTitleTypes, FecthTitleResponse, TitleData } from "src/utils/types";
+import { EnumTitleType, FecthTitleResponse, TitleData } from "src/utils/types";
 import { equalsEnum, firstElement, getArrayOfElements, getDefaultPageSize } from "src/utils/utils";
 
 export default function useTable() {
@@ -9,15 +9,21 @@ export default function useTable() {
     const [selectedTitle, setSelectedTitle] = useState<TitleData>();
     const [showModal, setShowModal] = useState(false);
     const [isFetchingData, setFetchingData] = useState(true);
-    const [titleType, setTitleType] = useState<EnumTitleTypes>();
+    const [titleType, setTitleType] = useState<EnumTitleType>();
 
     function updateListPageSize(data: FecthTitleResponse) {
         setListPageSize(getArrayOfElements(Math.ceil(data.allResultsSize / getDefaultPageSize())));
     }
 
-    function updateTitleType(data: FecthTitleResponse) {
+    function updateTitleType(data: FecthTitleResponse, titleType?: EnumTitleType) {
+        if (titleType) {
+            setTitleType(titleType);
+
+            return;
+        }
+
         if (data.results && firstElement(data.results)) {
-            setTitleType(firstElement(data.results).liquidated ? EnumTitleTypes.RECEIVED : EnumTitleTypes.TO_RECEIVE);
+            setTitleType(firstElement(data.results).liquidated ? EnumTitleType.RECEIVED : EnumTitleType.TO_RECEIVE);
         }
     }
 
@@ -34,7 +40,7 @@ export default function useTable() {
     function changePage(pageIndex: number) {
         setFetchingData(true);
 
-        if (equalsEnum(titleType, EnumTitleTypes.RECEIVED)) {
+        if (equalsEnum(titleType, EnumTitleType.RECEIVED)) {
             titlesData.fetchRecivedTitlesData(pageIndex)
         } else {
             titlesData.fetchTitlesToReciveData(pageIndex);

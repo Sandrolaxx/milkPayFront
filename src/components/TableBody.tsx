@@ -1,7 +1,8 @@
-import { EnumTitleTypes, TableBodyProps } from "src/utils/types";
+import { EnumTitleType, TableBodyProps } from "src/utils/types";
 import * as utils from "src/utils/utils";
 import BoletoIcon from "../assets/icons/barcode.svg";
 import PixIcon from "../assets/icons/pix.svg";
+import ReceiptIcon from "../assets/icons/receipt-solid.svg";
 
 export default function TableBody({ titles, titleType, handleShowModal }: TableBodyProps) {
     return (
@@ -46,7 +47,7 @@ export default function TableBody({ titles, titleType, handleShowModal }: TableB
                             {utils.formatMoney(result.amount)}
                         </p>
                     </td>
-                    {utils.equalsEnum(titleType, EnumTitleTypes.TO_RECEIVE) &&
+                    {utils.equalsEnum(titleType, EnumTitleType.TO_RECEIVE) &&
                         <td className="p-5 border-b border-gray-200 text-sm">
                             <button onClick={() => handleShowModal(result)} className={`px-3 py-1 
                                                 font-semibold bg-dark-color rounded-full text-light-color leading-tight`}>
@@ -54,24 +55,26 @@ export default function TableBody({ titles, titleType, handleShowModal }: TableB
                             </button>
                         </td>
                     }
-                    {(utils.equalsEnum(titleType, EnumTitleTypes.RECEIVED)
-                        || utils.equalsEnum(titleType, EnumTitleTypes.ALL)) &&
+                    {(utils.equalsEnum(titleType, EnumTitleType.RECEIVED)
+                        || utils.equalsEnum(titleType, EnumTitleType.ALL)) &&
                         <>
                             <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                                 <p className="text-dark-color whitespace-no-wrap">
-                                    {utils.formatMoney((result.amount - result.finalAmount))}
+                                    {result.liquidated && utils.formatMoney((result.amount - result.finalAmount))}
                                 </p>
                             </td>
                             <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                                 <p className="text-dark-color whitespace-no-wrap">
-                                    {utils.formatMoney(result.finalAmount)}
+                                    {result.liquidated && utils.formatMoney(result.finalAmount)}
                                 </p>
                             </td>
                             <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
-                                <button onClick={() => handleShowModal(result)} className={`px-3 py-1 
-                                                font-semibold bg-dark-color rounded-full text-light-color leading-tight`}>
-                                    COMPROVANTE
-                                </button>
+                                {result.liquidated &&
+                                    <button onClick={() => handleShowModal(result)} title="Visualizar comprovante"
+                                        className="w-full flex justify-center" >
+                                        <ReceiptIcon width={24} height={24} fill="#7001DF" />
+                                    </button>
+                                }
                             </td>
                         </>
                     }

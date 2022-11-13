@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import useTable from "src/hooks/useTable";
-import { TableProps, TitleData } from "src/utils/types";
+import { EnumTitleType, TableProps, TitleData } from "src/utils/types";
 import ArrowRightIcon from "../assets/icons/arrow-left.svg";
 import ArrowLeftIcon from "../assets/icons/arrow-right.svg";
 import ModalCard from "./ModalCard";
@@ -8,14 +8,19 @@ import TableLineSkeleton from "./skeleton/TableLineSkeleton";
 import TableBody from "./TableBody";
 import TableHead from "./TableHead";
 
-export default function Table({ title, subTitle, data, setShowModal }: TableProps) {
+export default function Table({ title, subTitle, data, setShowModal, titleType }: TableProps) {
     const table = useTable();
 
     useEffect(() => {
         if (data) {
             table.setFetchingData(false);
             table.updateListPageSize(data);
-            table.updateTitleType(data);
+
+            if (titleType) {
+                table.updateTitleType(data, titleType);
+            } else {
+                table.updateTitleType(data);
+            }
         }
     }, [data]);
 

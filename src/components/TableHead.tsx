@@ -1,4 +1,4 @@
-import { EnumTitleTypes, TableHeadProps } from "src/utils/types";
+import { EnumTitleType, TableHeadProps } from "src/utils/types";
 import { equalsEnum } from "src/utils/utils";
 
 export default function TableHead({ titleType }: TableHeadProps) {
@@ -33,13 +33,14 @@ export default function TableHead({ titleType }: TableHeadProps) {
                     border-b cursor-help border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                     Valor Total Título
                 </th>
-                {equalsEnum(titleType, EnumTitleTypes.TO_RECEIVE) &&
+                {equalsEnum(titleType, EnumTitleType.TO_RECEIVE) &&
                     <th title="Solicitar Antecipação" scope="col" className={`whitespace-nowrap pt-8 px-5 py-3 border-b 
                         cursor-help border-gray-200 text-purple-700 text-left text-sm font-normal`}>
                         Antecipar
                     </th>
                 }
-                {equalsEnum(titleType, EnumTitleTypes.RECEIVED) &&
+                {(equalsEnum(titleType, EnumTitleType.RECEIVED)
+                    || equalsEnum(titleType, EnumTitleType.ALL)) &&
                     <>
                         <th title="Visualizar Comprovante" scope="col" className={`whitespace-nowrap pt-8 px-5 py-3
                             border-b cursor-help border-gray-200 text-purple-700 text-left text-sm font-normal`}>
