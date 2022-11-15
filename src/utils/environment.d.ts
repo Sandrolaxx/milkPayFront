@@ -8,6 +8,7 @@ declare namespace NodeJS {
         NEXT_PUBLIC_TOKEN_GRANT_TYPE: string;
         NEXT_PUBLIC_TOKEN_EXPIRATION_TIME: number;
         NEXT_PUBLIC_DEFAULT_PAGE_SIZE: number;
+        NEXT_PUBLIC_DEFAULT_PAGE_SIZE_FULL_TABLE: number;
         NEXT_PUBLIC_USER_PATH: string;
         NEXT_PUBLIC_TITLE_PATH: string;
         NEXT_PUBLIC_TOTALIZERS_PATH: string;

@@ -134,8 +134,6 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
     const urlTitles = addQueryParams(getTitleURLSearchParams(params), new URL(baseUrl.concat(titlePath)));
     const token = localStorage.getItem("token");
 
-    console.log(urlTitles);
-
     const request: RequestInit = {
         headers: {
             Authorization: getBearerToken(token!),
@@ -151,7 +149,7 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
 
             return handleReponseError(res, null, true);
         })
-        .catch(err => err);
+        .catch(err => resolveRequestError(err));
 }
 
 export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {

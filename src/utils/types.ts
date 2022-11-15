@@ -275,9 +275,9 @@ export enum EnumModalSteps {
 }
 
 export enum EnumTitleType {
-    ALL,
-    RECEIVED,
-    TO_RECEIVE,
+    ALL = "ALL",
+    RECEIVED = "RECEIVED",
+    TO_RECEIVE = "TO_RECEIVE",
 }
 
 export enum EnumPaymentType {

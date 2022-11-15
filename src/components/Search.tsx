@@ -17,18 +17,18 @@ export default function Search() {
 
     useEffect(() => {
         const allTitlesParams = getFetchTitlesParams(pageIndex, pageSize);
-        
+
         fetchTitles(allTitlesParams)
             .then(res => setTitles(res))
-            .catch(() => router.push("/"));
-        }, []);
-        
-        function handleFilter() {
-            const allTitlesParamsWithFilter = getFetchTitlesParamsWithFilter(filterBy, filterValue, pageIndex, pageSize);
-            
+            .catch(() => router.push("/auth"));
+    }, []);
+
+    function handleFilter() {
+        const allTitlesParamsWithFilter = getFetchTitlesParamsWithFilter(filterBy, filterValue, pageIndex, pageSize);
+
         fetchTitles(allTitlesParamsWithFilter)
             .then(res => setTitles(res))
-            .catch(() => router.push("/"));
+            .catch(() => router.push("/auth"));
     }
 
     return (
@@ -96,7 +96,7 @@ export default function Search() {
                             handleFunction={handleFilter} />
                     </span>
                 </div>
-                {titles && titles.results &&
+                {titles &&
                     <Table key="all-title" title="Títulos" subTitle="Todos os títulos gerados" data={titles}
                         setShowModal={() => false} titleType={EnumTitleType.ALL} />
                 }

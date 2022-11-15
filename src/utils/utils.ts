@@ -9,6 +9,7 @@ import { CardTotalizers, ConsultPixKey, EnumFilterTitle, FecthTitleParams, PixPa
 
 const expirationTime = process.env.NEXT_PUBLIC_TOKEN_EXPIRATION_TIME;
 const defaultPageSize = process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE;
+const defaultPageSizeFullTable = process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE_FULL_TABLE;
 
 export function isNullOrEmpty(str: any): boolean {
     return str == null || str == undefined || str.trim() == "";
@@ -244,6 +245,10 @@ export function getArrayOfElements(lineSize?: number): number[] {
 
 export function getDefaultPageSize() {
     return defaultPageSize;
+}
+
+export function getDefaultPageSizeFullTable() {
+    return defaultPageSizeFullTable;
 }
 
 export function getTotalInterest(dailyInterest: number, dueDate: Date): string {

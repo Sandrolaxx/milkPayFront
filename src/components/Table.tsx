@@ -15,7 +15,7 @@ export default function Table({ title, subTitle, data, setShowModal, titleType }
         if (data) {
             table.setFetchingData(false);
             table.updateListPageSize(data);
-
+            
             if (titleType) {
                 table.updateTitleType(data, titleType);
             } else {

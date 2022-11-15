@@ -47,7 +47,8 @@ export default function TableBody({ titles, titleType, handleShowModal }: TableB
                             {utils.formatMoney(result.amount)}
                         </p>
                     </td>
-                    {utils.equalsEnum(titleType, EnumTitleType.TO_RECEIVE) &&
+                    {(utils.equalsEnum(titleType, EnumTitleType.TO_RECEIVE)
+                        && !utils.equalsEnum(titleType, EnumTitleType.ALL)) &&
                         <td className="p-5 border-b border-gray-200 text-sm">
                             <button onClick={() => handleShowModal(result)} className={`px-3 py-1 
                                                 font-semibold bg-dark-color rounded-full text-light-color leading-tight`}>

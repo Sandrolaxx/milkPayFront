@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDataContext } from "src/context/data";
 import { EnumTitleType, FecthTitleResponse, TitleData } from "src/utils/types";
-import { equalsEnum, firstElement, getArrayOfElements, getDefaultPageSize } from "src/utils/utils";
+import { equalsEnum, firstElement, getArrayOfElements, getDefaultPageSize, getDefaultPageSizeFullTable } from "src/utils/utils";
 
 export default function useTable() {
     const { titlesData } = useDataContext();
@@ -12,7 +12,9 @@ export default function useTable() {
     const [titleType, setTitleType] = useState<EnumTitleType>();
 
     function updateListPageSize(data: FecthTitleResponse) {
-        setListPageSize(getArrayOfElements(Math.ceil(data.allResultsSize / getDefaultPageSize())));
+        const pageSize = data.allResultsSize > getDefaultPageSize() ? getDefaultPageSizeFullTable() : getDefaultPageSize();
+
+        setListPageSize(getArrayOfElements(Math.ceil(data.allResultsSize / pageSize)));
     }
 
     function updateTitleType(data: FecthTitleResponse, titleType?: EnumTitleType) {
