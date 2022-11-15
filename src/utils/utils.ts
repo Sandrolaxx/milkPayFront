@@ -78,12 +78,25 @@ export function formatDateStrToDDMMYYYYHHMMSS(date: string): string {
     return DDMMYYYY.concat(" ").concat(HHMMSS);
 }
 
-export function formatMoney(amount: number) {
+export function formatMoneyWithSign(amount: number) {
     return amount
         .toFixed(2)
         .replace("", "R$ ")
         .replace(".", ",")
         .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+}
+
+export function formatMoneyInput(valueToFormat: string) {
+    const regex = new RegExp(/(\d)(?=(\d{3})+(?!\d))/g);
+
+    const onlyDigits = valueToFormat
+        .split("")
+        .filter(s => /\d/.test(s))
+        .join("");
+
+    const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2);
+
+    return digitsFloat.replace(".", ",").replace(regex, "$1.");
 }
 
 export function formatDocument(document: string) {
@@ -94,6 +107,12 @@ export function formatDocument(document: string) {
     }
 
     return document.replace(regex, "");
+}
+
+export function onlyNumbers(value: string): string {
+    const regex = new RegExp(/[^\d]/g);
+
+    return value.replace(regex, "");
 }
 
 export function isUserAuth(): boolean {
@@ -121,7 +140,7 @@ export function getTotalCardComponentData(totalizers: Totalizers): CardTotalizer
         {
             title: "Valor Recebido",
             subTitle: "Últimos 12 meses",
-            value: totalizers.amountReceived ? formatMoney(totalizers.amountReceived) : formatMoney(0),
+            value: totalizers.amountReceived ? formatMoneyWithSign(totalizers.amountReceived) : formatMoneyWithSign(0),
             bigIcon: AmountRecivedIcon,
             smallIcon: CalendarIcon,
             iconAreaColor: "bg-primary-color",
@@ -129,7 +148,7 @@ export function getTotalCardComponentData(totalizers: Totalizers): CardTotalizer
         {
             title: "Títulos a Receber",
             subTitle: "Próximos 30 dias",
-            value: totalizers.titlesToReceive ? totalizers.titlesToReceive.toString() : formatMoney(0),
+            value: totalizers.titlesToReceive ? totalizers.titlesToReceive.toString() : formatMoneyWithSign(0),
             bigIcon: TitlesToReceiveIcon,
             smallIcon: CalendarIcon,
             iconAreaColor: "bg-dark-color",
@@ -137,7 +156,7 @@ export function getTotalCardComponentData(totalizers: Totalizers): CardTotalizer
         {
             title: "Valor  a Receber",
             subTitle: "Próximos 30 dias",
-            value: totalizers.amountToReceive ? formatMoney(totalizers.amountToReceive) : formatMoney(0),
+            value: totalizers.amountToReceive ? formatMoneyWithSign(totalizers.amountToReceive) : formatMoneyWithSign(0),
             bigIcon: AmountReceiveToIcon,
             smallIcon: CalendarIcon,
             iconAreaColor: "bg-primary-color",
@@ -182,13 +201,17 @@ export function getTitleURLSearchParams(params: FecthTitleParams) {
         searchParams.set("filterValue", params.filterValue);
     }
 
+    if (params.filterValueAux) {
+        searchParams.set("filterValueAux", params.filterValueAux);
+    }
+
     return searchParams;
 }
 
 export function getFetchTitlesParams(pageIndex?: number, pageSize?: number, liquidated?: boolean): FecthTitleParams {
     const today = getNow();
     const nextMonth = getNow();
-    nextMonth.setMonth(today.getMonth() + 1);
+    nextMonth.setMonth(today.getMonth() + 2);
 
     return {
         offset: formatDDMMYYYY(today),
@@ -199,14 +222,21 @@ export function getFetchTitlesParams(pageIndex?: number, pageSize?: number, liqu
     };
 }
 
-export function getFetchTitlesParamsWithFilter(filterBy: EnumFilterTitle, filterValue: string,
-        pageIndex?: number, pageSize?: number, liquidated?: boolean): FecthTitleParams {
+export function getFetchTitlesParamsWithFilter(
+    filterBy: EnumFilterTitle,
+    filterValue: string,
+    filterValueAux: string,
+    pageIndex?: number,
+    pageSize?: number,
+    liquidated?: boolean,
+): FecthTitleParams {
     return {
         pageIndex: pageIndex ?? 0,
         pageSize: pageSize ?? 5,
         liquidated,
         filterBy,
-        filterValue
+        filterValueAux,
+        filterValue,
     };
 }
 
@@ -426,4 +456,54 @@ export function parseStrToFilterTitleEnum(strValue: string): EnumFilterTitle {
         default:
             return EnumFilterTitle.NONE;
     }
+}
+
+export function changeInputType(event: any, type: string) {
+    event.currentTarget.type = type;
+
+    if (type == "date") {
+        event.currentTarget.showPicker();
+    }
+}
+
+export function YYYYMMDDtoDDMMYYYY(srtData: string) {
+    const DD = srtData.substring(8, 10);
+    const MM = srtData.substring(5, 7);
+    const YYYY = srtData.substring(0, 4);
+
+    return DD.concat("/").concat(MM).concat("/").concat(YYYY);
+}
+
+export function DDMMYYYYtoISO(srtData: string) {
+    const DD = srtData.substring(0, 2);
+    const MM = srtData.substring(3, 5);
+    const YYYY = srtData.substring(6, 10);
+
+    return YYYY.concat("-").concat(MM).concat("-").concat(DD).concat("T00:00:00");
+}
+
+export function isValidDate(startDate: string, endDate: string) {
+
+    if (isNullOrEmpty(startDate)) {
+        handleError("Necessário informar a data inicial!");
+    
+        return false;
+    }
+
+    if (isNullOrEmpty(endDate)) {
+        handleError("Necessário informar a data final!");
+    
+        return false;
+    }
+
+    const sDate = new Date(startDate).getTime();
+    const eDate = new Date(endDate).getTime();
+
+    if (sDate > eDate) {
+        handleError("A data final não pode ser menor que a inicial!");
+
+        return false;
+    }
+
+    return true;
 }

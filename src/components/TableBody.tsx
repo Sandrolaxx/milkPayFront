@@ -44,7 +44,7 @@ export default function TableBody({ titles, titleType, handleShowModal }: TableB
                     </td>
                     <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                         <p className="text-dark-color whitespace-no-wrap">
-                            {utils.formatMoney(result.amount)}
+                            {utils.formatMoneyWithSign(result.amount)}
                         </p>
                     </td>
                     {(utils.equalsEnum(titleType, EnumTitleType.TO_RECEIVE)
@@ -61,12 +61,12 @@ export default function TableBody({ titles, titleType, handleShowModal }: TableB
                         <>
                             <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                                 <p className="text-dark-color whitespace-no-wrap">
-                                    {result.liquidated && utils.formatMoney((result.amount - result.finalAmount))}
+                                    {result.liquidated && utils.formatMoneyWithSign((result.amount - result.finalAmount))}
                                 </p>
                             </td>
                             <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">
                                 <p className="text-dark-color whitespace-no-wrap">
-                                    {result.liquidated && utils.formatMoney(result.finalAmount)}
+                                    {result.liquidated && utils.formatMoneyWithSign(result.finalAmount)}
                                 </p>
                             </td>
                             <td className="whitespace-nowrap p-5 border-b border-gray-200 text-sm">

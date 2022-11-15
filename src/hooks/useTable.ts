@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDataContext } from "src/context/data";
-import { EnumTitleType, FecthTitleResponse, TitleData } from "src/utils/types";
+import { EnumTitleType, FecthTitleParams, FecthTitleResponse, TitleData } from "src/utils/types";
 import { equalsEnum, firstElement, getArrayOfElements, getDefaultPageSize, getDefaultPageSizeFullTable } from "src/utils/utils";
 
 export default function useTable() {
@@ -12,7 +12,7 @@ export default function useTable() {
     const [titleType, setTitleType] = useState<EnumTitleType>();
 
     function updateListPageSize(data: FecthTitleResponse) {
-        const pageSize = data.allResultsSize > getDefaultPageSize() ? getDefaultPageSizeFullTable() : getDefaultPageSize();
+        const pageSize = equalsEnum(titleType, EnumTitleType.ALL) ? getDefaultPageSizeFullTable() : getDefaultPageSize();
 
         setListPageSize(getArrayOfElements(Math.ceil(data.allResultsSize / pageSize)));
     }
@@ -39,13 +39,23 @@ export default function useTable() {
         setSelectedTitle(undefined);
     }
 
-    function changePage(pageIndex: number) {
+    function changePage(pageIndex: number, filterParams?: FecthTitleParams) {
         setFetchingData(true);
 
-        if (equalsEnum(titleType, EnumTitleType.RECEIVED)) {
-            titlesData.fetchRecivedTitlesData(pageIndex)
-        } else {
-            titlesData.fetchTitlesToReciveData(pageIndex);
+        switch (titleType) {
+            case EnumTitleType.RECEIVED:
+                titlesData.fetchRecivedTitlesData(pageIndex);
+                break;
+            case EnumTitleType.TO_RECEIVE:
+                titlesData.fetchTitlesToReciveData(pageIndex);
+                break;
+            case EnumTitleType.ALL:
+                if (filterParams) {
+                    filterParams!.pageIndex = pageIndex;
+
+                    titlesData.fetchAllTitlesData(filterParams);
+                }
+                break;
         }
     }
 
@@ -53,21 +63,32 @@ export default function useTable() {
         return listPageSize && listPageSize.length ? true : false;
     }
 
-    function goBackPage(page: number) {
-        page > 0 ? changePage(page - 1) : () => false;
+    function goBackPage(page: number, filterParams?: FecthTitleParams) {
+        page > 0 ? changePage(page - 1, filterParams) : () => false;
     }
 
-    function goNextPage(page: number, listPageLength: number) {
-        page + 1 < listPageLength ? changePage(page + 1) : () => false;
+    function goNextPage(page: number, listPageLength: number, filterParams?: FecthTitleParams) {
+        page + 1 < listPageLength ? changePage(page + 1, filterParams) : () => false;
     }
 
-    function goToIndexPage(page: number, pageIndex: number) {
-        pageIndex != page + 1 ? changePage(pageIndex - 1) : () => false;
+    function goToIndexPage(page: number, pageIndex: number, filterParams?: FecthTitleParams) {
+        pageIndex != page + 1 ? changePage(pageIndex - 1, filterParams) : () => false;
     }
 
     return {
-        listPageSize, selectedTitle, showModal, isFetchingData, titleType, setFetchingData,
-        handleShowModal, handleCloseModal, updateListPageSize, updateTitleType,
-        renderPageNavigation, goBackPage, goNextPage, goToIndexPage
-    }
+        listPageSize,
+        selectedTitle,
+        showModal,
+        isFetchingData,
+        titleType,
+        setFetchingData,
+        handleShowModal,
+        handleCloseModal,
+        updateListPageSize,
+        updateTitleType,
+        renderPageNavigation,
+        goBackPage,
+        goNextPage,
+        goToIndexPage,
+    };
 }

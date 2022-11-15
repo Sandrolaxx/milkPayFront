@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDataContext } from "src/context/data";
 import { bankSlipayment, consultBankSlip, consultPixKey, consultReceipt, pixPayment } from "src/utils/restClient";
 import { BankSlip, ConsultPixKey, EnumModalSteps, EnumPaymentType, ModalCardProps, PaymentResponse } from "src/utils/types";
-import { equalsEnum, formatMoney, formatTextSize, getPixPaymentDto, getTotalInterest } from "src/utils/utils";
+import { equalsEnum, formatMoneyWithSign, formatTextSize, getPixPaymentDto, getTotalInterest } from "src/utils/utils";
 import DownloadIcon from "../assets/icons/download.svg";
 import ModalCardButtons from "./ModalCardButtons";
 import ModalCardStepTwoSkeleton from "./skeleton/ModalCardStepTwoSkeleton";
@@ -134,7 +134,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                         <p className="font-medium">
                             {equalsEnum(title.paymentType, EnumPaymentType.PIX) ? 'Valor Bruto' : 'Total'}
                         </p>
-                        <p>{formatMoney(title.amount)}</p>
+                        <p>{formatMoneyWithSign(title.amount)}</p>
                     </span>
                     {
                         equalsEnum(title.paymentType, EnumPaymentType.PIX) &&
@@ -149,11 +149,11 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                             </span>
                             <span className="w-full flex flex-row justify-between px-6 py-1">
                                 <p className="font-medium">Valor juro</p>
-                                <p>{formatMoney(title.amount - title.finalAmount)}</p>
+                                <p>{formatMoneyWithSign(title.amount - title.finalAmount)}</p>
                             </span>
                             <span className="w-full flex flex-row justify-between px-6 py-4">
                                 <p className="font-medium">Total</p>
-                                <p>{formatMoney(title.finalAmount)}</p>
+                                <p>{formatMoneyWithSign(title.finalAmount)}</p>
                             </span>
                         </>
                     }
@@ -241,19 +241,19 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                                 </span>
                                 <span className="w-full flex flex-row justify-between px-6 py-1">
                                     <p className="font-medium">Multa</p>
-                                    <p>{formatMoney(bankSlipData?.fine!)}</p>
+                                    <p>{formatMoneyWithSign(bankSlipData?.fine!)}</p>
                                 </span>
                                 <span className="w-full flex flex-row justify-between px-6 py-1">
                                     <p className="font-medium">Juro</p>
-                                    <p>{formatMoney(bankSlipData?.interest!)}</p>
+                                    <p>{formatMoneyWithSign(bankSlipData?.interest!)}</p>
                                 </span>
                                 <span className="w-full flex flex-row justify-between px-6 py-1">
                                     <p className="font-medium">Desconto</p>
-                                    <p>{formatMoney(bankSlipData?.discount!)}</p>
+                                    <p>{formatMoneyWithSign(bankSlipData?.discount!)}</p>
                                 </span>
                                 <span className="w-full flex flex-row justify-between px-6 py-1">
                                     <p className="font-medium">Valor</p>
-                                    <p>{formatMoney(bankSlipData?.amount!)}</p>
+                                    <p>{formatMoneyWithSign(bankSlipData?.amount!)}</p>
                                 </span>
                                 <span className="w-full flex justify-center items-center py-1">
                                     <input className="mx-2" type="checkbox" name="confirmPaymentData" id="checkbox"
@@ -271,7 +271,7 @@ export default function ModalCard({ title, handleClose }: ModalCardProps) {
                     <h1 className="font-medium text-lg my-2">Confirmação de Antecipação</h1>
                     <p className="mx-6 mb-4 text-lg text-center">
                         Deseja mesmo realizar a antecipação no valor de {
-                            formatMoney(title.finalAmount ? title.finalAmount : title.amount)
+                            formatMoneyWithSign(title.finalAmount ? title.finalAmount : title.amount)
                         }?
                     </p>
                     <span className="w-full flex justify-center items-center py-1">

@@ -46,7 +46,7 @@ export default function Profile() {
         <div className="w-full h-full flex flex-col overflow-auto">
             <div className="w-full h-full mt-20 flex flex-col">
                 {!userData.user?.acceptTerms &&
-                    <span className="mx-8 mt-12">
+                    <span className="mx-8 mt-4">
                         <h1 className="text-dark-color text-xl text-center">
                             Finalize seu cadastro para poder ter acesso à visualização de totalizadores, recebíveis e realizar antecipações.
                         </h1>
@@ -55,7 +55,7 @@ export default function Profile() {
                         </p>
                     </span>
                 }
-                <div className="w-full h-full flex flex-col mt-6 p-8 px-12 xl:px-40 2xl:px-96">
+                <div className="w-full h-full flex flex-col p-8 px-12 xl:px-40 2xl:px-96">
                     <span className="font-medium text-dark-color md:text-lg">
                         Informações básicas
                     </span>
@@ -171,7 +171,7 @@ export default function Profile() {
                                 </span>
                             </div>
                         </div>
-                        <div className="flex flex-col md:flex-row md:justify-between mt-8 md:mt-52">
+                        <div className="flex flex-col md:flex-row md:justify-between mb-12 md:mt-52">
                             <div className="w-full" />
                             <div className="w-full" />
                             <div className="w-full mt-6">

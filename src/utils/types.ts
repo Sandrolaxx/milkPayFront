@@ -35,9 +35,11 @@ export interface CardTotalProps {
 export interface TableProps {
     title: string;
     subTitle: string;
-    data: FecthTitleResponse;
+    data: FecthTitleResponse | undefined;
     setShowModal: Function;
     titleType?: EnumTitleType
+    fetchingData?: boolean;
+    filterParams?: FecthTitleParams;
 }
 
 export interface ModalCardProps {
@@ -82,8 +84,10 @@ export interface IDataContext {
         fetchCardsData: () => void;
     };
     titlesData: {
+        allTitles: FecthTitleResponse | undefined;
         titlesToReceive: FecthTitleResponse | undefined;
         receivedTitles: FecthTitleResponse | undefined;
+        fetchAllTitlesData: (filterParams: FecthTitleParams) => void;
         fetchTitlesToReciveData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
         fetchRecivedTitlesData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
     };
@@ -103,8 +107,10 @@ export type DataContext = {
         fetchCardsData: () => void;
     };
     titlesData: {
+        allTitles: FecthTitleResponse | undefined;
         titlesToReceive: FecthTitleResponse | undefined;
         receivedTitles: FecthTitleResponse | undefined;
+        fetchAllTitlesData: (filterParams: FecthTitleParams) => void;
         fetchTitlesToReciveData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
         fetchRecivedTitlesData: (pageIndex?: number | undefined, pageSize?: number | undefined) => void;
     };
@@ -182,6 +188,7 @@ export type FecthTitleParams = {
     liquidated?: boolean;
     filterBy?: EnumFilterTitle;
     filterValue?: string;
+    filterValueAux?: string;
 };
 
 export type ConsultPixKey = {
@@ -295,5 +302,6 @@ export enum EnumFilterTitle {
     DIGITABLE = "DIGITABLE",
     PAYMENT_TYPE = "PAYMENT_TYPE",
     STATUS = "STATUS",
+    LAST_TITLES = "LAST_TITLES",
     NONE = "NONE"
 }

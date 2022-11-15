@@ -79,7 +79,7 @@ export default function Menu() {
                     <p className="text-xl ml-1">Sair</p>
                 </button>
             </div>
-            <div className="w-full fixed top-0 flex py-2 h-16 animate-fade-down md:hidden bg-light-color">
+            <div className="w-full fixed z-10 top-0 flex py-2 h-16 animate-fade-down md:hidden bg-light-color">
                 <div className="w-full ml-14 flex justify-center">
                     <MilkPayIcon fill="#212121" width={48} height={52} name="Logo MilkPay" />
                 </div>

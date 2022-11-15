@@ -1,26 +1,26 @@
 import { useEffect } from "react";
 import useTable from "src/hooks/useTable";
-import { EnumTitleType, TableProps, TitleData } from "src/utils/types";
+import { TableProps, TitleData } from "src/utils/types";
 import ArrowRightIcon from "../assets/icons/arrow-left.svg";
 import ArrowLeftIcon from "../assets/icons/arrow-right.svg";
 import ModalCard from "./ModalCard";
-import TableLineSkeleton from "./skeleton/TableLineSkeleton";
 import TableBody from "./TableBody";
 import TableHead from "./TableHead";
 
-export default function Table({ title, subTitle, data, setShowModal, titleType }: TableProps) {
+export default function Table({ title, subTitle, data, setShowModal, titleType, fetchingData, filterParams }: TableProps) {
     const table = useTable();
 
     useEffect(() => {
+        table.setFetchingData(fetchingData ?? false);
+
         if (data) {
-            table.setFetchingData(false);
-            table.updateListPageSize(data);
-            
             if (titleType) {
                 table.updateTitleType(data, titleType);
             } else {
                 table.updateTitleType(data);
             }
+
+            table.updateListPageSize(data);
         }
     }, [data]);
 
@@ -45,36 +45,41 @@ export default function Table({ title, subTitle, data, setShowModal, titleType }
                     <div className="inline-block min-w-full shadow-md border-2 rounded-3xl overflow-hidden">
                         <table className="min-w-full leading-normal">
                             <TableHead titleType={table.titleType!} />
-                            {table.isFetchingData ?
-                                <TableLineSkeleton titleType={table.titleType!} />
-                                :
+                            {(!table.isFetchingData && data && data.results.length > 0) &&
                                 <TableBody titles={data.results} titleType={table.titleType!} handleShowModal={handleShowModal} />
                             }
                         </table>
-                        {table.renderPageNavigation() ?
+                        {table.isFetchingData &&
+                            <div className="flex justify-center items-center h-16 text-lg">
+                                Carregando...
+                            </div>
+                        }
+                        {(data && data.results.length == 0 && !table.isFetchingData) &&
+                            <div className="flex justify-center items-center h-16 text-lg">
+                                Nenhum registro encontrado
+                            </div>
+                        }
+                        {data && table.renderPageNavigation() &&
                             <div className="px-4 bg-white py-4 flex flex-col xs:flex-row items-center xs:justify-between">
                                 <div className="flex items-center">
-                                    <button type="button" onClick={() => table.goBackPage(data.page)}
+                                    <button type="button" onClick={() => table.goBackPage(data.page, filterParams)}
                                         className="p-2 border rounded-l-xl text-gray-600 bg-white hover:bg-gray-100">
                                         <ArrowRightIcon width={16} stroke="#7E22CE" />
                                     </button>
                                     {table.listPageSize!.map(pageIndex => (
-                                        <button key={pageIndex} type="button" onClick={() => table.goToIndexPage(data.page, pageIndex)}
+                                        <button key={pageIndex} type="button" onClick={() => table.goToIndexPage(data.page, pageIndex, filterParams)}
                                             className={`px-4 py-2 border-t border-b text-base hover:bg-gray-100
                                             ${pageIndex == data?.page! + 1 ? 'text-purple-600' : 'text-gray-500'} `}>
                                             {pageIndex}
                                         </button>
                                     ))}
-                                    <button type="button" onClick={() => table.goNextPage(data.page, table.listPageSize?.length!)}
+                                    <button type="button" onClick={() => table.goNextPage(data.page, table.listPageSize?.length!, filterParams)}
                                         className="p-2 border rounded-r-xl hover:bg-gray-100">
                                         <ArrowLeftIcon width={16} stroke="#7E22CE" />
                                     </button>
                                 </div>
                             </div>
-                            :
-                            <div className="flex justify-center items-center h-16">
-                                Nenhum registro encontrado
-                            </div>
+
                         }
                     </div>
                 </div>
