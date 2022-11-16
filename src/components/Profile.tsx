@@ -4,12 +4,16 @@ import { useDataContext } from "src/context/data";
 import { updateUser } from "src/utils/restClient";
 import { UserUpdateInfo } from "src/utils/types";
 import { verifyUserHasChanges, verifyValidPassword, verifyValidUserFields } from "src/utils/utils";
+import CloseEyeIcon from "../assets/icons/eye-off.svg";
+import OpenEyeIcon from "../assets/icons/eye.svg";
 import Button from "./Button";
 
 export default function Profile() {
     const { userData } = useDataContext();
     const user = userData.user;
     const router = useRouter();
+    const [isOpenEye, setOpenEye] = useState(false);
+    const [isOpenEyeForgot, setOpenEyeForgot] = useState(false);
     const [name, setName] = useState(user ? user.name : "");
     const [email, setEmail] = useState(user ? user.email : "");
     const [phone, setPhone] = useState(user ? user.phone : "");
@@ -105,25 +109,49 @@ export default function Profile() {
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row md:justify-between">
-                            <div className="w-full mt-6 relative md:mr-4">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
-                                    Senha
-                                </p>
-                                <input type="password" id="password" onChange={e => setPassword(e.target.value)} value={password}
-                                    placeholder="Nome do usuário" className="w-full h-14 px-4 border placeholder-gray-400 
-                                rounded-md bg-white border-second-gray-color shadow-sm text-sm focus:outline-none 
-                                focus:ring-1 focus:ring-primary-color focus:border-transparent appearance-none"
-                                />
+                            <div className="w-full mt-7 relative md:mt-6 md:mr-4">
+                                <span className="flex flex-col">
+                                    <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
+                                        Senha
+                                    </p>
+                                    <input type={isOpenEye ? "text" : "password"} id="sign-in-password" placeholder="Senha"
+                                        value={password} onChange={e => setPassword(e.target.value)} required
+                                        className={`w-full h-14 px-4 border placeholder-gray-400 rounded-md bg-white 
+                                        border-second-gray-color shadow-sm text-sm focus:outline-none focus:ring-1
+                                        focus:ring-primary-color focus:border-transparent appearance-none`}
+                                    />
+                                    <button type="button" onClick={() => setOpenEye(!isOpenEye)}
+                                        className={`flex self-end -mt-10 m-4 animate-fade-in-fast`}>
+                                        {
+                                            isOpenEye ?
+                                                <OpenEyeIcon className="text-second-gray-color" width={24} height={24} />
+                                                :
+                                                <CloseEyeIcon className="text-second-gray-color" width={24} height={24} />
+                                        }
+                                    </button>
+                                </span>
                             </div>
                             <div className="w-full mt-7 relative md:mt-6">
-                                <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
-                                    Confirmar Senha
-                                </p>
-                                <input type="password" id="passwordConfirmation" onChange={e => setConfirmPassword(e.target.value)}
-                                    value={confirmPassword} placeholder="Username" className="w-full h-14 px-4 border placeholder-gray-400 
-                               rounded-md bg-white border-second-gray-color shadow-sm text-sm focus:outline-none 
-                               focus:ring-1 focus:ring-primary-color focus:border-transparent appearance-none"
-                                />
+                                <span className="flex flex-col">
+                                    <p className="absolute bg-white -mt-1.5 ml-3 px-2 text-secondary-color text-xs font-medium">
+                                        Confirmar Senha
+                                    </p>
+                                    <input type={isOpenEyeForgot ? "text" : "password"} id="passwordConfirmation" placeholder="Confirmação"
+                                        value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required
+                                        className={`w-full h-14 px-4 border placeholder-gray-400 rounded-md bg-white 
+                                        border-second-gray-color shadow-sm text-sm focus:outline-none focus:ring-1
+                                        focus:ring-primary-color focus:border-transparent appearance-none`}
+                                    />
+                                    <button type="button" onClick={() => setOpenEyeForgot(!isOpenEyeForgot)}
+                                        className={`flex self-end -mt-10 m-4 animate-fade-in-fast`}>
+                                        {
+                                            isOpenEyeForgot ?
+                                                <OpenEyeIcon className="text-second-gray-color" width={24} height={24} />
+                                                :
+                                                <CloseEyeIcon className="text-second-gray-color" width={24} height={24} />
+                                        }
+                                    </button>
+                                </span>
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row md:justify-between">

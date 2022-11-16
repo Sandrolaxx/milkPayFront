@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import useTable from "src/hooks/useTable";
-import { TableProps, TitleData } from "src/utils/types";
+import { EnumTitleType, TableProps, TitleData } from "src/utils/types";
+import { equalsEnum } from "src/utils/utils";
 import ArrowRightIcon from "../assets/icons/arrow-left.svg";
 import ArrowLeftIcon from "../assets/icons/arrow-right.svg";
 import ModalCard from "./ModalCard";
@@ -9,6 +10,8 @@ import TableHead from "./TableHead";
 
 export default function Table({ title, subTitle, data, setShowModal, titleType, fetchingData, filterParams }: TableProps) {
     const table = useTable();
+    const msgNenhumRegistroTitulo = "Nenhum registro encontrado, entre em contato com a empresa "
+        .concat("parceira para verificar o lançamento dos títulos.");
 
     useEffect(() => {
         table.setFetchingData(fetchingData ?? false);
@@ -56,7 +59,7 @@ export default function Table({ title, subTitle, data, setShowModal, titleType, 
                         }
                         {(data && data.results.length == 0 && !table.isFetchingData) &&
                             <div className="flex justify-center items-center h-16 text-lg">
-                                Nenhum registro encontrado
+                                {!equalsEnum(titleType, EnumTitleType.ALL) ? msgNenhumRegistroTitulo : "Nenhum registro encontrado."}
                             </div>
                         }
                         {data && table.renderPageNavigation() &&

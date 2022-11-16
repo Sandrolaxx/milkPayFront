@@ -1,5 +1,17 @@
 import { toast } from "react-toastify";
-import { BankSlip, ConsultPixKey, EnumError, FecthTitleParams, FecthTitleResponse, PaymentResponse, PixPayment, Receipt, Totalizers, User, UserUpdateInfo } from "./types";
+import {
+    BankSlip,
+    ConsultPixKey,
+    EnumError,
+    FecthTitleParams,
+    FecthTitleResponse,
+    PaymentResponse,
+    PixPayment,
+    Receipt,
+    Totalizers,
+    User,
+    UserUpdateInfo
+} from "./types";
 import {
     addQueryParams,
     getBasicToken,
@@ -28,6 +40,7 @@ const consultKeyPath = process.env.NEXT_PUBLIC_CONSULT_PIX_KEY_PATH;
 const consultPath = process.env.NEXT_PUBLIC_CONSULT_PATH;
 const paymentPath = process.env.NEXT_PUBLIC_PAYMENT_PATH;
 const receiptPath = process.env.NEXT_PUBLIC_RECEIPT_PATH;
+const restorePath = process.env.NEXT_PUBLIC_RESTORE_PASS;
 
 export async function createAccount(document: string, password: string) {
     const userDto = { document, password };
@@ -54,6 +67,38 @@ export async function createAccount(document: string, password: string) {
         .then(res => {
             if (res.ok) {
                 toast.update(toastify, getToastSuccess("Usuário criado com sucesso!"));
+
+                return;
+            }
+
+            return handleReponseError(res, toastify, true);
+        })
+        .catch(err => resolveRequestError(err, toastify));
+}
+
+export async function sendEmailForgorPassword(email: string) {
+    const url = baseUrl.concat(userPath).concat(restorePath);
+    const token = await getToken(tokenUser, tokenPassword);
+    const toastify = toast.loading("Enviando e-mail📨...");
+
+    if (!token) {
+        const error = EnumError.SERVICOS_INDISPONIVEIS.concat("o envio do e-mail.");
+
+        return handleToastifyError(toastify, error, false);
+    }
+
+    const request: RequestInit = {
+        headers: {
+            Authorization: getBearerToken(token!),
+            email: email,
+        },
+        method: "POST",
+    };
+
+    return fetch(url, request)
+        .then(res => {
+            if (res.ok) {
+                toast.update(toastify, getToastSuccess("E-mail enviado com sucesso! Verifique sua caixa de entrada."));
 
                 return;
             }
@@ -137,7 +182,7 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
     const request: RequestInit = {
         headers: {
             Authorization: getBearerToken(token!),
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
     };
 

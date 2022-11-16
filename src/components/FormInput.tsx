@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CloseEyeIcon from "../assets/icons/eye-off.svg";
 import OpenEyeIcon from "../assets/icons/eye.svg";
 import LockIcon from "../assets/icons/lock.svg";
 import EmailIcon from "../assets/icons/mail.svg";
 import MilkPayIcon from "../assets/icons/milkpay.svg";
 import UserIcon from "../assets/icons/user.svg";
-import { createAccount, getUserToken } from "../utils/restClient";
+import { createAccount, getUserToken, sendEmailForgorPassword } from "../utils/restClient";
 import { EnumFormType, FormInputProps } from "../utils/types";
 import { equalsEnum, formatDocument, getTokenExpirationDate, isNullOrEmpty } from "../utils/utils";
 import Button from "./Button";
@@ -46,13 +46,13 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
     }
 
     function handleForgotPassword(event: any) {
-        event.preventDefault();
+        if (!isNullOrEmpty(email)) {
+            event.preventDefault();
 
-        console.log("Esqueci!" + email);//TODO criar fluxo esqueci minha senha
-    }
-
-    function handleLoseEmail(event: any) {
-        //TODO abrir modal informações contato suporte
+            sendEmailForgorPassword(email)
+                .then(() => changeInput(EnumFormType.LOGIN))
+                .catch(err => err);
+        }
     }
 
     function changeInput(formType: EnumFormType) {
@@ -146,19 +146,19 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                                     bg-white border-l border-b  border-gray-300 text-gray-color `}>
                                         <EmailIcon className="text-dark-color" width={24} />
                                     </span>
-                                    <input type="email" id="forgot-email" placeholder="E-mail"
+                                    <input type="email" id="forgot-email" required placeholder="E-mail"
                                         value={email} onChange={e => setEmail(e.target.value)}
                                         className={`flex-1 rounded-r-lg appearance-none border 
-                                border-gray-300 w-full py-2 px-3 bg-white text-gray-color
-                                placeholder-gray-400 shadow-sm text-base focus:outline-none 
-                                focus:ring-2 focus:ring-purple-600 focus:border-transparent`}
+                                        border-gray-300 w-full py-2 px-3 bg-white text-gray-color
+                                        placeholder-gray-400 shadow-sm text-base focus:outline-none 
+                                        focus:ring-2 focus:ring-purple-600 focus:border-transparent`}
                                     />
                                 </div>
                             </div>
                             <div className={`flex items-center mb-6 text-xs font-normal sm:text-sm 
                         text-gray-600 hover:text-gray-500 dark:text-gray-100 dark:hover:text-white`}>
                                 <div className="flex ml-auto">
-                                    <Button text="Voltar ao Login" handleFunction={() => changeInput(EnumFormType.LOGIN)}  />
+                                    <Button text="Voltar ao Login" handleFunction={() => changeInput(EnumFormType.LOGIN)} />
                                 </div>
                             </div>
                         </>
@@ -173,7 +173,7 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                     }
                     {equalsEnum(formType, EnumFormType.LOGIN) &&
                         <div className="flex w-full">
-                            <Button  text="Login" dafaultStyle handleFunction={handleLogin} />
+                            <Button text="Login" dafaultStyle handleFunction={handleLogin} />
                         </div>
                     }
                     {equalsEnum(formType, EnumFormType.REGISTER) &&
@@ -196,9 +196,6 @@ export default function FormInput({ formType, changeFunction }: FormInputProps) 
                 {equalsEnum(formType, EnumFormType.REGISTER) &&
 
                     <Button text="Já possui uma conta?" handleFunction={() => changeInput(EnumFormType.LOGIN)} />
-                }
-                {equalsEnum(formType, EnumFormType.FORGOT_PASSWORD) &&
-                    <Button text="Não possui mais o e-mail cadastrado?" handleFunction={handleLoseEmail} />
                 }
             </div>
         </>
