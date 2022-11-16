@@ -186,7 +186,7 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
         },
     };
 
-    return fetch(urlTitles, request)
+    return fetch(urlTitles.toString(), request)
         .then(res => {
             if (res.ok) {
                 return res.json();
@@ -199,7 +199,7 @@ export function fetchTitles(params: FecthTitleParams): Promise<FecthTitleRespons
 
 export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
     const toastify = toast.loading("Consultando Chave🗝");
-    const urlConsultPix = new URL(baseUrl.concat(pixPath.concat(consultKeyPath)));
+    const urlConsultPix = baseUrl.concat(pixPath).concat(consultKeyPath);
     const token = localStorage.getItem("token");
 
     const request: RequestInit = {
@@ -225,7 +225,7 @@ export function consultPixKey(pixKey: string): Promise<ConsultPixKey> {
 
 export function pixPayment(pixPayment: PixPayment): Promise<PaymentResponse> {
     const toastify = toast.loading("Realizando Pagamento...💸");
-    const urlPaymentPix = new URL(baseUrl.concat(pixPath.concat(paymentPath)));
+    const urlPaymentPix = baseUrl.concat(pixPath).concat(paymentPath);
     const token = localStorage.getItem("token");
 
     const request: RequestInit = {
@@ -252,7 +252,7 @@ export function pixPayment(pixPayment: PixPayment): Promise<PaymentResponse> {
 
 export function consultBankSlip(bankSlip: BankSlip): Promise<BankSlip> {
     const toastify = toast.loading("Consultando Boleto📃");
-    const urlConsultBankSlip = new URL(baseUrl.concat(bankslipPath.concat(consultPath)));
+    const urlConsultBankSlip = baseUrl.concat(bankslipPath).concat(consultPath);
     const token = localStorage.getItem("token");
 
     const request: RequestInit = {
@@ -279,7 +279,7 @@ export function consultBankSlip(bankSlip: BankSlip): Promise<BankSlip> {
 
 export function bankSlipayment(bankSlip: BankSlip): Promise<PaymentResponse> {
     const toastify = toast.loading("Realizando Pagamento...💸");
-    const urlPaymentBankSlip = new URL(baseUrl.concat(bankslipPath.concat(paymentPath)));
+    const urlPaymentBankSlip = baseUrl.concat(bankslipPath).concat(paymentPath);
     const token = localStorage.getItem("token");
 
     const request: RequestInit = {
@@ -305,7 +305,7 @@ export function bankSlipayment(bankSlip: BankSlip): Promise<PaymentResponse> {
 }
 
 export function consultReceipt(txId: number): Promise<Receipt> {
-    const urlConsultReceipt = new URL(baseUrl.concat(receiptPath));
+    const urlConsultReceipt = baseUrl.concat(receiptPath);
     const token = localStorage.getItem("token");
 
     const request: RequestInit = {
@@ -328,7 +328,7 @@ export function consultReceipt(txId: number): Promise<Receipt> {
 }
 
 export function updateUser(userInfo: UserUpdateInfo): Promise<User> {
-    const urlUpdateUser = new URL(baseUrl.concat(userPath));
+    const urlUpdateUser = baseUrl.concat(userPath);
     const toastify = toast.loading("Atualizando Usuário...✨");
     const token = localStorage.getItem("token");
 
